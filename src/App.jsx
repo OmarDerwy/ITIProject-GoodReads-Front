@@ -7,6 +7,7 @@ import { createTheme, MantineProvider } from '@mantine/core';
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import Navbar from './components/general/navbar';
 import './App.css'
 
 const theme = createTheme({
@@ -18,7 +19,7 @@ function App() {
   return (
     <>
       <MantineProvider theme={theme}>
-        <p>Hello World</p>
+        <Navbar />
       </MantineProvider>
     </>
   )
