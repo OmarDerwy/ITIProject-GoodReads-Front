@@ -73,15 +73,10 @@ export default function MinimalNavBar() {
   return (
     <header className={classes.header}>
       <Container size="md">
-        <div className={classes.inner}>
+        <a href="#" className={classes.inner}>
           <img src={BooksLogo} alt="Books Logo" />
           <p className={classes.p}>Books</p>
-          {/* <MantineLogo size={28} /> */}
-          {/* <Group gap={5} visibleFrom="sm">
-            {items}
-          </Group> */}
-          {/* <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" /> */}
-        </div>
+        </a>
       </Container>
     </header>
   );

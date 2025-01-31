@@ -10,6 +10,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    * {
+      margin-inline: 3px;
+    }
   }
   
   .link {
@@ -34,4 +37,6 @@
   .p {
     font-size: 1.1em;
     font-weight: 600;
+    text-decoration: none;
+    color: var(--mantine-color-white);
   }
