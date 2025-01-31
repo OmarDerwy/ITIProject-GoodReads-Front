@@ -9,6 +9,7 @@ import Navbar from './components/general/navbar';
 import './App.css'
 //components
 import LandingPage from './pages/LandingPage';
+import MinimalNavBar from './components/landingpage/MinimalNavBar';
 
 const theme = createTheme({
 
@@ -22,6 +23,7 @@ function App() {
       <MantineProvider theme={theme} defaultColorScheme='dark'>
         <Navbar />
         <LandingPage/>
+        
       </MantineProvider>
     </>
   )

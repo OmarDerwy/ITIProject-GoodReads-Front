@@ -28,3 +28,11 @@
     background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
   }
 }
+
+
+.p {
+  font-size: 1.1em;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--mantine-color-white);
+}
