@@ -6,19 +6,26 @@ import { createTheme, MantineProvider } from '@mantine/core';
 import { useState } from 'react'
 //CSS
 import './App.css'
-//components
+//react-router
+import { Routes, Route, BrowserRouter} from 'react-router-dom';
+//Pages
 import LandingPage from './pages/LandingPage';
 
 const theme = createTheme({
 
 });
 function App() {
-
+  const excludedRoutes = ['/login', '/register' , '/']; //use this when navbar is finished
   return (
     <>
-      <MantineProvider theme={theme} defaultColorScheme='dark'>
-        <LandingPage/>
-      </MantineProvider>
+      <BrowserRouter>
+        <MantineProvider theme={theme} defaultColorScheme='dark'>
+          {/* Navbar */}
+          <Routes>
+            <Route path='/' element={<LandingPage/>}></Route>
+          </Routes>
+        </MantineProvider>
+      </BrowserRouter>
     </>
   )
 }
