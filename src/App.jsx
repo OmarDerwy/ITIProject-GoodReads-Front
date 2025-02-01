@@ -16,6 +16,7 @@ import UserProfile from './pages/UserProfile';
 import Navbar from './components/general/NavBar';
 import SignUp from './pages/SignUp';
 import NotFoundImage from './pages/PageNotFound';
+import { ForgotPassword } from './pages/ResetPassword';
 
 const theme = createTheme({
 
@@ -32,6 +33,7 @@ function App() {
             <Route path='/login' element={<Login/>}></Route>
             <Route path='/profile' element={<UserProfile/>}></Route>
             <Route path='/sign-up' element={<SignUp/>}></Route>
+            <Route path='/reset-password' element={<ForgotPassword/>}></Route>
             <Route path='*' element={<NotFoundImage/>}></Route>
           </Routes>
         </MantineProvider>

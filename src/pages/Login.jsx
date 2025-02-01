@@ -74,7 +74,7 @@ const Login = () => {
           {error && <Text color="red" mt={20} size="sm">{error}</Text>}
           <Group position="apart" mt="sm">
             <Checkbox label="Remember me" mt="md"/>
-            <Anchor href="#" size="sm" styles={{ label: { color: '#FDF5EA' } }} mt="lg">Forgot your password?</Anchor>
+            <Anchor href="/reset-password" size="sm" styles={{ label: { color: '#FDF5EA' } }} mt="lg">Forgot your password?</Anchor>
           </Group>
           <Button fullWidth 
                   mt="xl" 
