@@ -11,6 +11,9 @@ import { Routes, Route, BrowserRouter} from 'react-router-dom';
 //Pages
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
+//components
+import Navbar from './components/general/Navbar';
+
 
 
 const theme = createTheme({
@@ -22,7 +25,7 @@ function App() {
     <>
       <BrowserRouter>
         <MantineProvider theme={theme} defaultColorScheme='dark'>
-          {/* Navbar */}
+          <Navbar/>
           <Routes>
             <Route path='/' element={<LandingPage/>}></Route>
             <Route path='/login' element={<Login/>}></Route>

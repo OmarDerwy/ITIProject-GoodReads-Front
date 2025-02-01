@@ -1,7 +1,7 @@
 import { IconSearch } from "@tabler/icons-react";
 import { Autocomplete, Burger, Group } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import classes from "./navbar.module.css";
+import classes from "../../styles/general/Navbar.module.css";
 import BooksLogo from "/Logomark.svg";
 
 const links = [
