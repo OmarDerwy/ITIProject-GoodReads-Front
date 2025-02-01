@@ -13,7 +13,7 @@ import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import UserProfile from './pages/UserProfile';
 //components
-import Navbar from './components/general/Navbar';
+import Navbar from './components/general/NavBar';
 
 
 
