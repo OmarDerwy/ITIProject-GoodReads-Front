@@ -1,4 +1,4 @@
-import { IconSearch } from "@tabler/icons-react";
+// import { IconSearch } from "@tabler/icons-react"
 import { Autocomplete, Burger, Group } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "../../styles/general/Navbar.module.css";
@@ -57,7 +57,7 @@ function Navbar() {
           <Autocomplete
             className={classes.search}
             placeholder="Search"
-            leftSection={<IconSearch size={16} stroke={1.5} />}
+            leftSection="wait ill find something"
             
             visibleFrom="xs"
           />
