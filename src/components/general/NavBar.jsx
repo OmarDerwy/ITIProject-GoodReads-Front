@@ -3,6 +3,8 @@ import { Autocomplete, Burger, Group } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "../../styles/general/Navbar.module.css";
 import BooksLogo from "/Logomark.svg";
+import { CiSearch } from "react-icons/ci";
+
 
 const links = [
   { link: "/about", label: "Home" },
@@ -57,7 +59,7 @@ function Navbar() {
           <Autocomplete
             className={classes.search}
             placeholder="Search"
-            leftSection="wait ill find something"
+            leftSection={<CiSearch />}
             
             visibleFrom="xs"
           />
