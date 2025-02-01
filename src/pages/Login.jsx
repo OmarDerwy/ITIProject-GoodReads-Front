@@ -24,10 +24,11 @@ const Login = () => {
 
   return (
     <Paper shadow="md" p="xl" radius="md" withBorder style={{ minHeight: '100vh' }}>
-      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '50px', marginTop: '25px' }}>
-        <img src={BooksLogo} alt="Books Logo" style={{ width: '200px', height: '200px' }} />
-      </div>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+            <img src={BooksLogo} alt="Books Logo" style={{ width: '200px', height: '200px' }} />
+        </div>
       <Paper
+        maw={700}
         shadow="md"
         p="xl"
         className={classes.loginContainer} 
@@ -87,7 +88,7 @@ const Login = () => {
         </form>
         <Divider my="xl" label="Or" labelPosition="center" />
         <Text align="center" size="sm">
-          Do not have an account? <Anchor href="signUp.html">Sign up now</Anchor>
+          Do not have an account? <Anchor href="/sign-up">Sign up now</Anchor>
         </Text>
       </Paper>
     </Paper>
