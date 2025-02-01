@@ -1,4 +1,5 @@
-import { IconBrandInstagram, IconBrandFacebook, IconBrandTwitter, IconBrandYoutube } from '@tabler/icons-react';
+// import { IconBrandInstagram, IconBrandFacebook, IconBrandTwitter, IconBrandYoutube } from '@tabler/icons-react';
+import {FaInstagramSquare, FaFacebookSquare, FaTwitterSquare, FaYoutubeSquare  } from 'react-icons/fa'
 import { ActionIcon, Anchor, Group, Text } from '@mantine/core';
 import classes from '../../styles/landingpage/FooterCentered.module.css';
 
@@ -38,7 +39,7 @@ export default function FooterCentered() {
                       radius="xl"
                       component="a"
                       href="https://twitter.com">
-            <IconBrandTwitter size={18} stroke={1.5} />
+            <FaTwitterSquare size={18} stroke={1.5} />
           </ActionIcon>
           <ActionIcon size="lg"
                       variant="gradient"
@@ -46,7 +47,7 @@ export default function FooterCentered() {
                       radius="xl"
                       component="a"
                       href="https://youtube.com">
-            <IconBrandYoutube size={18} stroke={1.5} />
+            <FaYoutubeSquare  size={18} stroke={1.5} />
           </ActionIcon>
           <ActionIcon size="lg"
                       variant="gradient"
@@ -54,7 +55,7 @@ export default function FooterCentered() {
                       radius="xl"
                       component="a"
                       href="https://instagram.com">
-            <IconBrandInstagram size={18} stroke={1.5} />
+            <FaInstagramSquare size={18} stroke={1.5} />
           </ActionIcon>
           <ActionIcon size="lg"
                       variant="gradient"
@@ -63,7 +64,7 @@ export default function FooterCentered() {
                       component="a"
                       href="https://facebook.com"
           >
-            <IconBrandFacebook size={18} stroke={1.5} />
+            <FaFacebookSquare size={18} stroke={1.5} />
           </ActionIcon>
         </Group>
       </div>

@@ -1,4 +1,5 @@
 // import React from 'react'
+import MinimalNavbar from '../components/landingpage/MinimalNavbar'
 import HeroSection from '../components/landingpage/HeroSection'
 import Footer from '../components/general/Footer'
 // import NotFoundImage from '../pages/PageNotFound'
