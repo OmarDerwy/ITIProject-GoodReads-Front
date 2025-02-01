@@ -25,6 +25,7 @@ function App() {
     <>
       <BrowserRouter>
         <MantineProvider theme={theme} defaultColorScheme='dark'>
+          <Navbar />
           {/* Navbar */}
           <Routes>
             <Route path='/' element={<LandingPage/>}></Route>
