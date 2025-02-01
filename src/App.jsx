@@ -14,8 +14,8 @@ import Login from './pages/Login';
 import UserProfile from './pages/UserProfile';
 //components
 import Navbar from './components/general/NavBar';
-
-
+import SignUp from './pages/SignUp';
+import NotFoundImage from './pages/PageNotFound';
 
 const theme = createTheme({
 
@@ -30,9 +30,9 @@ function App() {
           <Routes>
             <Route path='/' element={<LandingPage/>}></Route>
             <Route path='/login' element={<Login/>}></Route>
-            {/* <Route path='/register' element={<Login/>}></Route> */}
             <Route path='/profile' element={<UserProfile/>}></Route>
-            {/* <Route path='/home' element={<Login/>}></Route> */}
+            <Route path='/sign-up' element={<SignUp/>}></Route>
+            <Route path='*' element={<NotFoundImage/>}></Route>
           </Routes>
         </MantineProvider>
       </BrowserRouter>
