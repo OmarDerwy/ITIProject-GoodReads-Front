@@ -2,7 +2,7 @@
 import { Burger, Center, Container, Group, Menu } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 // import { MantineLogo } from '@mantinex/mantine-logo';
-import classes from './../../styles/landingpage/MinimalNavBar.module.css';
+import classes from './../../styles/landingpage/MinimalNavbar.module.css';
 import BooksLogo from '/Logomark.svg';
 
 // const links = [
