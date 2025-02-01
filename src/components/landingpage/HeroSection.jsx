@@ -6,7 +6,11 @@ import EtherealBook from '/EtherealBook.png'
 //react
 import { useState, useEffect } from 'react';
 
+//react-router
+import { useNavigate } from 'react-router-dom';
+
 export default function HeroSection() {
+  const navigate = useNavigate();
   function ImageWithHueShift({ src, alt, className }) {
     const [hue, setHue] = useState(0);
   
@@ -57,7 +61,7 @@ export default function HeroSection() {
               </Button>
               <Button
                 component="a"
-                href="#"
+                onClick={() => navigate('/Login')}
                 size="xl"
                 variant="default"
                 className={classes.control}
