@@ -8,10 +8,12 @@ import { createTheme, MantineProvider } from '@mantine/core';
 import './App.css'
 //react-router
 import { Routes, Route, BrowserRouter} from 'react-router-dom';
+//components
+import Navbar from './components/general/NavBar';
 //Pages
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
-
+import UserProfile from './pages/UserProfile';
 
 const theme = createTheme({
 
@@ -22,10 +24,13 @@ function App() {
     <>
       <BrowserRouter>
         <MantineProvider theme={theme} defaultColorScheme='dark'>
-          {/* Navbar */}
+          {!excludedRoutes.includes(location.pathname) && <Navbar />}
           <Routes>
             <Route path='/' element={<LandingPage/>}></Route>
             <Route path='/login' element={<Login/>}></Route>
+            {/* <Route path='/register' element={<Login/>}></Route> */}
+            <Route path='/profile' element={<UserProfile/>}></Route>
+            {/* <Route path='/home' element={<Login/>}></Route> */}
           </Routes>
         </MantineProvider>
       </BrowserRouter>
