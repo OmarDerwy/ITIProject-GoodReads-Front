@@ -53,6 +53,7 @@ export default function HeroSection() {
             <Group className={classes.controls}>
               <Button
                 size="xl"
+                onClick={() => navigate('/sign-up')}
                 className={classes.control}
                 variant="gradient"
                 gradient={{ from: 'green', to: 'lightgreen' }}
