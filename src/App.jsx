@@ -8,12 +8,14 @@ import { createTheme, MantineProvider } from '@mantine/core';
 import './App.css'
 //react-router
 import { Routes, Route, BrowserRouter} from 'react-router-dom';
-//components
-import Navbar from './components/general/NavBar';
 //Pages
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import UserProfile from './pages/UserProfile';
+//components
+import Navbar from './components/general/Navbar';
+
+
 
 const theme = createTheme({
 
