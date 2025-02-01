@@ -10,6 +10,7 @@ import './App.css'
 import { Routes, Route, BrowserRouter} from 'react-router-dom';
 //Pages
 import LandingPage from './pages/LandingPage';
+import Login from './pages/Login';
 
 
 const theme = createTheme({
@@ -24,6 +25,7 @@ function App() {
           {/* Navbar */}
           <Routes>
             <Route path='/' element={<LandingPage/>}></Route>
+            <Route path='/login' element={<Login/>}></Route>
           </Routes>
         </MantineProvider>
       </BrowserRouter>
