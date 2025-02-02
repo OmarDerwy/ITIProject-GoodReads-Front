@@ -1,6 +1,6 @@
 // import { IconSearch } from "@tabler/icons-react"
-import { Autocomplete, Burger, Button, Group } from "@mantine/core";
-import { useNavigate } from 'react-router-dom';
+import { Autocomplete, Burger, Button, Drawer, Group } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "../../styles/general/Navbar.module.css";
 import BooksLogo from "/Logomark.svg";
@@ -19,11 +19,7 @@ function Navbar() {
   const [opened, { toggle }] = useDisclosure(false);
 
   const items = links.map((link) => (
-    <Link
-      key={link.label}
-      to={link.link}
-      className={classes.link}
-    >
+    <Link key={link.label} to={link.link} className={classes.link}>
       {link.label}
     </Link>
   ));
@@ -32,7 +28,11 @@ function Navbar() {
     <header className={classes.header}>
       <div className={classes.inner}>
         <Group wrap="nowrap" align="flex-start" className="Logo">
-          <Link style={{textDecoration: "none"}} to="#" className={classes.inner}>
+          <Link
+            style={{ textDecoration: "none" }}
+            to="#"
+            className={classes.inner}
+          >
             <img src={BooksLogo} alt="Books Logo" />
             <p className={classes.p}>Books</p>
           </Link>
@@ -48,27 +48,62 @@ function Navbar() {
             leftSection={<CiSearch />}
             visibleFrom="xs"
           />
-
-          <Button
-            size="sm"
-            onClick={() => navigate("/Login")}
-            className={classes.control}
-            variant="gradient"
-            gradient={{ from: "green", to: "lightgreen" }}
-          >
-            Login
-          </Button>
-          <Button
-            component="a"
-            onClick={() => navigate("/sign-up")}
-            size="sm"
-            variant="default"
-            className={classes.control}
-          >
-            Sign Up
-          </Button>
+          <Group visibleFrom="sm">
+            <Button
+              size="sm"
+              onClick={() => navigate("/Login")}
+              className={classes.control}
+              variant="gradient"
+              gradient={{ from: "green", to: "lightgreen" }}
+            >
+              Login
+            </Button>
+            <Button
+              component="a"
+              onClick={() => navigate("/sign-up")}
+              size="sm"
+              variant="default"
+              className={classes.control}
+            >
+              Sign Up
+            </Button>
+          </Group>
           <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" />
-
+          <Drawer opened={opened} onClose={toggle} size="100%">
+          <Autocomplete
+            className={classes.search}
+            placeholder="Search"
+            leftSection={<CiSearch />}
+            mb={10}
+          />
+            <Group gap={10} mb={10} pb={50} pt={20} display="block" onClick={()=>toggle()}  >
+              {items}
+            </Group>
+            <Button
+              size="sm"
+              onClick={() => {navigate("/Login"); toggle()}}
+              className={classes.control}
+              variant="gradient"
+              gradient={{ from: "green", to: "lightgreen" }}
+              gap={5}
+              display="block"
+              mb={10}
+              fullWidth="true"
+            >
+              Login
+            </Button>
+            <Button
+              component="a"
+              onClick={() => {navigate("/sign-up"); toggle()}}
+              size="sm"
+              variant="default"
+              className={classes.control}
+              fullWidth="true"
+            >
+              Sign Up
+            </Button>
+            
+          </Drawer>
         </Group>
       </div>
     </header>
