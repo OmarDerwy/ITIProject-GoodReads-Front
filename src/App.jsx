@@ -14,6 +14,7 @@ import SignUp from './pages/SignUp';
 import NotFoundImage from './pages/PageNotFound';
 import { ForgotPassword } from './pages/ResetPassword';
 import { GetInTouchSimple } from './pages/GetInTouch';
+import Bookshelves from './pages/Bookshelves';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path='/' element={<LandingPage/>}></Route>
           <Route path='/login' element={<Login/>}></Route>
           <Route path='/profile' element={<UserProfile/>}></Route>
+          <Route path='/bookshelves' element={<Bookshelves/>}></Route>
           <Route path='/sign-up' element={<SignUp/>}></Route>
           <Route path='/reset-password' element={<ForgotPassword/>}></Route>
           <Route path='/contact-us' element={<GetInTouchSimple/>}></Route>
