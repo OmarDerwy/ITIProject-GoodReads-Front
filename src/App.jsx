@@ -1,8 +1,4 @@
-//mantine styles
-import '@mantine/core/styles.css';
-//mantine core
-import { createTheme, MantineProvider } from '@mantine/core';
-//R
+
 // import { useState } from 'react'
 //CSS
 import './App.css'
@@ -18,25 +14,21 @@ import SignUp from './pages/SignUp';
 import NotFoundImage from './pages/PageNotFound';
 import { ForgotPassword } from './pages/ResetPassword';
 
-const theme = createTheme({
 
-});
 function App() {
   const excludedRoutes = ['/login', '/register' , '/']; //use this when navbar is finished
   return (
     <>
       <BrowserRouter>
-        <MantineProvider theme={theme} defaultColorScheme='dark'>
-          {!excludedRoutes.includes(location.pathname) && <Navbar />}
-          <Routes>
-            <Route path='/' element={<LandingPage/>}></Route>
-            <Route path='/login' element={<Login/>}></Route>
-            <Route path='/profile' element={<UserProfile/>}></Route>
-            <Route path='/sign-up' element={<SignUp/>}></Route>
-            <Route path='/reset-password' element={<ForgotPassword/>}></Route>
-            <Route path='*' element={<NotFoundImage/>}></Route>
-          </Routes>
-        </MantineProvider>
+        {!excludedRoutes.includes(location.pathname) && <Navbar />}
+        <Routes>
+          <Route path='/' element={<LandingPage/>}></Route>
+          <Route path='/login' element={<Login/>}></Route>
+          <Route path='/profile' element={<UserProfile/>}></Route>
+          <Route path='/sign-up' element={<SignUp/>}></Route>
+          <Route path='/reset-password' element={<ForgotPassword/>}></Route>
+          <Route path='*' element={<NotFoundImage/>}></Route>
+        </Routes>
       </BrowserRouter>
     </>
   )
