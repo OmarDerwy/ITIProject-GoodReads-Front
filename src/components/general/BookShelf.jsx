@@ -1,4 +1,4 @@
-import { Container, Group, Paper } from '@mantine/core'
+import { Container, Group, Paper, Title } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
 import { Link } from 'react-router-dom'
 // import { BookCard } from './BookCard'
@@ -10,9 +10,10 @@ export function BookShelf() {
   return (
     <Container>
       <Paper bg={'#1C1E21'} m={20} p={20}>
+        <Title className='text-white' order={2}>Bookshelf</Title>
         <Carousel
         withIndicators
-        slideSize="33.333333%"
+        slideSize={{base:'20%', xs:'33.333%' ,sm:'25%', md:'20%', lg:'20%'}}
         slideGap="md"
         loop
         align="start"
