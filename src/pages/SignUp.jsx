@@ -2,7 +2,12 @@ import { useState } from 'react';
 import { TextInput, PasswordInput, Checkbox, Button, Group, Text, Paper , Title, Anchor} from '@mantine/core';
 import BooksLogo from '/Logomark.svg';
 import classes from '../styles/landingpage/Login.module.css';
+import { AiOutlineMail} from "react-icons/ai";
+import { RiLockPasswordLine } from "react-icons/ri";
+import { CiUser } from "react-icons/ci";
+import { BsTelephone } from "react-icons/bs";
 // import PasswordRequirement from '../components/general/PasswordStrength';
+
 
 const SignUp = () => {
   const [formValues, setFormValues] = useState({
@@ -69,6 +74,7 @@ const SignUp = () => {
         <TextInput
           label="Username"
           placeholder="Enter a username"
+          leftSection={<CiUser size={16} />}
           styles={{
             input: { height: '50px'}, 
             label: { fontWeight:'900', marginBottom:'10px', fontSize:'1rem'}
@@ -76,6 +82,7 @@ const SignUp = () => {
           mt="lg"
           mb="lg"
           required
+          
           className={classes.loginContainerLabel}
           value={formValues.username}
           onChange={(e) => setFormValues({ ...formValues, username: e.target.value })}
@@ -84,6 +91,7 @@ const SignUp = () => {
         <TextInput
           label="Email"
           placeholder="Enter your email"
+          leftSection={<AiOutlineMail size={16} />}
           styles={{
             input: { height: '50px'}, 
             label: { fontWeight:'900', marginBottom:'10px', fontSize:'1rem'}
@@ -98,6 +106,7 @@ const SignUp = () => {
         />
         <TextInput
           label="Phone Number"
+          leftSection={<BsTelephone size={16} />}
           placeholder="Enter your phone number"
           styles={{
             input: { height: '50px'}, 
@@ -113,6 +122,7 @@ const SignUp = () => {
         />
         <PasswordInput
           label="Password"
+          leftSection={<RiLockPasswordLine size={16}/> }
           placeholder="Enter your password"
           styles={{
             input: { height: '50px'}, 
@@ -128,6 +138,7 @@ const SignUp = () => {
         />
         <PasswordInput
           label="Confirm Password"
+          leftSection={<RiLockPasswordLine size={16}/> }
           placeholder="Confirm your password"
           styles={{
             input: { height: '50px'}, 
@@ -147,6 +158,7 @@ const SignUp = () => {
           styles={{ 
             label: { fontWeight:'900', marginBottom:'10px', fontSize:'1rem', color:'lightgreen'}
           }}
+          color="lightgreen"
           required
           className={classes.loginContainerLabel}
           mb="lg"
