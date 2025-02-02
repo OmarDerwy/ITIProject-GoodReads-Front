@@ -30,7 +30,7 @@ function Navbar() {
         <Group wrap="nowrap" align="flex-start" className="Logo">
           <Link
             style={{ textDecoration: "none" }}
-            to="#"
+            to=""
             className={classes.inner}
           >
             <img src={BooksLogo} alt="Books Logo" />
