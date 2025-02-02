@@ -2,9 +2,11 @@ import { useState } from 'react';
 import classes from '../styles/landingpage/Login.module.css';
 import { TextInput, PasswordInput, Button, Checkbox, Divider, Text, Paper, Group, Anchor, Title } from '@mantine/core';
 import BooksLogo from '/Logomark.svg';
+import { RiLockPasswordLine } from "react-icons/ri";
+
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -12,6 +14,7 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
+    
     const userFound = users.find(user => user.name === username && user.password === password);
     
     if (userFound) {
@@ -44,21 +47,23 @@ const Login = () => {
 
         <form onSubmit={handleLogin}>
           <TextInput
-            label="Username"
+            label="Email"
             styles={{
               input: { height: '50px'}, 
               label: { fontWeight:'900', marginBottom:'10px', fontSize:'1rem'}
             }}
+
             className={classes.loginContainerLabel}            
-            placeholder="Enter a Username"
+            placeholder="Enter your Email"
             required
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             mt="xl"
             mb="xl"
           />
           <PasswordInput
             label="Password"
+            leftSection={<RiLockPasswordLine size={16}/> }
             styles={{
               input: { height: '50px', marginBottom:'10px'}, 
               label: { fontWeight:'900', marginBottom:'10px', fontSize:'1rem'}
@@ -73,7 +78,7 @@ const Login = () => {
           />
           {error && <Text color="red" mt={20} size="sm">{error}</Text>}
           <Group position="apart" mt="sm">
-            <Checkbox label="Remember me" mt="md"/>
+            <Checkbox label="Remember me" mt="md" color="lightgreen"/>
             <Anchor href="/reset-password" size="sm" styles={{ label: { color: '#FDF5EA' } }} mt="lg">Forgot your password?</Anchor>
           </Group>
           <Button fullWidth 

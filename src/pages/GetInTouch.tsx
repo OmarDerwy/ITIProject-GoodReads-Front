@@ -1,6 +1,10 @@
 import { Button, Group, SimpleGrid, Textarea, TextInput, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { AiOutlineMail} from "react-icons/ai";
 import classes from '../styles/general/GetInTouch.module.css';
+import React from 'react';
+
+
 
 export function GetInTouchSimple() {
 const form = useForm({
@@ -39,6 +43,7 @@ return (
     />
     <TextInput
         label="Email"
+        leftSection={<AiOutlineMail size={16} />}
         placeholder="Your email"
         name="email"
         mb="xl"
@@ -58,7 +63,7 @@ return (
     placeholder="Subject"
     mt="md"
     mb="xl"
-    required
+    
     name="subject"
     variant="filled"
     className={classes.contactUsFormLabel}
@@ -76,7 +81,7 @@ return (
     maxRows={10}
     minRows={5}
     autosize
-    required
+    
     name="message"
     variant="filled"
     className={classes.contactUsFormLabel}
