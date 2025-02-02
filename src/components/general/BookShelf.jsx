@@ -7,8 +7,8 @@ import React from 'react'
 export function BookShelf() {
   return (
     <Container>
-      <Paper bg={'white'}>
-        <Group justify='flex-starts'>
+      <Paper bg={'#1C1E21'}>
+        <Group justify='flex-starts' m={20}>
           <p>test</p>
           <p>test</p>
           <p>test</p>
