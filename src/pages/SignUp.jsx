@@ -1,22 +1,31 @@
 import { useState } from 'react';
 import { TextInput, PasswordInput, Checkbox, Button, Group, Text, Paper , Title, Anchor} from '@mantine/core';
-import BooksLogo from '/Logomark.svg';
 import classes from '../styles/landingpage/Login.module.css';
+//react-router-dom
+import { useNavigate } from 'react-router-dom';
+//logo
+import BooksLogo from '/Logomark.svg';
+//icons
 import { AiOutlineMail} from "react-icons/ai";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { CiUser } from "react-icons/ci";
 import { BsTelephone } from "react-icons/bs";
 // import PasswordRequirement from '../components/general/PasswordStrength';
+//axios
+import axiosInstance from '../apis/config'
 
 
 const SignUp = () => {
+  //init useNaviate
+  const navigate = useNavigate();
+  //init form values state
   const [formValues, setFormValues] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    phoneNumber: '',
-    terms: false,
+    username: 'dummy1',
+    email: 'dummy1@gmail.com',
+    password: '6482Awed',
+    confirmPassword: '6482Awed',
+    phoneNumber: '01234567898',
+    terms: true,
   });
 
   const [errors, setErrors] = useState({});
@@ -49,7 +58,23 @@ const SignUp = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (validate()) {
-      console.log("Success");
+      console.log("signup validated");
+      const sendPackage ={
+        name: formValues.username,
+        email: formValues.email,
+        password: formValues.password,
+      }
+      axiosInstance.post('/api/auth/register', sendPackage)
+      .then((response) => {
+        console.log(response);
+        //send registeration success for a toast at the landing page
+        navigate('/login', {state:{registerSuccess: true}})
+      }).catch((error) => {
+        if(error.response.data.error.includes('duplicate')){
+          setErrors({email: "Email already exists"})
+        }
+      
+      })
     }
   };
 

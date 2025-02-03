@@ -1,15 +1,32 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import classes from '../styles/landingpage/Login.module.css';
 import { TextInput, PasswordInput, Button, Checkbox, Divider, Text, Paper, Group, Anchor, Title } from '@mantine/core';
+import { notifications } from '@mantine/notifications'
 import BooksLogo from '/Logomark.svg';
 import { RiLockPasswordLine } from "react-icons/ri";
 
 
 const Login = () => {
+  //user input states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  const [success, setSuccess] = useState(false)
+  //location hook
+  const location = useLocation();
+  // notifications.show({
+  //   message: 'just a test',
+  //   color: 'green'
+  // })
+  if(location.state){
+    location.state.registerSuccess && notifications.show({
+      title:'Registeration successful!',
+      message:"User has been registered successfuly.",
+      color: 'green'
+    })
+    location.state.registerSuccess = false
+  }
   const users = JSON.parse(localStorage.getItem("users")) || [];
 
   const handleLogin = (e) => {
@@ -27,9 +44,9 @@ const Login = () => {
 
   return (
     <Paper shadow="md" p="xl" radius="md" withBorder style={{ minHeight: '100vh' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-            <img src={BooksLogo} alt="Books Logo" style={{ width: '200px', height: '200px' }} />
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+          <img src={BooksLogo} alt="Books Logo" style={{ width: '200px', height: '200px' }} />
+      </div>
       <Paper
         maw={700}
         shadow="md"
@@ -101,6 +118,7 @@ const Login = () => {
 };
 
 export default Login;
+
 
 
 

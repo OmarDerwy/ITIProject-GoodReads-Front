@@ -5,6 +5,7 @@ import App from './App.jsx'
 //Mantine
 import '@mantine/carousel/styles.css';
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import { createTheme, MantineProvider } from '@mantine/core';
 //react-router-dom
 import { BrowserRouter } from 'react-router-dom';

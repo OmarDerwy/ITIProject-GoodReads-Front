@@ -15,6 +15,7 @@ import NotFoundImage from './pages/PageNotFound';
 import { ForgotPassword } from './pages/ResetPassword';
 import { GetInTouchSimple } from './pages/GetInTouch';
 import Bookshelves from './pages/Bookshelves';
+import { Notifications } from '@mantine/notifications';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
   return (
     <>
       {!excludedRoutes.includes(location.pathname) && <Navbar />}
+      <Notifications/>
       <Routes>
         <Route path='/' element={<LandingPage/>}></Route>
         <Route path='/login' element={<Login/>}></Route>
