@@ -18,10 +18,11 @@ import Bookshelves from './pages/Bookshelves';
 import AuthorDetails from './pages/AuthorDetails';
 import CategoryDetails from './pages/CategoryDetails';
 import Categories from './pages/Categories';
+import Authors from './pages/Authors';
 
 function App() {
   const location = useLocation();
-  const excludedRoutes = ['/login', '/register' , '/']; //use this when navbar is finished
+  const excludedRoutes = ['/login', '/sign-up' , '/']; //use this when navbar is finished
   return (
     <>
       {!excludedRoutes.includes(location.pathname) && <Navbar />}
@@ -34,6 +35,7 @@ function App() {
         <Route path='/reset-password' element={<ForgotPassword/>}></Route>
         <Route path='/contact-us' element={<GetInTouchSimple/>}></Route>
         <Route path='/author-details' element={<AuthorDetails/>}></Route>
+        <Route path='/authors' element={<Authors/>}></Route>
         <Route path='/category-details' element={<CategoryDetails/>}></Route>
         <Route path='/categories' element={<Categories/>}></Route>
 
