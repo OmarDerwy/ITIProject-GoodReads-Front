@@ -1,0 +1,82 @@
+.wrapper {
+display: flex;
+align-items: center;
+margin: 0 auto;
+padding: calc(var(--mantine-spacing-xl) * 2);
+border-radius: var(--mantine-radius-md);
+background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-8));
+border: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-8));
+
+@media (max-width: var(--mantine-breakpoint-sm)) {
+    flex-direction: column-reverse;
+    padding: var(--mantine-spacing-xl);
+}
+}
+
+
+
+.title {
+    color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+    font-family:
+    Greycliff CF,
+    var(--mantine-font-family);
+    line-height: 1;
+    margin-bottom: var(--mantine-spacing-md);
+
+}
+
+.body {
+    padding-right: calc(var(--mantine-spacing-xl) * 4);
+    
+    @media (max-width: $mantine-breakpoint-sm) {
+    padding-right: 0;
+    margin-top: var(--mantine-spacing-xl);
+    }
+    }
+
+
+
+.controls {
+display: flex;
+flex-direction: column; 
+margin-top: var(--mantine-spacing-xl);
+width: 100%; 
+}
+
+.inputWrapper {
+width: 100%;
+}
+
+.input {
+border-radius: var(--mantine-radius-md);
+margin-bottom: var(--mantine-spacing-sm); 
+}
+
+.control {
+border-radius: var(--mantine-radius-md); 
+width: 100%; 
+}
+
+.btnSubscribe{
+    color: var(--secondry-1);
+    max-width: 25%;
+    
+}
+
+.btnSubscribe:hover {
+    color: var(--primary-1);
+    transition: background-color 1.5s, color 1.5s, transform 0.75s;
+    transform: scale(1.05);
+    transform-origin: center;
+}
+
+.image {
+    max-width: 35%; 
+    height: auto;      
+    display: block;  
+    margin: 0 auto; 
+
+    @media (max-width: var(--mantine-breakpoint-sm)){
+        max-width: 90%; 
+    }
+}
