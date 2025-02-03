@@ -6,6 +6,8 @@ import App from './App.jsx'
 import '@mantine/carousel/styles.css';
 import '@mantine/core/styles.css';
 import { createTheme, MantineProvider } from '@mantine/core';
+//react-router-dom
+import { BrowserRouter } from 'react-router-dom';
 
 const theme = createTheme({
 
@@ -14,7 +16,9 @@ const theme = createTheme({
 createRoot(document.getElementById('root')).render(
   // <StrictMode>
   <MantineProvider theme={theme} defaultColorScheme='dark'>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </MantineProvider>
-  // </StrictMode>,
+  // </StrictMode>
 )

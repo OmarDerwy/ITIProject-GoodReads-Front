@@ -3,7 +3,7 @@
 //CSS
 import './App.css'
 //react-router
-import { Routes, Route, BrowserRouter} from 'react-router-dom';
+import { Routes, Route, useLocation} from 'react-router-dom';
 //Pages
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
@@ -18,22 +18,21 @@ import Bookshelves from './pages/Bookshelves';
 
 
 function App() {
+  const location = useLocation();
   const excludedRoutes = ['/login', '/register' , '/']; //use this when navbar is finished
   return (
     <>
-      <BrowserRouter>
-        {!excludedRoutes.includes(location.pathname) && <Navbar />}
-        <Routes>
-          <Route path='/' element={<LandingPage/>}></Route>
-          <Route path='/login' element={<Login/>}></Route>
-          <Route path='/profile' element={<UserProfile/>}></Route>
-          <Route path='/bookshelves' element={<Bookshelves/>}></Route>
-          <Route path='/sign-up' element={<SignUp/>}></Route>
-          <Route path='/reset-password' element={<ForgotPassword/>}></Route>
-          <Route path='/contact-us' element={<GetInTouchSimple/>}></Route>
-          <Route path='*' element={<NotFoundImage/>}></Route>
-        </Routes>
-      </BrowserRouter>
+      {!excludedRoutes.includes(location.pathname) && <Navbar />}
+      <Routes>
+        <Route path='/' element={<LandingPage/>}></Route>
+        <Route path='/login' element={<Login/>}></Route>
+        <Route path='/profile' element={<UserProfile/>}></Route>
+        <Route path='/bookshelves' element={<Bookshelves/>}></Route>
+        <Route path='/sign-up' element={<SignUp/>}></Route>
+        <Route path='/reset-password' element={<ForgotPassword/>}></Route>
+        <Route path='/contact-us' element={<GetInTouchSimple/>}></Route>
+        <Route path='*' element={<NotFoundImage/>}></Route>
+      </Routes>
     </>
   )
 }
