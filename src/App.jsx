@@ -19,6 +19,7 @@ import AuthorDetails from './pages/AuthorDetails';
 import CategoryDetails from './pages/CategoryDetails';
 import Categories from './pages/Categories';
 import Authors from './pages/Authors';
+import General from './pages/General';
 
 function App() {
   const location = useLocation();
@@ -38,6 +39,8 @@ function App() {
         <Route path='/authors' element={<Authors/>}></Route>
         <Route path='/category-details' element={<CategoryDetails/>}></Route>
         <Route path='/categories' element={<Categories/>}></Route>
+        <Route path='/general' element={<General/>}></Route>
+
 
 
         <Route path='*' element={<NotFoundImage/>}></Route>
