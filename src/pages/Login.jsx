@@ -38,9 +38,9 @@ const Login = () => {
       .then((response) => {
         console.log(response);
         //send registeration success for a toast at the landing page
-        navigate('/', {state:{loginSuccess: true}})
+        navigate('/profile', {state:{loginSuccess: true}})
       }).catch((error) => {
-      
+        
       })
   };
 
