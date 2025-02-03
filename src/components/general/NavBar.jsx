@@ -51,7 +51,7 @@ function Navbar() {
           <Group visibleFrom="sm">
             <Button
               size="sm"
-              onClick={() => navigate("/Login")}
+              onClick={() => navigate("/login")}
               className={classes.control}
               variant="gradient"
               gradient={{ from: "green", to: "lightgreen" }}
