@@ -16,6 +16,8 @@ import { ForgotPassword } from './pages/ResetPassword';
 import { GetInTouchSimple } from './pages/GetInTouch';
 import Bookshelves from './pages/Bookshelves';
 import AuthorDetails from './pages/AuthorDetails';
+import CategoryDetails from './pages/CategoryDetails';
+import Categories from './pages/Categories';
 
 function App() {
   const location = useLocation();
@@ -32,6 +34,10 @@ function App() {
         <Route path='/reset-password' element={<ForgotPassword/>}></Route>
         <Route path='/contact-us' element={<GetInTouchSimple/>}></Route>
         <Route path='/author-details' element={<AuthorDetails/>}></Route>
+        <Route path='/category-details' element={<CategoryDetails/>}></Route>
+        <Route path='/categories' element={<Categories/>}></Route>
+
+
         <Route path='*' element={<NotFoundImage/>}></Route>
       </Routes>
     </>
