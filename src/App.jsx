@@ -20,16 +20,18 @@ import AuthorDetails from './pages/AuthorDetails';
 import CategoryDetails from './pages/CategoryDetails';
 import Categories from './pages/Categories';
 import Authors from './pages/Authors';
+import Admin from './pages/Admin';
 
 function App() {
   const location = useLocation();
-  const excludedRoutes = ['/login', '/sign-up' , '/']; //use this when navbar is finished
+  const excludedRoutes = ['/login', '/sign-up' , '/', '/admin']; //use this when navbar is finished
   return (
     <>
       {!excludedRoutes.includes(location.pathname) && <Navbar />}
       <Notifications/>
       <Routes>
         <Route path='/' element={<LandingPage/>}></Route>
+        <Route path='/admin' element={<Admin/>}></Route>
         <Route path='/login' element={<Login/>}></Route>
         <Route path='/profile' element={<UserProfile/>}></Route>
         <Route path='/bookshelves' element={<Bookshelves/>}></Route>
