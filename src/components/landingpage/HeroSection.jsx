@@ -35,7 +35,7 @@ export default function HeroSection() {
   }
   return (
     <div className={classes.wrapper}>
-      <Container size={900} className={classes.inner}>
+      <Container size={1500} style={{ minHeight: '100vh' }} className={classes.inner}>
         <Grid>
           <Grid.Col span={{base: 12, md: 6, lg: 6, xl: 6}} order={{base: 1, md: 2, lg: 2}} className={classes.imageContainer}>
             <ImageWithHueShift src={EtherealBook} alt="hero" className={classes.image} />

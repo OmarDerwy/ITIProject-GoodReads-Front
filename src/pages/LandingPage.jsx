@@ -2,6 +2,7 @@
 import MinimalNavbar from '../components/landingpage/MinimalNavbar'
 import HeroSection from '../components/landingpage/HeroSection'
 import Footer from '../components/general/Footer'
+import { FaqWithImage } from '../components/landingpage/FAQ'
 // import NotFoundImage from '../pages/PageNotFound'
 
 export default function LandingPage() {
@@ -9,6 +10,7 @@ export default function LandingPage() {
     <>
       <MinimalNavbar/>
       <HeroSection/>
+      <FaqWithImage/>
       <Footer/>
     </>
   )
