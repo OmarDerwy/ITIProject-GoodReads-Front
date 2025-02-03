@@ -27,7 +27,7 @@ function Navbar() {
   return (
     <header className={classes.header}>
       <div className={classes.inner}>
-        <Group wrap="nowrap" align="flex-start" className="Logo">
+        <Group wrap="auto" align="flex-start" className="Logo">
           <Link
             style={{ textDecoration: "none" }}
             to="/"
@@ -38,17 +38,17 @@ function Navbar() {
           </Link>
         </Group>
 
-        <Group>
-          <Group gap={5} className={classes.links} visibleFrom="sm">
+        <Group hiddenFrom="" >
+          <Group gap={5} className={classes.links} visibleFrom="md">
             {items}
           </Group>
           <Autocomplete
             className={classes.search}
             placeholder="Search"
             leftSection={<CiSearch />}
-            visibleFrom="xs"
+            visibleFrom="md"
           />
-          <Group visibleFrom="sm">
+          <Group visibleFrom="md">
             <Button
               size="sm"
               onClick={() => navigate("/login")}
@@ -68,7 +68,7 @@ function Navbar() {
               Sign Up
             </Button>
           </Group>
-          <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" />
+          <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="md" />
           <Drawer opened={opened} onClose={toggle} size="100%">
           <Autocomplete
             className={classes.search}
