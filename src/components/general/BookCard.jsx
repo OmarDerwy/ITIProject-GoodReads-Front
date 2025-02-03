@@ -1,8 +1,9 @@
 import React from 'react'
-import { Card, Image, Text } from '@mantine/core';
+import { Card, Image, Text, Rating } from '@mantine/core';
 
 
-export default function BookCard() {
+export default function BookCard(props) {
+  const {title, author, rating, views} = props;
   return (
     <Card
       shadow="sm"
@@ -20,17 +21,18 @@ export default function BookCard() {
       </Card.Section>
 
       <Text fw={500} size="lg" mt="md">
-        Book Title
+        {title == undefined? "" : title }
       </Text>
 
       <Text mt="xs" c="dimmed" size="sm">
-        Author Name
+        {author == undefined? "" : author}
       </Text>
       <Text mt="xs" c="dimmed" size="sm">
-        rating
+      {rating == undefined? "" : <Rating value={rating} fractions={2} readOnly />}
       </Text>
       <Text mt="xs" c="dimmed" size="sm">
-        Views
+      {views == undefined? "" : views+" views"}
+
       </Text>
     </Card>
   )

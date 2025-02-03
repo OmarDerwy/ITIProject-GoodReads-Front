@@ -6,11 +6,12 @@ import { Link } from 'react-router-dom'
 import React from 'react'
 import BookCard from './BookCard'
 
-export function BookShelf() {
+export function BookShelf(props) {
+  const {title, popular} = props;
   return (
     <Container>
       <Paper bg={'#1C1E21'} m={20} p={20}>
-        <Title className='text-white' order={2}>Bookshelf</Title>
+        <Title className='text-white' mb={20} order={2}>{title}</Title>
         <Carousel
         withIndicators
         slideSize={{base:'20%', xs:'33.333%' ,sm:'25%', md:'20%', lg:'20%'}}
@@ -18,14 +19,9 @@ export function BookShelf() {
         loop
         align="start"
         >
-          <Carousel.Slide><BookCard/></Carousel.Slide>
-          <Carousel.Slide><BookCard/></Carousel.Slide>
-          <Carousel.Slide><BookCard/></Carousel.Slide>
-          <Carousel.Slide><BookCard/></Carousel.Slide>
-          <Carousel.Slide><BookCard/></Carousel.Slide>
-          <Carousel.Slide><BookCard/></Carousel.Slide>
-          <Carousel.Slide><BookCard/></Carousel.Slide>
-          <Carousel.Slide><BookCard/></Carousel.Slide>
+          {popular.map((pop, i)=>(
+          <Carousel.Slide key={i}><BookCard title={pop.title} rating={pop.rating} views={pop.views}/></Carousel.Slide>
+          ))}
           {/* ...other slides */}
         </Carousel>
         {/* <Group justify='flex-starts' m={20} p={20}>
