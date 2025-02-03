@@ -71,7 +71,7 @@ const SignUp = () => {
         navigate('/login', {state:{registerSuccess: true}})
       }).catch((error) => {
         if(error.response.data.error.includes('duplicate')){
-          setErrors({email: "Email already exists"})
+          setErrors({email: "This email already exists"})
         }
       
       })

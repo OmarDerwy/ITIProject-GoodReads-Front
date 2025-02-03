@@ -5,14 +5,15 @@ import { TextInput, PasswordInput, Button, Checkbox, Divider, Text, Paper, Group
 import { notifications } from '@mantine/notifications'
 import BooksLogo from '/Logomark.svg';
 import { RiLockPasswordLine } from "react-icons/ri";
-
+import axiosInstance from '../apis/config';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
   //user input states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false)
   //location hook
   const location = useLocation();
   // notifications.show({
@@ -23,23 +24,24 @@ const Login = () => {
     location.state.registerSuccess && notifications.show({
       title:'Registeration successful!',
       message:"User has been registered successfuly.",
-      color: 'green'
+      color: 'green',
+      autoClose:5000
     })
     location.state.registerSuccess = false
   }
-  const users = JSON.parse(localStorage.getItem("users")) || [];
+  // const users = JSON.parse(localStorage.getItem("users")) || [];
 
   const handleLogin = (e) => {
     e.preventDefault();
-    
-    const userFound = users.find(user => user.name === username && user.password === password);
-    
-    if (userFound) {
-      alert(`Welcome back, ${userFound.name}!`);
-      setError("");
-    } else {
-      setError("Invalid username or password");
-    }
+    // const userFound = users.find(user => user.name === username && user.password === password);
+    axiosInstance.post('/api/auth/login', {email,password})
+      .then((response) => {
+        console.log(response);
+        //send registeration success for a toast at the landing page
+        navigate('/', {state:{loginSuccess: true}})
+      }).catch((error) => {
+      
+      })
   };
 
   return (
