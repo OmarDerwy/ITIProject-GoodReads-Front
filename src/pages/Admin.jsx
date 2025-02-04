@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { AppShell, Center, NavLink  } from '@mantine/core';
 import BooksLogo from '/Logomark.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
-
+//components
+import { TableSort } from '../components/admin/TableSort';
 
 export default function Admin() {
   const location = useLocation();
@@ -32,7 +33,7 @@ export default function Admin() {
         </NavLink>
         </AppShell.Navbar>
         <AppShell.Main>
-
+          <TableSort></TableSort>
         </AppShell.Main>
     </AppShell>
   )
