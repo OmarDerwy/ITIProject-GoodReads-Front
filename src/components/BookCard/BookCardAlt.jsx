@@ -12,11 +12,7 @@ const BookCard = ({ book }) => {
         radius="md"
         className={classes.card}
     >
-        <Link to={`/book/${book.id}`} style={{ textDecoration: 'none', color: 'inherit' }}> {/* Updated Link */}
-            <Text weight={500} size="lg" mt="sm" c="primary-1" className={classes.title}>
-                {book.title}
-            </Text>
-        </Link>
+        
 
         <Center m="xs">
             {book.image_url && <Image src={book.image_url} height={400} alt={book.title} />}
