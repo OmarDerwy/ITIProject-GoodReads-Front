@@ -21,6 +21,7 @@ import CategoryDetails from './pages/CategoryDetails';
 import Categories from './pages/Categories';
 import Authors from './pages/Authors';
 import BookList from './pages/BrowseBooks';
+import BookDetails from './pages/BookDetails';
 
 function App() {
   const location = useLocation();
@@ -41,7 +42,8 @@ function App() {
         <Route path='/authors' element={<Authors/>}></Route>
         <Route path='/category-details' element={<CategoryDetails/>}></Route>
         <Route path='/categories' element={<Categories/>}></Route>
-        <Route path='/browse-books' element={<BookList/>}></Route>
+        <Route path='/books' element={<BookList/>}></Route>
+        <Route path="/book/:bookId" element={<BookDetails/>} />
         <Route path='*' element={<NotFoundImage/>}></Route>
       </Routes>
     </>
