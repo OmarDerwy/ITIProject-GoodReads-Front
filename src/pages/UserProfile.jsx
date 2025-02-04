@@ -15,11 +15,20 @@ export default function UserProfile() {
       autoClose: 5000
     })
   }
+  const popular =[
+    { title: "book1", rating: 2.5, views: 100 },
+    { title: "book2", rating: 3, views: 200 },
+    { title: "book3", rating: 3.5, views: 300 },
+    { title: "book4", rating: 2.5, views: 100 },
+    { title: "book5", rating: 3, views: 200 },
+    { title: "book6", rating: 3.5, views: 300 },
+    { title: "book7", rating: 2.5, views: 100 },
+  ]
   return (
     <>
       <UserInfo/>
       <Divider my="md"/>
-      <BookShelf/>
+      <BookShelf title="Your Books" popular={popular} />
       
     </>
   )

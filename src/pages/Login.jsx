@@ -37,10 +37,12 @@ const Login = () => {
     axiosInstance.post('/api/auth/login', {email,password})
       .then((response) => {
         console.log(response);
+        localStorage.setItem("userToken", response.data.token);
+
         //send registeration success for a toast at the landing page
         navigate('/profile', {state:{loginSuccess: true}})
       }).catch((error) => {
-        
+        console.log(error)
       })
   };
 

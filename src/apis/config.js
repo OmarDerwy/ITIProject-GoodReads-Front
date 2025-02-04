@@ -6,14 +6,17 @@ const axiosInstance = axios.create({
    baseURL: 'http://localhost:3000',
 })
 
-// axiosInstance.interceptors.request.use(function (config) {
-//     // Do something before request is sent
-//     config.headers.Authorization = `Bearer ${apikey}`
-//     return config;
-//   }, function (error) {
-//     // Do something with request error
-//     return Promise.reject(error);
-//   });
+axiosInstance.interceptors.request.use(function (config) {
+    // Do something before request is sent
+   const token = localStorage.getItem('userToken');
+   if (token) {
+       config.headers.Authorization = `Bearer ${token}`
+   }    
+   return config;
+  }, function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  });
 
 // // Add a response interceptor
 // axiosInstance.interceptors.response.use(function (response) {
