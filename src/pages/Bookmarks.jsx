@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Rating, Grid, Table, Select, Image } from "@mantine/core";
 import classes from "./../styles/general/Bookmarks.module.css";
 import { Link } from "react-router-dom";
@@ -11,9 +11,8 @@ const data = [
 ];
 
 function Bookmarks() {
-  
   const [active, setActive] = useState("All");
-  const [bookmarksAll, setBookmarks] = useState([
+  const [bookmarksAll, setBookmarksAll] = useState([
     {
       cover: "gdsagdsag",
       name: "Cadgsag gdasgdsag",
@@ -55,16 +54,15 @@ function Bookmarks() {
       status: "Want To Read",
     },
   ]);
-  const [bookmarksRead, setBookmarksRead] = useState(
-    bookmarksAll.filter((bookmark) => bookmark.status === "Read")
-  );
-  const [bookmarksCurrReading, setBookmarksCurrReading] = useState(
-    bookmarksAll.filter((bookmark) => bookmark.status === "Currently Reading")
-  );
-  const [bookmarksWantToRead, setBookmarksWantToRead] = useState(
-    bookmarksAll.filter((bookmark) => bookmark.status === "Want To Read")
-  );
 
+  const handleStatusChange = (newStatus, bookmarkName) => {
+    const newBookmarksAll = bookmarksAll.map((bookmark) =>
+      bookmark.name === bookmarkName
+        ? { ...bookmark, status: newStatus }
+        : bookmark
+    );
+    setBookmarksAll(newBookmarksAll);
+  };
   const links = data.map((item) => {
     return (
       <Link
@@ -83,12 +81,8 @@ function Bookmarks() {
 
   const bookmarks =
     active === "All"
-      ? bookmarksAll
-      : active === "Read"
-      ? bookmarksRead
-      : active === "Currently Reading"
-      ? bookmarksCurrReading
-      : active === "Want To Read" && bookmarksWantToRead;
+      ? bookmarksAll 
+      : bookmarksAll.filter((bookmark)=> bookmark.status === active);
   const rows = bookmarks.map((bookmark) => (
     <Table.Tr key={bookmark.name}>
       <Table.Td>
@@ -107,6 +101,9 @@ function Bookmarks() {
           placeholder="Read status"
           data={["Currently Reading", "Want To Read", "Read"]}
           defaultValue={bookmark.status}
+          onChange={(_value, option) =>
+            handleStatusChange(_value, bookmark.name)
+          }
         />
       </Table.Td>
     </Table.Tr>
