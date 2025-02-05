@@ -6,7 +6,7 @@ import classes from "../../styles/general/Navbar.module.css";
 import BooksLogo from "/Logomark.svg";
 import { CiSearch } from "react-icons/ci";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const links = [
   { link: "/", label: "Home" },
@@ -19,18 +19,16 @@ function Navbar() {
   const navigate = useNavigate();
   const [opened, { toggle }] = useDisclosure(false);
   const [active, setActive] = useState("");
-  const params = useParams();
+  const location = useLocation();
+  const activePage = location.pathname.split('/')[1];
 
   const items = links.map((link) => (
     <Link
       key={link.label}
       to={link.link}
       className={classes.link}
-      data-active={link.label === active || undefined}
-      onClick={(event) => {
-        setActive(link.label);
-        console.log();
-      }}
+      data-active={link.label === activePage || undefined}
+      
     >
       {link.label}
     </Link>
