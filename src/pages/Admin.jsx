@@ -17,7 +17,7 @@ export default function Admin() {
   //   }
   // }, [location, navigate]);
   const [data, setData] = useState([]);
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(null);
   const buttons = [
     {
       label: 'Users',
@@ -30,10 +30,11 @@ export default function Admin() {
   ];
 
   const handleNewData = (index, api) => {
+    setData([])
     setActive(index);
     axiosInstance.get(api)
       .then((response) => {
-        // setData(response.data);
+        setData(response.data);
         console.log(response);
       })
   };
@@ -59,7 +60,7 @@ export default function Admin() {
         {items}
         </AppShell.Navbar>
         <AppShell.Main>
-          {/* <TableSort></TableSort> */}
+          {data.length > 0 ? <TableSort data={data} dataHeader={buttons[active].label} /> : <p>No Data Retrieved</p>}
         </AppShell.Main>
     </AppShell>
   )
