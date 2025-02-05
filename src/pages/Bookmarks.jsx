@@ -11,8 +11,9 @@ const data = [
 ];
 
 function Bookmarks() {
+  
   const [active, setActive] = useState("All");
-  const bookmarks = [
+  const [bookmarksAll, setBookmarks] = useState([
     {
       cover: "gdsagdsag",
       name: "Cadgsag gdasgdsag",
@@ -40,7 +41,7 @@ function Bookmarks() {
     {
       cover: "aDGSAGGS",
       name: "Basadg adsgasd",
-      author: "Barium AGDSD" ,
+      author: "Barium AGDSD",
       avgRating: 3.5,
       usrRating: 5,
       status: "Want To Read",
@@ -53,15 +54,15 @@ function Bookmarks() {
       usrRating: 5,
       status: "Want To Read",
     },
-  ];
-  const bookmarksRead = bookmarks.filter(
-    (bookmark) => bookmark.status === "Read"
+  ]);
+  const [bookmarksRead, setBookmarksRead] = useState(
+    bookmarksAll.filter((bookmark) => bookmark.status === "Read")
   );
-  const bookmarksCurrReading = bookmarks.filter(
-    (bookmark) => bookmark.status === "Currently Reading"
+  const [bookmarksCurrReading, setBookmarksCurrReading] = useState(
+    bookmarksAll.filter((bookmark) => bookmark.status === "Currently Reading")
   );
-  const bookmarksWantToRead = bookmarks.filter(
-    (bookmark) => bookmark.status === "Want To Read"
+  const [bookmarksWantToRead, setBookmarksWantToRead] = useState(
+    bookmarksAll.filter((bookmark) => bookmark.status === "Want To Read")
   );
 
   const links = data.map((item) => {
@@ -80,99 +81,18 @@ function Bookmarks() {
     );
   });
 
-  const rowsAll = bookmarks.map((bookmark) => (
+  const bookmarks =
+    active === "All"
+      ? bookmarksAll
+      : active === "Read"
+      ? bookmarksRead
+      : active === "Currently Reading"
+      ? bookmarksCurrReading
+      : active === "Want To Read" && bookmarksWantToRead;
+  const rows = bookmarks.map((bookmark) => (
     <Table.Tr key={bookmark.name}>
       <Table.Td>
-        <Image
-        radius="md"
-        src={bookmark.cover}
-        h={84}
-        w={84}
-        />
-      </Table.Td>
-      <Table.Td>{bookmark.name}</Table.Td>
-      <Table.Td>{bookmark.author}</Table.Td>
-      <Table.Td>
-        <Rating value={bookmark.avgRating} fractions={2} readOnly />
-      </Table.Td>
-      <Table.Td>
-        <Rating defaultValue={bookmark.usrRating} fractions={2} />
-      </Table.Td>
-      <Table.Td>
-        <Select
-          placeholder="Read status"
-          data={["Currently Reading", "Want To Read", "Read"]}
-          defaultValue={bookmark.status}
-        />
-      </Table.Td>
-    </Table.Tr>
-  ));
-
-  const rowsRead = bookmarksRead.map((bookmark) => (
-    <Table.Tr key={bookmark.name}>
-      <Table.Td>
-        <Image
-        radius="md"
-        src={bookmark.cover}
-        h={84}
-        w={84}
-        />
-      </Table.Td>
-      <Table.Td>{bookmark.name}</Table.Td>
-      <Table.Td>{bookmark.author}</Table.Td>
-      <Table.Td>
-        <Rating value={bookmark.avgRating} fractions={2} readOnly />
-      </Table.Td>
-      <Table.Td>
-        <Rating defaultValue={bookmark.usrRating} fractions={2} />
-      </Table.Td>
-      <Table.Td>
-        <Select
-          placeholder="Read status"
-          data={["Currently Reading", "Want To Read", "Read"]}
-          defaultValue={bookmark.status}
-        />
-      </Table.Td>
-    </Table.Tr>
-  ));
-
-  const rowsCurrReading = bookmarksCurrReading.map((bookmark) => (
-    <Table.Tr key={bookmark.name}>
-      <Table.Td>
-        <Image
-        radius="md"
-        src={bookmark.cover}
-        h={84}
-        w={84}
-        />
-      </Table.Td>
-      <Table.Td>{bookmark.name}</Table.Td>
-      <Table.Td>{bookmark.author}</Table.Td>
-      <Table.Td>
-        <Rating value={bookmark.avgRating} fractions={2} readOnly />
-      </Table.Td>
-      <Table.Td>
-        <Rating defaultValue={bookmark.usrRating} fractions={2} />
-      </Table.Td>
-      <Table.Td>
-        <Select
-          placeholder="Read status"
-          data={["Currently Reading", "Want To Read", "Read"]}
-          defaultValue={bookmark.status}
-        />
-      </Table.Td>
-    </Table.Tr>
-  ));
-
-  const rowsWantToRead = bookmarksWantToRead.map((bookmark) => (
-    <Table.Tr key={bookmark.name}>
-      <Table.Td>
-        <Image
-        radius="md"
-        src={bookmark.cover}
-        h={84}
-        w={84}
-        />
+        <Image radius="md" src={bookmark.cover} h={84} w={84} />
       </Table.Td>
       <Table.Td>{bookmark.name}</Table.Td>
       <Table.Td>{bookmark.author}</Table.Td>
@@ -213,15 +133,7 @@ function Bookmarks() {
                 <Table.Th>Shelf</Table.Th>
               </Table.Tr>
             </Table.Thead>
-            <Table.Tbody>
-              {active === "All"
-                ? rowsAll
-                : active === "Read"
-                ? rowsRead
-                : active === "Currently Reading"
-                ? rowsCurrReading
-                : active === "Want To Read" && rowsWantToRead}
-            </Table.Tbody>
+            <Table.Tbody>{rows}</Table.Tbody>
           </Table>
         </Grid.Col>
       </Grid>
