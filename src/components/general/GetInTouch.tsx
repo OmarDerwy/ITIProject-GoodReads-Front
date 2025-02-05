@@ -1,9 +1,8 @@
 import { Button, Group, SimpleGrid, Textarea, TextInput, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { AiOutlineMail} from "react-icons/ai";
-import classes from '../styles/general/GetInTouch.module.css';
+import classes from '../../styles/general/GetInTouch.module.css';
 import React from 'react';
-
 
 
 export function GetInTouchSimple() {

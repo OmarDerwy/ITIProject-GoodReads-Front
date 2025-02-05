@@ -1,30 +1,28 @@
-
-// import { useState } from 'react'
-//CSS
 import './App.css'
-//react-router
 import { Routes, Route, useLocation} from 'react-router-dom';
-//Pages
-import LandingPage from './pages/LandingPage';
-import Login from './pages/Login';
-import UserProfile from './pages/UserProfile';
-//components
+import React , {Suspense} from 'react';
+
 import Navbar from './components/general/NavBar';
-import SignUp from './pages/SignUp';
-import NotFoundImage from './pages/PageNotFound';
-import { ForgotPassword } from './pages/ResetPassword';
-import { GetInTouchSimple } from './pages/GetInTouch';
-import Bookshelves from './pages/Bookshelves';
+import { Loader } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
-import AuthorDetails from './pages/AuthorDetails';
-import CategoryDetails from './pages/CategoryDetails';
-import Categories from './pages/Categories';
-import Authors from './pages/Authors';
-import Admin from './pages/Admin';
-import BookList from './pages/BrowseBooks';
-import General from './pages/General';
-import BookDetails from './pages/BookDetails';
-import Bookmarks from './pages/Bookmarks';
+
+const LandingPage = React.lazy(() => import('./pages/LandingPage'));
+const Login = React.lazy(() => import('./pages/Login'));
+const SignUp = React.lazy(() => import('./pages/SignUp'));
+const UserProfile = React.lazy(() => import('./pages/UserProfile'));
+const BookList = React.lazy(() => import('./pages/BrowseBooks'));
+const Categories = React.lazy(() => import('./pages/Categories'));
+const NotFoundImage = React.lazy(() => import('./pages/PageNotFound'));
+const Authors = React.lazy(() => import('./pages/Authors'));
+const ForgotPassword = React.lazy(() => import('./pages/ResetPassword'));
+const Bookshelves = React.lazy(() => import('./pages/Bookshelves'));
+const AuthorDetails = React.lazy(() => import('./pages/AuthorDetails'));
+const CategoryDetails = React.lazy(() => import('./pages/CategoryDetails'));
+const General = React.lazy(() => import('./pages/General'));
+const BookDetails = React.lazy(() => import('./pages/BookDetails'));
+const ContactUs = React.lazy( () => import('./pages/ContactUs'));
+const Admin = React.lazy(() => import('./pages/Admin'));
+const Bookmarks = React.lazy(() => import('./pages/Bookmarks'));
 
 function App() {
   const location = useLocation();
@@ -33,27 +31,27 @@ function App() {
     <>
       {!excludedRoutes.includes(location.pathname) && <Navbar />}
       <Notifications/>
-      <Routes>
-        <Route path='/' element={<LandingPage/>}></Route>
-        <Route path='/admin' element={<Admin/>}></Route>
-        <Route path='/login' element={<Login/>}></Route>
-        <Route path='/profile' element={<UserProfile/>}></Route>
-        <Route path='/bookshelves' element={<Bookshelves/>}></Route>
-        <Route path='/sign-up' element={<SignUp/>}></Route>
-        <Route path='/reset-password' element={<ForgotPassword/>}></Route>
-        <Route path='/contact-us' element={<GetInTouchSimple/>}></Route>
-        <Route path='/author-details' element={<AuthorDetails/>}></Route>
-        <Route path='/authors' element={<Authors/>}></Route>
-        <Route path='/category-details' element={<CategoryDetails/>}></Route>
-        <Route path='/categories' element={<Categories/>}></Route>
-        {/* <Route path='/browse-books' element={<BookList/>}></Route> */}
-        <Route path='/general' element={<General/>}></Route>
-        <Route path='/books' element={<BookList/>}></Route>
-        <Route path="/book/:bookId" element={<BookDetails/>} />
-        <Route path='/bookmarks' element={<Bookmarks/>}></Route>
-        
-        <Route path='*' element={<NotFoundImage/>}></Route>
-      </Routes>
+      <Suspense fallback={<div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "200px"}}> <Loader type="bars" color="lightgreen" size={200}/> </div>}>
+        <Routes>
+          <Route path='/' element={<LandingPage/>}></Route>
+          <Route path='/admin' element={<Admin/>}></Route>
+          <Route path='/login' element={<Login/>}></Route>
+          <Route path='/sign-up' element={<SignUp/>}></Route>
+          <Route path='/reset-password' element={<ForgotPassword/>}></Route>
+          <Route path='/books' element={<BookList/>}></Route> 
+          <Route path="/books/:bookId" element={<BookDetails/>} />
+          <Route path='/bookmarks' element={<Bookmarks/>}></Route>
+          <Route path='/authors' element={<Authors/>}></Route>
+          <Route path='/author-details' element={<AuthorDetails/>}></Route>
+          <Route path='/categories' element={<Categories/>}></Route>
+          <Route path='/category-details' element={<CategoryDetails/>}></Route>
+          <Route path='/profile' element={<UserProfile/>}></Route>
+          <Route path='/bookshelves' element={<Bookshelves/>}></Route>
+          <Route path='/general' element={<General/>}></Route>
+          <Route path='/contact-us' element={<ContactUs/>}></Route>  
+          <Route path='*' element={<NotFoundImage/>}></Route>
+        </Routes>
+      </Suspense>
     </>
   )
 }
