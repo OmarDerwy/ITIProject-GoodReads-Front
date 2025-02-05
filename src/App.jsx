@@ -24,6 +24,7 @@ import Admin from './pages/Admin';
 import BookList from './pages/BrowseBooks';
 import General from './pages/General';
 import BookDetails from './pages/BookDetails';
+import Bookmarks from './pages/Bookmarks';
 
 function App() {
   const location = useLocation();
@@ -49,6 +50,8 @@ function App() {
         <Route path='/general' element={<General/>}></Route>
         <Route path='/books' element={<BookList/>}></Route>
         <Route path="/book/:bookId" element={<BookDetails/>} />
+        <Route path='/bookmarks' element={<Bookmarks/>}></Route>
+        
         <Route path='*' element={<NotFoundImage/>}></Route>
       </Routes>
     </>
