@@ -1,18 +1,17 @@
 import { useState } from "react";
-import { Checkbox, Grid, Table } from "@mantine/core";
+import { Rating, Grid, Table, Select } from "@mantine/core";
 import classes from "./../styles/general/Bookmarks.module.css";
 import { Link } from "react-router-dom";
 
 const data = [
-  { link: "/read", label: "Read" },
-  { link: "/currently-reading", label: "Currently Reading" },
-  { link: "/want-to-read", label: "Want to Read" },
+  { label: "Read" },
+  { label: "Currently Reading" },
+  { label: "Want to Read" },
 ];
 
 function Bookmarks() {
-  const [active, setActive] = useState("Billing");
-  const [selectedRows, setSelectedRows] = useState([]);
-  const elements = [
+  const [active, setActive] = useState("Read");
+  const bookmarks = [
     { position: 6, symbol: "C", name: "Carbon" },
     { position: 7, symbol: "N", name: "Nitrogen" },
     { position: 39, symbol: "Y", name: "Yttrium" },
@@ -20,14 +19,25 @@ function Bookmarks() {
     { position: 58, symbol: "Ce", name: "Cerium" },
   ];
 
-  const rows = elements.map((element) => (
-    <Table.Tr key={element.name}>
-      <Table.Td>{element.position} a </Table.Td>
-      <Table.Td>{element.name} b </Table.Td>
-      <Table.Td>{element.symbol} c </Table.Td>
-      <Table.Td>{element.name} d </Table.Td>
-      <Table.Td>{element.mass} e </Table.Td>
-      <Table.Td>{element.symbol} f </Table.Td>
+  const rows = bookmarks.map((bookmark) => (
+    <Table.Tr key={bookmark.name}>
+      <Table.Td>{bookmark.position} a </Table.Td>
+      <Table.Td>{bookmark.name} b </Table.Td>
+      <Table.Td>{bookmark.symbol} c </Table.Td>
+      <Table.Td>
+        {bookmark.name} d <Rating value={2.5} fractions={2} readOnly />
+      </Table.Td>
+      <Table.Td>
+        {bookmark.mass} e <Rating defaultValue={2.5} fractions={2} />
+      </Table.Td>
+      <Table.Td>
+        {bookmark.symbol} f{" "}
+        <Select
+          placeholder="Read status"
+          data={["Currently read", "Want to read", "Read"]}
+          defaultValue=""
+        />
+      </Table.Td>
     </Table.Tr>
   ));
 
@@ -39,7 +49,6 @@ function Bookmarks() {
         to={item.link}
         key={item.label}
         onClick={(event) => {
-          event.preventDefault();
           setActive(item.label);
         }}
       >
@@ -57,7 +66,7 @@ function Bookmarks() {
           </nav>
         </Grid.Col>
 
-        <Grid.Col span={9}>
+        <Grid.Col span={9.33}>
           <Table striped highlightOnHover withTableBorder>
             <Table.Thead>
               <Table.Tr>
