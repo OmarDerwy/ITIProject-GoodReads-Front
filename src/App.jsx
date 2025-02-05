@@ -46,6 +46,7 @@ function App() {
         <Route path='/browse-books' element={<BookList/>}></Route>
         <Route path='/general' element={<General/>}></Route>
         <Route path='/bookmarks' element={<Bookmarks/>}></Route>
+        <Route path='/read' element={<Bookmarks/>}></Route>
         
         <Route path='*' element={<NotFoundImage/>}></Route>
       </Routes>
