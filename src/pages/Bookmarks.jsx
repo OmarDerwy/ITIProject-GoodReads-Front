@@ -63,6 +63,16 @@ function Bookmarks() {
     );
     setBookmarksAll(newBookmarksAll);
   };
+
+  const handleRatingChange = (newRating, bookmarkName) => {
+    const newBookmarksAll = bookmarksAll.map((bookmark) =>
+      bookmark.name === bookmarkName
+        ? { ...bookmark, usrRating: newRating }
+        : bookmark
+    );
+    setBookmarksAll(newBookmarksAll);
+
+  }
   const links = data.map((item) => {
     return (
       <Link
@@ -81,8 +91,8 @@ function Bookmarks() {
 
   const bookmarks =
     active === "All"
-      ? bookmarksAll 
-      : bookmarksAll.filter((bookmark)=> bookmark.status === active);
+      ? bookmarksAll
+      : bookmarksAll.filter((bookmark) => bookmark.status === active);
   const rows = bookmarks.map((bookmark) => (
     <Table.Tr key={bookmark.name}>
       <Table.Td>
@@ -94,16 +104,18 @@ function Bookmarks() {
         <Rating value={bookmark.avgRating} fractions={2} readOnly />
       </Table.Td>
       <Table.Td>
-        <Rating defaultValue={bookmark.usrRating} fractions={2} />
+        <Rating
+          defaultValue={bookmark.usrRating}
+          fractions={2}
+          onChange={(_value) => handleRatingChange(_value, bookmark.name)}
+        />
       </Table.Td>
       <Table.Td>
         <Select
           placeholder="Read status"
           data={["Currently Reading", "Want To Read", "Read"]}
           defaultValue={bookmark.status}
-          onChange={(_value, option) =>
-            handleStatusChange(_value, bookmark.name)
-          }
+          onChange={(_value) => handleStatusChange(_value, bookmark.name)}
         />
       </Table.Td>
     </Table.Tr>
