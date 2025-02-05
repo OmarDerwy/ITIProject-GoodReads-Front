@@ -1,45 +1,68 @@
 import { useState } from "react";
-import { Rating, Grid, Table, Select } from "@mantine/core";
+import { Rating, Grid, Table, Select, Image } from "@mantine/core";
 import classes from "./../styles/general/Bookmarks.module.css";
 import { Link } from "react-router-dom";
 
 const data = [
+  { label: "All" },
   { label: "Read" },
   { label: "Currently Reading" },
-  { label: "Want to Read" },
+  { label: "Want To Read" },
 ];
 
 function Bookmarks() {
-  const [active, setActive] = useState("Read");
+  const [active, setActive] = useState("All");
   const bookmarks = [
-    { position: 6, symbol: "C", name: "Carbon" },
-    { position: 7, symbol: "N", name: "Nitrogen" },
-    { position: 39, symbol: "Y", name: "Yttrium" },
-    { position: 56, symbol: "Ba", name: "Barium" },
-    { position: 58, symbol: "Ce", name: "Cerium" },
+    {
+      cover: "gdsagdsag",
+      name: "Cadgsag gdasgdsag",
+      author: "Carbon dsfhsah",
+      avgRating: 4,
+      usrRating: 5,
+      status: "Read",
+    },
+    {
+      cover: "dgsag",
+      name: "Ngsag adsgdasg",
+      author: "Nitrogen ahfsdhds",
+      avgRating: 3,
+      usrRating: 5,
+      status: "Read",
+    },
+    {
+      cover: "dagsdasg",
+      name: "Ydsagsag asdgdsag",
+      author: "Yttrium FJDSJ",
+      avgRating: 2,
+      usrRating: 5,
+      status: "Currently Reading",
+    },
+    {
+      cover: "aDGSAGGS",
+      name: "Basadg adsgasd",
+      author: "Barium AGDSD" ,
+      avgRating: 3.5,
+      usrRating: 5,
+      status: "Want To Read",
+    },
+    {
+      cover: "ADSGSAG",
+      name: "Cesadg asdgasdg",
+      author: "Cerium fsadgsad",
+      avgRating: 4.5,
+      usrRating: 5,
+      status: "Want To Read",
+    },
   ];
-
-  const rows = bookmarks.map((bookmark) => (
-    <Table.Tr key={bookmark.name}>
-      <Table.Td>{bookmark.position} a </Table.Td>
-      <Table.Td>{bookmark.name} b </Table.Td>
-      <Table.Td>{bookmark.symbol} c </Table.Td>
-      <Table.Td>
-        {bookmark.name} d <Rating value={2.5} fractions={2} readOnly />
-      </Table.Td>
-      <Table.Td>
-        {bookmark.mass} e <Rating defaultValue={2.5} fractions={2} />
-      </Table.Td>
-      <Table.Td>
-        {bookmark.symbol} f{" "}
-        <Select
-          placeholder="Read status"
-          data={["Currently read", "Want to read", "Read"]}
-          defaultValue=""
-        />
-      </Table.Td>
-    </Table.Tr>
-  ));
+  const bookmarksRead = bookmarks.filter(
+    (bookmark) => bookmark.status === "Read"
+  );
+  const bookmarksCurrReading = bookmarks.filter(
+    (bookmark) => bookmark.status === "Currently Reading"
+  );
+  const bookmarksWantToRead = bookmarks.filter(
+    (bookmark) => bookmark.status === "Want To Read"
+  );
 
   const links = data.map((item) => {
     return (
@@ -57,6 +80,118 @@ function Bookmarks() {
     );
   });
 
+  const rowsAll = bookmarks.map((bookmark) => (
+    <Table.Tr key={bookmark.name}>
+      <Table.Td>
+        <Image
+        radius="md"
+        src={bookmark.cover}
+        h={84}
+        w={84}
+        />
+      </Table.Td>
+      <Table.Td>{bookmark.name}</Table.Td>
+      <Table.Td>{bookmark.author}</Table.Td>
+      <Table.Td>
+        <Rating value={bookmark.avgRating} fractions={2} readOnly />
+      </Table.Td>
+      <Table.Td>
+        <Rating defaultValue={bookmark.usrRating} fractions={2} />
+      </Table.Td>
+      <Table.Td>
+        <Select
+          placeholder="Read status"
+          data={["Currently Reading", "Want To Read", "Read"]}
+          defaultValue={bookmark.status}
+        />
+      </Table.Td>
+    </Table.Tr>
+  ));
+
+  const rowsRead = bookmarksRead.map((bookmark) => (
+    <Table.Tr key={bookmark.name}>
+      <Table.Td>
+        <Image
+        radius="md"
+        src={bookmark.cover}
+        h={84}
+        w={84}
+        />
+      </Table.Td>
+      <Table.Td>{bookmark.name}</Table.Td>
+      <Table.Td>{bookmark.author}</Table.Td>
+      <Table.Td>
+        <Rating value={bookmark.avgRating} fractions={2} readOnly />
+      </Table.Td>
+      <Table.Td>
+        <Rating defaultValue={bookmark.usrRating} fractions={2} />
+      </Table.Td>
+      <Table.Td>
+        <Select
+          placeholder="Read status"
+          data={["Currently Reading", "Want To Read", "Read"]}
+          defaultValue={bookmark.status}
+        />
+      </Table.Td>
+    </Table.Tr>
+  ));
+
+  const rowsCurrReading = bookmarksCurrReading.map((bookmark) => (
+    <Table.Tr key={bookmark.name}>
+      <Table.Td>
+        <Image
+        radius="md"
+        src={bookmark.cover}
+        h={84}
+        w={84}
+        />
+      </Table.Td>
+      <Table.Td>{bookmark.name}</Table.Td>
+      <Table.Td>{bookmark.author}</Table.Td>
+      <Table.Td>
+        <Rating value={bookmark.avgRating} fractions={2} readOnly />
+      </Table.Td>
+      <Table.Td>
+        <Rating defaultValue={bookmark.usrRating} fractions={2} />
+      </Table.Td>
+      <Table.Td>
+        <Select
+          placeholder="Read status"
+          data={["Currently Reading", "Want To Read", "Read"]}
+          defaultValue={bookmark.status}
+        />
+      </Table.Td>
+    </Table.Tr>
+  ));
+
+  const rowsWantToRead = bookmarksWantToRead.map((bookmark) => (
+    <Table.Tr key={bookmark.name}>
+      <Table.Td>
+        <Image
+        radius="md"
+        src={bookmark.cover}
+        h={84}
+        w={84}
+        />
+      </Table.Td>
+      <Table.Td>{bookmark.name}</Table.Td>
+      <Table.Td>{bookmark.author}</Table.Td>
+      <Table.Td>
+        <Rating value={bookmark.avgRating} fractions={2} readOnly />
+      </Table.Td>
+      <Table.Td>
+        <Rating defaultValue={bookmark.usrRating} fractions={2} />
+      </Table.Td>
+      <Table.Td>
+        <Select
+          placeholder="Read status"
+          data={["Currently Reading", "Want To Read", "Read"]}
+          defaultValue={bookmark.status}
+        />
+      </Table.Td>
+    </Table.Tr>
+  ));
+
   return (
     <>
       <Grid>
@@ -66,7 +201,7 @@ function Bookmarks() {
           </nav>
         </Grid.Col>
 
-        <Grid.Col span={9.33}>
+        <Grid.Col span={9}>
           <Table striped highlightOnHover withTableBorder>
             <Table.Thead>
               <Table.Tr>
@@ -78,7 +213,15 @@ function Bookmarks() {
                 <Table.Th>Shelf</Table.Th>
               </Table.Tr>
             </Table.Thead>
-            <Table.Tbody>{rows}</Table.Tbody>
+            <Table.Tbody>
+              {active === "All"
+                ? rowsAll
+                : active === "Read"
+                ? rowsRead
+                : active === "Currently Reading"
+                ? rowsCurrReading
+                : active === "Want To Read" && rowsWantToRead}
+            </Table.Tbody>
           </Table>
         </Grid.Col>
       </Grid>
