@@ -1,11 +1,12 @@
 // import { IconSearch } from "@tabler/icons-react"
 import { Autocomplete, Burger, Button, Drawer, Group } from "@mantine/core";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "../../styles/general/Navbar.module.css";
 import BooksLogo from "/Logomark.svg";
 import { CiSearch } from "react-icons/ci";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const links = [
   { link: "/", label: "Home" },
@@ -17,9 +18,20 @@ const links = [
 function Navbar() {
   const navigate = useNavigate();
   const [opened, { toggle }] = useDisclosure(false);
+  const [active, setActive] = useState("");
+  const params = useParams();
 
   const items = links.map((link) => (
-    <Link key={link.label} to={link.link} className={classes.link}>
+    <Link
+      key={link.label}
+      to={link.link}
+      className={classes.link}
+      data-active={link.label === active || undefined}
+      onClick={(event) => {
+        setActive(link.label);
+        console.log();
+      }}
+    >
       {link.label}
     </Link>
   ));
@@ -38,7 +50,7 @@ function Navbar() {
           </Link>
         </Group>
 
-        <Group hiddenFrom="" >
+        <Group hiddenFrom="">
           <Group gap={5} className={classes.links} visibleFrom="md">
             {items}
           </Group>
@@ -70,18 +82,28 @@ function Navbar() {
           </Group>
           <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="md" />
           <Drawer opened={opened} onClose={toggle} size="100%">
-          <Autocomplete
-            className={classes.search}
-            placeholder="Search"
-            leftSection={<CiSearch />}
-            mb={10}
-          />
-            <Group gap={10} mb={10} pb={50} pt={20} display="block" onClick={()=>toggle()}  >
+            <Autocomplete
+              className={classes.search}
+              placeholder="Search"
+              leftSection={<CiSearch />}
+              mb={10}
+            />
+            <Group
+              gap={10}
+              mb={10}
+              pb={50}
+              pt={20}
+              display="block"
+              onClick={() => toggle()}
+            >
               {items}
             </Group>
             <Button
               size="sm"
-              onClick={() => {navigate("/Login"); toggle()}}
+              onClick={() => {
+                navigate("/Login");
+                toggle();
+              }}
               className={classes.control}
               variant="gradient"
               gradient={{ from: "green", to: "lightgreen" }}
@@ -94,7 +116,10 @@ function Navbar() {
             </Button>
             <Button
               component="a"
-              onClick={() => {navigate("/sign-up"); toggle()}}
+              onClick={() => {
+                navigate("/sign-up");
+                toggle();
+              }}
               size="sm"
               variant="default"
               className={classes.control}
@@ -102,7 +127,6 @@ function Navbar() {
             >
               Sign Up
             </Button>
-            
           </Drawer>
         </Group>
       </div>
