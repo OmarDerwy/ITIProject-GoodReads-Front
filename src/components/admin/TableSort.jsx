@@ -6,6 +6,7 @@ import {
   FaCaretDown as IconSelector
 } from "react-icons/fa"
 import {
+  Flex,
   Button,
   Center,
   Group,
@@ -14,9 +15,16 @@ import {
   Table,
   Text,
   TextInput,
-  UnstyledButton
+  UnstyledButton,
+  Modal,
+  NativeSelect
 } from "@mantine/core"
 import classes from "../../styles/admin/TableSort.module.css"
+import axiosInstance from "../../apis/config"
+import { notifications } from '@mantine/notifications';
+import { useDisclosure } from "@mantine/hooks"
+import { useForm } from '@mantine/form';
+
 
 function Th({ children, reversed, sorted, onSort }) {
   const Icon = sorted
@@ -42,9 +50,10 @@ function Th({ children, reversed, sorted, onSort }) {
 
 function filterData(data, search) {
   const query = search.toLowerCase().trim()
-  return data.filter(item =>
-    keys(data[0]).some(key => item[key].toLowerCase().includes(query))
-  )
+  return data.filter(item =>{
+    const filteredHeaders = keys(data[0]).filter((key)=> key != "__v")
+    return filteredHeaders.some(key => item[key].toLowerCase().includes(query))
+  })
 }
 
 function sortData(data, payload) {
@@ -150,13 +159,34 @@ function sortData(data, payload) {
 // ]
 
 export function TableSort(props) {
-  const { dataHeader } = props
+  const { dataHeader, handleNewData, currentApi } = props
+  //states
   const [ data, setData] = useState(props.data)
   const [search, setSearch] = useState("")
   const [sortedData, setSortedData] = useState(() => sortData(data, { sortBy: null, reversed: false, search: "" }))
   const [sortBy, setSortBy] = useState(null)
   const [reverseSortDirection, setReverseSortDirection] = useState(false)
+  //CRUD states
+  const [item, setItem] = useState(null)
+  //disclosures
+  const [deleteModalopened, {open: openDeleteModal,close: closeDeleteModal}] = useDisclosure(false);
+  const [addModalopened, {open: openAddModal,close: closeAddModal}] = useDisclosure(false);
+  const [editMode, {open: setEditMode, close: setAddMode}] = useDisclosure(false);
+  //prepare form
 
+  const dataHeaders = {
+    Users: ["_id", "name", "email", "role"],
+    Books: ["_id", "bookName", "authorName", "categoryName", "coverImage"]
+  }
+
+  const formUser = useForm({
+    initialValues: {
+      name: "dummy",
+      email: "dummy1@example.com",
+      password: "3465Tyhg",
+      role: "user",
+    },
+  })
   const setSorting = field => {
     const reversed = field === sortBy ? !reverseSortDirection : false
     setReverseSortDirection(reversed)
@@ -172,11 +202,70 @@ console.log("does the code duplicate?")
     )
   }
 
-  const dataHeaders = {
-    Users: ["_id", "name", "email", "role"],
-    Books: ["_id", "bookName", "authorName", "categoryName", "coverImage"]
+  const handleApiDelete = () => {
+    // console.log(row)
+    axiosInstance.delete(`${currentApi}${item}`)
+    .then((response) => {
+      console.log(response)
+      const newData = data.filter(item => item._id !== item)
+      handleNewData(currentApi)
+      notifications.show({
+        title: 'Success',
+        message: 'User deleted successfully.',
+        color: 'green'
+      })
+    }).catch((error) => {
+      console.log(error)
+      notifications.show({
+        title: 'error',
+        message: 'There was an error with your request.',
+        color: 'red'
+      })
+    });
   }
 
+  const handleApiAdd = (values) => {
+    console.log(values)
+    console.log(item)
+    if(editMode){
+      axiosInstance.put(`${currentApi}${item}`, values)
+      .then((response) => {
+        console.log(response)
+        handleNewData(currentApi)
+        notifications.show({
+          title: 'Success',
+          message: 'User updated successfully.',
+          color: 'green'
+        })
+      }).catch((error) => {
+        console.log(error)
+        notifications.show({
+          title: 'error',
+          message: 'There was an error with your request.',
+          color: 'red'
+        })
+      });
+    }
+    else{
+      axiosInstance.post(dataHeader? `/api/auth/register` : currentApi, values)
+      .then((response) => {
+        console.log(response)
+        handleNewData(currentApi)
+        notifications.show({
+          title: 'Success',
+          message: 'User added successfully.',
+          color: 'green'
+        })
+      }).catch((error) => {
+        console.log(error)
+        notifications.show({
+          title: 'error',
+          message: 'There was an error with your request.',
+          color: 'red'
+        })
+      });
+    }
+  }
 
   const rows = sortedData.map(row => (
     <Table.Tr key={row._id}>
@@ -185,56 +274,93 @@ console.log("does the code duplicate?")
       ))}
       <Table.Td>
         <Group spacing="sm">
-          <Button size="xs" variant="outline">Edit</Button>
-          <Button size="xs" color="red" variant="outline">Delete</Button>
+          <Button size="xs" variant="outline" onClick={()=>{setItem(row._id);setEditMode();openAddModal();}}>Edit</Button>
+          <Button size="xs" color="red" variant="outline" onClick={() => {setItem(row._id); openDeleteModal()}}>Delete</Button>
         </Group>
       </Table.Td>
     </Table.Tr>
   ))
 
   return (
-    <ScrollArea>
-      <TextInput
-        placeholder="Search by any field"
-        mb="md"
-        leftSection={<IconSearch size={16} stroke={1.5} />}
-        value={search}
-        onChange={handleSearchChange}
-      />
-      <Table
-        horizontalSpacing="md"
-        verticalSpacing="xs"
-        miw={700}
-        layout="fixed"
-      >
-        <Table.Tbody>
-          <Table.Tr>
-            {dataHeaders[dataHeader].map((field, index) => (
-              <Th
-                key={field}
-                sorted={sortBy === field}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting(field)}
-              >
-                {field.replace(/^_/, '')}
-              </Th>
-            ))}
-          </Table.Tr>
-        </Table.Tbody>
-        <Table.Tbody>
-          {rows.length > 0 ? (
-            rows
-          ) : (
+    <>
+      <Modal opened={addModalopened} onClose={closeAddModal} title="Add item" centered>
+        <form onSubmit={formUser.onSubmit((values)=>{handleApiAdd(values)})}>
+          <TextInput
+            label="Name"
+            placeholder="Input name"
+            key={formUser.key('name')}
+            {...formUser.getInputProps('name')}
+          />
+          <TextInput
+            label="Email"
+            placeholder="Input email"
+            key={formUser.key('email')}
+            {...formUser.getInputProps('email')}
+          />
+          { !editMode ? <TextInput
+            label="Password"
+            placeholder="Input password"
+            key={formUser.key('password')}
+            {...formUser.getInputProps('password')}
+          />:null}
+          <NativeSelect label="Role" data={['user', 'admin']} key={formUser.key('role')} {...formUser.getInputProps('role')}></NativeSelect>
+          <Button type="submit" onClick={closeAddModal}>Add</Button>
+          <Button onClick={closeAddModal}>Close</Button>
+        </form>
+      </Modal>
+      <Modal opened={deleteModalopened} onClose={closeDeleteModal} title="Are you sure you want to delete this user?" centered>
+        <Group>
+          <Button onClick={()=>{handleApiDelete();closeDeleteModal();}}>Yes</Button>
+          <Button onClick={closeDeleteModal}>No</Button>
+        </Group>
+      </Modal>
+      <ScrollArea>
+        <Flex gap={15} me={20}>
+          <TextInput
+            placeholder="Search by any field"
+            mb="md"
+            leftSection={<IconSearch size={16} stroke={1.5} />}
+            value={search}
+            onChange={handleSearchChange}
+            flex={'1'}
+          />
+          <Button variant="outline" color="green" onClick={()=>{setAddMode();openAddModal();}}>Add Data</Button>
+        </Flex>
+        <Table
+          horizontalSpacing="md"
+          verticalSpacing="xs"
+          miw={700}
+          layout="fixed"
+        >
+          <Table.Tbody>
             <Table.Tr>
-              <Table.Td colSpan={4}>
-                <Text fw={500} ta="center">
-                  Nothing found
-                </Text>
-              </Table.Td>
+              {dataHeaders[dataHeader].map((field, index) => (
+                <Th
+                  key={field}
+                  sorted={sortBy === field}
+                  reversed={reverseSortDirection}
+                  onSort={() => setSorting(field)}
+                >
+                  {field.replace(/^_/, '')}
+                </Th>
+              ))}
             </Table.Tr>
-          )}
-        </Table.Tbody>
-      </Table>
-    </ScrollArea>
+          </Table.Tbody>
+          <Table.Tbody>
+            {rows.length > 0 ? (
+              rows
+            ) : (
+              <Table.Tr>
+                <Table.Td colSpan={4}>
+                  <Text fw={500} ta="center">
+                    Nothing found
+                  </Text>
+                </Table.Td>
+              </Table.Tr>
+            )}
+          </Table.Tbody>
+        </Table>
+      </ScrollArea>
+    </>
   )
 }

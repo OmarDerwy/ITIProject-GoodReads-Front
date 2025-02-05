@@ -21,17 +21,16 @@ export default function Admin() {
   const buttons = [
     {
       label: 'Users',
-      api: '/api/users',
+      api: '/api/users/',
     },
     {
       label: 'Books',
-      api: '/api/books',
+      api: '/api/books/',
     }
   ];
 
-  const handleNewData = (index, api) => {
+  const handleNewData = (api) => {
     setData([])
-    setActive(index);
     axiosInstance.get(api)
       .then((response) => {
         setData(response.data);
@@ -43,7 +42,7 @@ export default function Admin() {
       href='#required-for-focus'
       key={index}
       label={button.label}
-      onClick={() => handleNewData(index, button.api)}
+      onClick={() => {setActive(index);handleNewData(button.api)}}
       active={index === active}>
     </NavLink>
   ));
@@ -60,7 +59,7 @@ export default function Admin() {
         {items}
         </AppShell.Navbar>
         <AppShell.Main>
-          {data.length > 0 ? <TableSort data={data} dataHeader={buttons[active].label} /> : <p>No Data Retrieved</p>}
+          {data.length > 0 ? <TableSort currentApi={buttons[active].api} handleNewData={handleNewData} data={data} dataHeader={buttons[active].label} /> : <p>No Data Retrieved</p>}
         </AppShell.Main>
     </AppShell>
   )
