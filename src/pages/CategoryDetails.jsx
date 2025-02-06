@@ -77,7 +77,7 @@ export default function CategoryDetails() {
             style={{cursor:"pointer"}}
           >
             <Grid.Col span="auto">
-              <Image radius="md" h="200" w="180" fit="fill" src="dagdadgas" />
+              <Image radius="md" h="200" w="180" fit="fill" src={book.coverImage} />
             </Grid.Col>
             <Grid.Col span="auto">
               <Text ta="left" fz="lg" fw={700} mb={5}>
