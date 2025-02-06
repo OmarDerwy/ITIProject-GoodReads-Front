@@ -1,12 +1,28 @@
 // import { IconSearch } from "@tabler/icons-react"
-import { Autocomplete, Burger, Button, Drawer, Group } from "@mantine/core";
+import {
+  Autocomplete,
+  Avatar,
+  Burger,
+  Button,
+  Drawer,
+  Group,
+  Text,
+} from "@mantine/core";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "../../styles/general/Navbar.module.css";
 import BooksLogo from "/Logomark.svg";
 import { CiSearch } from "react-icons/ci";
+import { FaStar, FaRegStar } from "react-icons/fa";
+
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+
+const user = {
+  name: "Userdagsag1",
+  email: "user1@fighter.dev",
+  image: "",
+};
 
 const links = [
   { link: "/", label: "Home" },
@@ -20,7 +36,8 @@ function Navbar() {
   const [opened, { toggle }] = useDisclosure(false);
   const [active, setActive] = useState("");
   const location = useLocation();
-  const activePage = location.pathname.split('/')[1];
+  const activePage = location.pathname.split("/")[1];
+  const [signedIn, setSignedIn] = useState(true);
 
   const items = links.map((link) => (
     <Link
@@ -28,7 +45,6 @@ function Navbar() {
       to={link.link}
       className={classes.link}
       data-active={link.label === activePage || undefined}
-      
     >
       {link.label}
     </Link>
@@ -48,7 +64,7 @@ function Navbar() {
           </Link>
         </Group>
 
-        <Group hiddenFrom="">
+        <Group>
           <Group gap={5} className={classes.links} visibleFrom="md">
             {items}
           </Group>
@@ -58,73 +74,149 @@ function Navbar() {
             leftSection={<CiSearch />}
             visibleFrom="md"
           />
-          <Group visibleFrom="md">
-            <Button
-              size="sm"
-              onClick={() => navigate("/login")}
-              className={classes.control}
-              variant="gradient"
-              gradient={{ from: "green", to: "lightgreen" }}
-            >
-              Login
-            </Button>
-            <Button
-              component="a"
-              onClick={() => navigate("/sign-up")}
-              size="sm"
-              variant="default"
-              className={classes.control}
-            >
-              Sign Up
-            </Button>
-          </Group>
+          {signedIn ? (
+            <Group visibleFrom="md" gap={10}>
+              <Link
+                style={{
+                  textDecoration: "inherit",
+                  color: "inherit ",
+                  display: "inherit",
+                }}
+                to="/profile"
+              >
+                <Avatar src={user.image} alt={user.name} size="md" />
+                <Text fw={500} size="sm" lh={1} mr={10} ml={5} my="auto">
+                  {user.name}
+                </Text>
+              </Link>
+              <Link
+                style={{
+                  textDecoration: "inherit",
+                  color: "inherit",
+                  display: "inherit",
+                }}
+                to="/Bookmarks"
+              >
+                {activePage === "Bookmarks" ? (
+                  <FaStar size={25}></FaStar>
+                ) : (
+                  <FaRegStar size={25}></FaRegStar>
+                )}
+                <Text fw={500} size="sm" lh={1} mr={10} ml={5} my="auto">
+                  Bookmarks
+                </Text>
+              </Link>
+            </Group>
+          ) : (
+            <Group visibleFrom="md">
+              <Button
+                size="sm"
+                onClick={() => navigate("/login")}
+                className={classes.control}
+                variant="gradient"
+                gradient={{ from: "green", to: "lightgreen" }}
+              >
+                Login
+              </Button>
+              <Button
+                component="a"
+                onClick={() => navigate("/sign-up")}
+                size="sm"
+                variant="default"
+                className={classes.control}
+              >
+                Sign Up
+              </Button>
+            </Group>
+          )}
+
           <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="md" />
           <Drawer opened={opened} onClose={toggle} size="100%">
+            {signedIn ? (
+              <Group gap={10}>
+                <Link
+                  style={{
+                    textDecoration: "inherit",
+                    color: "inherit ",
+                    display: "inherit",
+                  }}
+                  to="/profile"
+                  onClick={() => toggle()}
+                >
+                  <Avatar src={user.image} alt={user.name} size="md" />
+                  <Text fw={500} size="sm" lh={1} mr={10} ml={5} my="auto">
+                    {user.name}
+                  </Text>
+                </Link>
+                <Link
+                  style={{
+                    textDecoration: "inherit",
+                    color: "inherit",
+                    display: "inherit",
+                  }}
+                  to="/Bookmarks"
+                  onClick={() => toggle()}
+                >
+                  {activePage === "Bookmarks" ? (
+                    <FaStar size={25}></FaStar>
+                  ) : (
+                    <FaRegStar size={25}></FaRegStar>
+                  )}
+                  <Text fw={500} size="sm" lh={1} mr={10} ml={5} my="auto">
+                    Bookmarks
+                  </Text>
+                </Link>
+              </Group>
+            ) : (
+              <Group>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    navigate("/Login");
+                    toggle();
+                  }}
+                  className={classes.control}
+                  variant="gradient"
+                  gradient={{ from: "green", to: "lightgreen" }}
+                  display="block"
+                  fullWidth="true"
+                >
+                  Login
+                </Button>
+                <Button
+                  component="a"
+                  onClick={() => {
+                    navigate("/sign-up");
+                    toggle();
+                  }}
+                  size="sm"
+                  variant="default"
+                  className={classes.control}
+                  fullWidth="true"
+                  mb={20}
+                >
+                  Sign Up
+                </Button>
+              </Group>
+            )}
+
             <Autocomplete
               className={classes.search}
               placeholder="Search"
               leftSection={<CiSearch />}
               mb={10}
+              mt={10}
             />
             <Group
               gap={10}
               mb={10}
               pb={50}
-              pt={20}
+              pt={10}
               display="block"
               onClick={() => toggle()}
             >
               {items}
             </Group>
-            <Button
-              size="sm"
-              onClick={() => {
-                navigate("/Login");
-                toggle();
-              }}
-              className={classes.control}
-              variant="gradient"
-              gradient={{ from: "green", to: "lightgreen" }}
-              gap={5}
-              display="block"
-              mb={10}
-              fullWidth="true"
-            >
-              Login
-            </Button>
-            <Button
-              component="a"
-              onClick={() => {
-                navigate("/sign-up");
-                toggle();
-              }}
-              size="sm"
-              variant="default"
-              className={classes.control}
-              fullWidth="true"
-            >
-              Sign Up
-            </Button>
           </Drawer>
         </Group>
       </div>
