@@ -17,7 +17,8 @@ import {
   TextInput,
   UnstyledButton,
   Modal,
-  NativeSelect
+  NativeSelect,
+  Tooltip
 } from "@mantine/core"
 import classes from "../../styles/admin/TableSort.module.css"
 import axiosInstance from "../../apis/config"
@@ -75,88 +76,6 @@ function sortData(data, payload) {
   )
 }
 
-// const data = [
-//   {
-//     name: "Athena Weissnat",
-//     company: "Little - Rippin",
-//     email: "Elouise.Prohaska@yahoo.com"
-//   },
-//   {
-//     name: "Deangelo Runolfsson",
-//     company: "Greenfelder - Krajcik",
-//     email: "Kadin_Trantow87@yahoo.com"
-//   },
-//   {
-//     name: "Danny Carter",
-//     company: "Kohler and Sons",
-//     email: "Marina3@hotmail.com"
-//   },
-//   {
-//     name: "Trace Tremblay PhD",
-//     company: "Crona, Aufderhar and Senger",
-//     email: "Antonina.Pouros@yahoo.com"
-//   },
-//   {
-//     name: "Derek Dibbert",
-//     company: "Gottlieb LLC",
-//     email: "Abagail29@hotmail.com"
-//   },
-//   {
-//     name: "Viola Bernhard",
-//     company: "Funk, Rohan and Kreiger",
-//     email: "Jamie23@hotmail.com"
-//   },
-//   {
-//     name: "Austin Jacobi",
-//     company: "Botsford - Corwin",
-//     email: "Genesis42@yahoo.com"
-//   },
-//   {
-//     name: "Hershel Mosciski",
-//     company: "Okuneva, Farrell and Kilback",
-//     email: "Idella.Stehr28@yahoo.com"
-//   },
-//   {
-//     name: "Mylene Ebert",
-//     company: "Kirlin and Sons",
-//     email: "Hildegard17@hotmail.com"
-//   },
-//   {
-//     name: "Lou Trantow",
-//     company: "Parisian - Lemke",
-//     email: "Hillard.Barrows1@hotmail.com"
-//   },
-//   {
-//     name: "Dariana Weimann",
-//     company: "Schowalter - Donnelly",
-//     email: "Colleen80@gmail.com"
-//   },
-//   {
-//     name: "Dr. Christy Herman",
-//     company: "VonRueden - Labadie",
-//     email: "Lilyan98@gmail.com"
-//   },
-//   {
-//     name: "Katelin Schuster",
-//     company: "Jacobson - Smitham",
-//     email: "Erich_Brekke76@gmail.com"
-//   },
-//   {
-//     name: "Melyna Macejkovic",
-//     company: "Schuster LLC",
-//     email: "Kylee4@yahoo.com"
-//   },
-//   {
-//     name: "Pinkie Rice",
-//     company: "Wolf, Trantow and Zulauf",
-//     email: "Fiona.Kutch@hotmail.com"
-//   },
-//   {
-//     name: "Brain Kreiger",
-//     company: "Lueilwitz Group",
-//     email: "Rico98@hotmail.com"
-//   }
-// ]
 
 export function TableSort(props) {
   const { dataHeader, handleNewData, currentApi } = props
@@ -174,6 +93,23 @@ export function TableSort(props) {
   const [editMode, {open: setEditMode, close: setAddMode}] = useDisclosure(false);
   //prepare form
 
+  //native functions
+  const setSorting = field => {
+    const reversed = field === sortBy ? !reverseSortDirection : false
+    setReverseSortDirection(reversed)
+    setSortBy(field)
+    setSortedData(sortData(data, { sortBy: field, reversed, search }))
+  }
+  console.log("does the code duplicate?")
+  const handleSearchChange = event => {
+    const { value } = event.currentTarget
+    setSearch(value)
+    setSortedData(
+      sortData(data, { sortBy, reversed: reverseSortDirection, search: value })
+    )
+  }
+
+  //config functions
   const dataHeaders = {
     Users: ["_id", "name", "email", "role"],
     Books: ["_id", "bookName", "authorName", "categoryName", "coverImage"]
@@ -187,20 +123,18 @@ export function TableSort(props) {
       role: "user",
     },
   })
-  const setSorting = field => {
-    const reversed = field === sortBy ? !reverseSortDirection : false
-    setReverseSortDirection(reversed)
-    setSortBy(field)
-    setSortedData(sortData(data, { sortBy: field, reversed, search }))
-  }
-console.log("does the code duplicate?")
-  const handleSearchChange = event => {
-    const { value } = event.currentTarget
-    setSearch(value)
-    setSortedData(
-      sortData(data, { sortBy, reversed: reverseSortDirection, search: value })
-    )
-  }
+
+  const formBook = useForm({
+    initialValues: {
+      bookName: "Sample Book",
+      authorName: "Sample Author",
+      averageRating: 4.5,
+      ratings: 100,
+      categoryName: "Sample Category",
+      description: "This is a sample book description.",
+      coverImage: "https://example.com/sample-cover.jpg",
+    },
+  })
 
   const handleApiDelete = () => {
     // console.log(row)
@@ -234,7 +168,7 @@ console.log("does the code duplicate?")
         handleNewData(currentApi)
         notifications.show({
           title: 'Success',
-          message: 'User updated successfully.',
+          message: `${values.name} updated successfully.`,
           color: 'green'
         })
       }).catch((error) => {
@@ -247,13 +181,13 @@ console.log("does the code duplicate?")
       });
     }
     else{
-      axiosInstance.post(dataHeader? `/api/auth/register` : currentApi, values)
+      axiosInstance.post(dataHeader == 'User'? `/api/auth/register` : currentApi, values)
       .then((response) => {
         console.log(response)
         handleNewData(currentApi)
         notifications.show({
           title: 'Success',
-          message: 'User added successfully.',
+          message: `${values.name} added successfully.`,
           color: 'green'
         })
       }).catch((error) => {
@@ -266,11 +200,10 @@ console.log("does the code duplicate?")
       });
     }
   }
-
   const rows = sortedData.map(row => (
     <Table.Tr key={row._id}>
       {dataHeaders[dataHeader].map((field, index) => (
-        <Table.Td key={index}>{row[field]}</Table.Td>
+        <Tooltip key={index} label={row[field]}><Table.Td key={index} style={{ overflow: 'hidden' }}>{row[field]}</Table.Td></Tooltip>
       ))}
       <Table.Td>
         <Group spacing="sm">
@@ -283,30 +216,77 @@ console.log("does the code duplicate?")
 
   return (
     <>
+      {/* EPIC MODAL */}
       <Modal opened={addModalopened} onClose={closeAddModal} title="Add item" centered>
-        <form onSubmit={formUser.onSubmit((values)=>{handleApiAdd(values)})}>
-          <TextInput
-            label="Name"
-            placeholder="Input name"
-            key={formUser.key('name')}
-            {...formUser.getInputProps('name')}
-          />
-          <TextInput
-            label="Email"
-            placeholder="Input email"
-            key={formUser.key('email')}
-            {...formUser.getInputProps('email')}
-          />
-          { !editMode ? <TextInput
-            label="Password"
-            placeholder="Input password"
-            key={formUser.key('password')}
-            {...formUser.getInputProps('password')}
-          />:null}
-          <NativeSelect label="Role" data={['user', 'admin']} key={formUser.key('role')} {...formUser.getInputProps('role')}></NativeSelect>
-          <Button type="submit" onClick={closeAddModal}>Add</Button>
-          <Button onClick={closeAddModal}>Close</Button>
-        </form>
+        {(() => {
+          switch (dataHeader) {
+            case 'User':
+              return (
+                <form onSubmit={formUser.onSubmit((values)=>{handleApiAdd(values)})}>
+                  <TextInput
+                    label="Name"
+                    placeholder="Input name"
+                    key={formUser.key('name')}
+                    {...formUser.getInputProps('name')}
+                  />
+                  <TextInput
+                    label="Email"
+                    placeholder="Input email"
+                    key={formUser.key('email')}
+                    {...formUser.getInputProps('email')}
+                  />
+                  { !editMode ? <TextInput
+                    label="Password"
+                    placeholder="Input password"
+                    key={formUser.key('password')}
+                    {...formUser.getInputProps('password')}
+                  />:null}
+                  <NativeSelect label="Role" data={['user', 'admin']} key={formUser.key('role')} {...formUser.getInputProps('role')}></NativeSelect>
+                  <Button type="submit" onClick={closeAddModal}>Add</Button>
+                  <Button onClick={closeAddModal}>Close</Button>
+                </form>
+              )
+            case 'Books':
+              return (
+                <form onSubmit={formBook.onSubmit((values)=>{handleApiAdd(values)})}>
+                  <TextInput
+                    label="Title"
+                    placeholder="Input title"
+                    key={formBook.key('bookName')}
+                    {...formBook.getInputProps('bookName')}
+                  />
+                  <TextInput
+                    label="Author"
+                    placeholder="Input author"
+                    key={formBook.key('authorName')}
+                    {...formBook.getInputProps('authorName')}
+                  />
+                  <TextInput
+                    label="Description"
+                    placeholder="Input description"
+                    key={formBook.key('description')}
+                    {...formBook.getInputProps('description')}
+                  />
+                  <TextInput
+                    label="Category"
+                    placeholder="Input category"
+                    key={formBook.key('categoryName')}
+                    {...formBook.getInputProps('categoryName')}
+                  />
+                  <TextInput
+                    label="Image"
+                    placeholder="Input Image"
+                    key={formBook.key('coverImage')}
+                    {...formBook.getInputProps('coverImage')}
+                  />
+                  <Button type="submit" onClick={closeAddModal}>Add</Button>
+                  <Button onClick={closeAddModal}>Close</Button>
+                </form>
+              )
+            default:
+              return null
+          }
+        })()}
       </Modal>
       <Modal opened={deleteModalopened} onClose={closeDeleteModal} title="Are you sure you want to delete this user?" centered>
         <Group>

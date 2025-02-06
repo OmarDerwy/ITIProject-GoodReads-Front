@@ -39,7 +39,7 @@ export default function Admin() {
   };
   const items = buttons.map((button, index) => (
     <NavLink
-      href='#required-for-focus'
+      href='#'
       key={index}
       label={button.label}
       onClick={() => {setActive(index);handleNewData(button.api)}}
