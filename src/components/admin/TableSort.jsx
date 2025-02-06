@@ -220,7 +220,7 @@ export function TableSort(props) {
       <Modal opened={addModalopened} onClose={closeAddModal} title="Add item" centered>
         {(() => {
           switch (dataHeader) {
-            case 'User':
+            case 'Users':
               return (
                 <form onSubmit={formUser.onSubmit((values)=>{handleApiAdd(values)})}>
                   <TextInput
