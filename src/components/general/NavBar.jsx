@@ -37,7 +37,7 @@ function Navbar() {
   const [active, setActive] = useState("");
   const location = useLocation();
   const activePage = location.pathname.split("/")[1];
-  const [signedIn, setSignedIn] = useState(true);
+  const [signedIn, setSignedIn] = useState(false);
 
   const items = links.map((link) => (
     <Link

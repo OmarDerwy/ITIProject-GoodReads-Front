@@ -42,9 +42,9 @@ function App() {
           <Route path="/books/:bookId" element={<BookDetails/>} />
           <Route path='/bookmarks' element={<Bookmarks/>}></Route>
           <Route path='/authors' element={<Authors/>}></Route>
-          <Route path='/author-details' element={<AuthorDetails/>}></Route>
+          <Route path='/authors/:authorId' element={<AuthorDetails/>}></Route>
           <Route path='/categories' element={<Categories/>}></Route>
-          <Route path='/category-details' element={<CategoryDetails/>}></Route>
+          <Route path='/categories/:categoryId' element={<CategoryDetails/>}></Route>
           <Route path='/profile' element={<UserProfile/>}></Route>
           <Route path='/bookshelves' element={<Bookshelves/>}></Route>
           <Route path='/general' element={<General/>}></Route>
