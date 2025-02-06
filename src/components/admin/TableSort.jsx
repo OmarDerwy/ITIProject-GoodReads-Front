@@ -181,7 +181,7 @@ export function TableSort(props) {
       });
     }
     else{
-      axiosInstance.post(dataHeader == 'User'? `/api/auth/register` : currentApi, values)
+      axiosInstance.post(dataHeader == 'Users'? `/api/auth/register` : currentApi, values)
       .then((response) => {
         console.log(response)
         handleNewData(currentApi)
