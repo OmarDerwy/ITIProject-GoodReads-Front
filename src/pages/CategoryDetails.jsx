@@ -60,7 +60,7 @@ export default function CategoryDetails() {
   return (
     <>
       {/*get category name by id from params*/ console.log(books)}
-      <Title ml={30} order={2}>
+      <Title ml={30} mb={30} order={2}>
         {categoryName}
       </Title>
 
@@ -71,7 +71,7 @@ export default function CategoryDetails() {
             withBorder
             p="lg"
             bg="var(--mantine-color-body)"
-            m={50}
+            m="auto"
             key={index}
             onClick={()=>navigate(`/books/${book._id}`)}
             style={{cursor:"pointer"}}

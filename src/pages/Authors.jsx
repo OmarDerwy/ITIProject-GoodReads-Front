@@ -9,33 +9,54 @@ import {
     Title,
     Image,
   } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../apis/config";
   
   export default function Authors() {
+    const [authors, setAuthors] = useState([]);
+    const navigate = useNavigate();
+    useEffect(() => {
+      const fetchAuthors = async () => {
+        try {
+          const response = await axiosInstance.get("/api/authors");
+          setAuthors(response.data);
+        } catch (err) {
+          console.log("Error: " + err.message);
+        }
+      };
+      fetchAuthors();
+    }, []);
     return (
       <>
         
-        <Title ml={30} order={2}>
+        <Title ml={30} mb={30} order={2}>
           Authors:
         </Title>
   
         <Grid>
-          {/*map authors here*/}
-          <Paper
+          {authors.map((author, index)=>(
+            <Paper
+            key={index}
             radius="md"
             withBorder
             p="lg"
             bg="var(--mantine-color-body)"
-            m={50}
+            m="auto"
+            onClick={()=>navigate(`/authors/${author._id}`)}
+            style={{cursor:"pointer"}}
           >
             <Grid.Col span="auto">
-              <Avatar radius="md" h="200" w="180" fit="fill" src="dagdadgas" /> {/*image or icon for author*/}
+              <Avatar radius="md" h="200" w="180" fit="fill" src={author.imageUrl} /> {/*image or icon for author*/}
             </Grid.Col>
             <Grid.Col span="auto">
-              <Text ta="center" fz="lg" fw={500} mb={5}>
-                Author 1
+              <Text ta="center" fz="lg" fw={600} mb={5}>
+                {author.authorName}
               </Text>
             </Grid.Col>
           </Paper>
+          ))}
+          
         </Grid>
       </>
     );

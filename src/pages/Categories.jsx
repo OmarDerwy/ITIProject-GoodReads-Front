@@ -30,18 +30,19 @@ export default function Categories() {
 
   return (
     <>
-      <Title ml={30} order={2}>
+      <Title ml={30} mb={30} order={2}>
         Categories:
       </Title>
 
       <Grid>
-        {categories?.map((category) => (
+        {categories?.map((category, index) => (
           <Paper
+            key={index}
             radius="md"
             withBorder
             p="lg"
             bg="var(--mantine-color-body)"
-            m={50}
+            m="auto"
             onClick={()=>navigate(`/categories/${category._id}`)}
             style={{cursor:"pointer"}}
           >
