@@ -5,6 +5,7 @@ import {
   FaSearch as IconSearch,
   FaCaretDown as IconSelector
 } from "react-icons/fa"
+import { LuRefreshCcw } from "react-icons/lu";
 import {
   Flex,
   Button,
@@ -17,7 +18,10 @@ import {
   TextInput,
   UnstyledButton,
   Modal,
-  NativeSelect
+  NativeSelect,
+  Tooltip,
+  FileInput,
+  Image
 } from "@mantine/core"
 import classes from "../../styles/admin/TableSort.module.css"
 import axiosInstance from "../../apis/config"
@@ -75,88 +79,6 @@ function sortData(data, payload) {
   )
 }
 
-// const data = [
-//   {
-//     name: "Athena Weissnat",
-//     company: "Little - Rippin",
-//     email: "Elouise.Prohaska@yahoo.com"
-//   },
-//   {
-//     name: "Deangelo Runolfsson",
-//     company: "Greenfelder - Krajcik",
-//     email: "Kadin_Trantow87@yahoo.com"
-//   },
-//   {
-//     name: "Danny Carter",
-//     company: "Kohler and Sons",
-//     email: "Marina3@hotmail.com"
-//   },
-//   {
-//     name: "Trace Tremblay PhD",
-//     company: "Crona, Aufderhar and Senger",
-//     email: "Antonina.Pouros@yahoo.com"
-//   },
-//   {
-//     name: "Derek Dibbert",
-//     company: "Gottlieb LLC",
-//     email: "Abagail29@hotmail.com"
-//   },
-//   {
-//     name: "Viola Bernhard",
-//     company: "Funk, Rohan and Kreiger",
-//     email: "Jamie23@hotmail.com"
-//   },
-//   {
-//     name: "Austin Jacobi",
-//     company: "Botsford - Corwin",
-//     email: "Genesis42@yahoo.com"
-//   },
-//   {
-//     name: "Hershel Mosciski",
-//     company: "Okuneva, Farrell and Kilback",
-//     email: "Idella.Stehr28@yahoo.com"
-//   },
-//   {
-//     name: "Mylene Ebert",
-//     company: "Kirlin and Sons",
-//     email: "Hildegard17@hotmail.com"
-//   },
-//   {
-//     name: "Lou Trantow",
-//     company: "Parisian - Lemke",
-//     email: "Hillard.Barrows1@hotmail.com"
-//   },
-//   {
-//     name: "Dariana Weimann",
-//     company: "Schowalter - Donnelly",
-//     email: "Colleen80@gmail.com"
-//   },
-//   {
-//     name: "Dr. Christy Herman",
-//     company: "VonRueden - Labadie",
-//     email: "Lilyan98@gmail.com"
-//   },
-//   {
-//     name: "Katelin Schuster",
-//     company: "Jacobson - Smitham",
-//     email: "Erich_Brekke76@gmail.com"
-//   },
-//   {
-//     name: "Melyna Macejkovic",
-//     company: "Schuster LLC",
-//     email: "Kylee4@yahoo.com"
-//   },
-//   {
-//     name: "Pinkie Rice",
-//     company: "Wolf, Trantow and Zulauf",
-//     email: "Fiona.Kutch@hotmail.com"
-//   },
-//   {
-//     name: "Brain Kreiger",
-//     company: "Lueilwitz Group",
-//     email: "Rico98@hotmail.com"
-//   }
-// ]
 
 export function TableSort(props) {
   const { dataHeader, handleNewData, currentApi } = props
@@ -166,16 +88,39 @@ export function TableSort(props) {
   const [sortedData, setSortedData] = useState(() => sortData(data, { sortBy: null, reversed: false, search: "" }))
   const [sortBy, setSortBy] = useState(null)
   const [reverseSortDirection, setReverseSortDirection] = useState(false)
+  const [imageSrc, setimageSrc] = useState(null)
   //CRUD states
   const [item, setItem] = useState(null)
   //disclosures
+  const [imageModalOpened, {open: openImageModal,close: closeImageModal}] = useDisclosure(false);
   const [deleteModalopened, {open: openDeleteModal,close: closeDeleteModal}] = useDisclosure(false);
   const [addModalopened, {open: openAddModal,close: closeAddModal}] = useDisclosure(false);
   const [editMode, {open: setEditMode, close: setAddMode}] = useDisclosure(false);
-  //prepare form
+  //singular item
+  const singularItem={
+    Users: 'user',
+    Books: 'book',
+  }
 
+  //native functions
+  const setSorting = field => {
+    const reversed = field === sortBy ? !reverseSortDirection : false
+    setReverseSortDirection(reversed)
+    setSortBy(field)
+    setSortedData(sortData(data, { sortBy: field, reversed, search }))
+  }
+  console.log("does the code duplicate?")
+  const handleSearchChange = event => {
+    const { value } = event.currentTarget
+    setSearch(value)
+    setSortedData(
+      sortData(data, { sortBy, reversed: reverseSortDirection, search: value })
+    )
+  }
+
+  //config functions
   const dataHeaders = {
-    Users: ["_id", "name", "email", "role"],
+    Users: ["_id", "name", "email", "role", "avatar"],
     Books: ["_id", "bookName", "authorName", "categoryName", "coverImage"]
   }
 
@@ -185,33 +130,31 @@ export function TableSort(props) {
       email: "dummy1@example.com",
       password: "3465Tyhg",
       role: "user",
+      avatar: null
     },
   })
-  const setSorting = field => {
-    const reversed = field === sortBy ? !reverseSortDirection : false
-    setReverseSortDirection(reversed)
-    setSortBy(field)
-    setSortedData(sortData(data, { sortBy: field, reversed, search }))
-  }
-console.log("does the code duplicate?")
-  const handleSearchChange = event => {
-    const { value } = event.currentTarget
-    setSearch(value)
-    setSortedData(
-      sortData(data, { sortBy, reversed: reverseSortDirection, search: value })
-    )
-  }
+
+  const formBook = useForm({
+    initialValues: {
+      bookName: "Sample Book",
+      authorName: "Sample Author",
+      categoryName: "Sample Category",
+      description: "This is a sample book description.",
+      coverImage: null,
+      bookFile: null,
+    },
+  })
 
   const handleApiDelete = () => {
     // console.log(row)
     axiosInstance.delete(`${currentApi}${item}`)
     .then((response) => {
       console.log(response)
-      const newData = data.filter(item => item._id !== item)
+      // const newData = data.filter(item => item._id !== item)
       handleNewData(currentApi)
       notifications.show({
         title: 'Success',
-        message: 'User deleted successfully.',
+        message: `${singularItem[dataHeader].charAt(0).toUpperCase() + singularItem[dataHeader].slice(1)} deleted successfully.`,
         color: 'green'
       })
     }).catch((error) => {
@@ -225,16 +168,21 @@ console.log("does the code duplicate?")
   }
 
   const handleApiAdd = (values) => {
+    // debugger;
     console.log(values)
-    console.log(item)
+    const formData = new FormData();
+    for (const key in values) {
+      formData.append(key, values[key]);
+    }
+    console.log(Array.from(formData));
     if(editMode){
-      axiosInstance.put(`${currentApi}${item}`, values)
+      axiosInstance.put(`${currentApi}${item}`, formData)
       .then((response) => {
         console.log(response)
         handleNewData(currentApi)
         notifications.show({
           title: 'Success',
-          message: 'User updated successfully.',
+          message: `${singularItem[dataHeader].charAt(0).toUpperCase() + singularItem[dataHeader].slice(1)} updated successfully.`,
           color: 'green'
         })
       }).catch((error) => {
@@ -244,16 +192,19 @@ console.log("does the code duplicate?")
           message: 'There was an error with your request.',
           color: 'red'
         })
+      }).finally(() => {
+        formUser.reset();
+        formBook.reset();
       });
     }
     else{
-      axiosInstance.post(dataHeader? `/api/auth/register` : currentApi, values)
+      axiosInstance.post(dataHeader == 'Users'? `/api/auth/register` : currentApi, formData)
       .then((response) => {
         console.log(response)
         handleNewData(currentApi)
         notifications.show({
           title: 'Success',
-          message: 'User added successfully.',
+          message: `${values.name} added successfully.`,
           color: 'green'
         })
       }).catch((error) => {
@@ -263,18 +214,58 @@ console.log("does the code duplicate?")
           message: 'There was an error with your request.',
           color: 'red'
         })
+      }).finally(() => {
+        // formUser.setValues({avatar: null}) check if this is necessary later
       });
     }
   }
-
   const rows = sortedData.map(row => (
     <Table.Tr key={row._id}>
       {dataHeaders[dataHeader].map((field, index) => (
-        <Table.Td key={index}>{row[field]}</Table.Td>
+        <Tooltip key={index} label={row[field]}>
+          <Table.Td key={index} style={{ overflow: 'hidden' }}>
+            {!row[field]? 'no data found' : ['avatar', 'coverImage'].includes(field)? <Image onClick={()=>{setimageSrc(row[field]);openImageModal();}} src={row[field]} width={50} height={50} fit="contain" />: row[field]}
+          </Table.Td>
+        </Tooltip>
       ))}
       <Table.Td>
         <Group spacing="sm">
-          <Button size="xs" variant="outline" onClick={()=>{setItem(row._id);setEditMode();openAddModal();}}>Edit</Button>
+          <Button size="xs" variant="outline" onClick={()=>{
+            setItem(row._id);
+            switch (dataHeader) {
+              case 'Users':
+                formUser.setValues({
+                  name: row.name,
+                  email: row.email,
+                  password: row.password,
+                  role: row.role,
+                  avatar: null
+                });
+                break;
+              case 'Books':
+                formBook.setValues({
+                  bookName: row.bookName,
+                  authorName: row.authorName,
+                  categoryName: row.categoryName,
+                  description: row.description,
+                  coverImage: null,
+                  bookFile: null,
+                });
+                break;
+            }
+            // const formStuff = formUser.getValues()
+            // for(const key in formStuff){
+            //   // if (!['password', 'avatar', 'role'].includes(key)) {
+            //   // }
+            //   console.log(key, row[key])
+            //   formUser.setFieldValue(key, row[key])
+            // }
+            // // .keys().forEach((key) => formUser.setFieldValue(key, row[key]));
+            setEditMode();
+            openAddModal();
+            }}>
+              Edit
+            </Button>
           <Button size="xs" color="red" variant="outline" onClick={() => {setItem(row._id); openDeleteModal()}}>Delete</Button>
         </Group>
       </Table.Td>
@@ -283,37 +274,106 @@ console.log("does the code duplicate?")
 
   return (
     <>
-      <Modal opened={addModalopened} onClose={closeAddModal} title="Add item" centered>
-        <form onSubmit={formUser.onSubmit((values)=>{handleApiAdd(values)})}>
-          <TextInput
-            label="Name"
-            placeholder="Input name"
-            key={formUser.key('name')}
-            {...formUser.getInputProps('name')}
-          />
-          <TextInput
-            label="Email"
-            placeholder="Input email"
-            key={formUser.key('email')}
-            {...formUser.getInputProps('email')}
-          />
-          { !editMode ? <TextInput
-            label="Password"
-            placeholder="Input password"
-            key={formUser.key('password')}
-            {...formUser.getInputProps('password')}
-          />:null}
-          <NativeSelect label="Role" data={['user', 'admin']} key={formUser.key('role')} {...formUser.getInputProps('role')}></NativeSelect>
-          <Button type="submit" onClick={closeAddModal}>Add</Button>
-          <Button onClick={closeAddModal}>Close</Button>
-        </form>
+      {/* EPIC MODALS */}
+      <Modal opened={imageModalOpened} onClose={closeImageModal} centered>
+        <Image src={imageSrc} width={500} height={500} fit="contain" />
       </Modal>
-      <Modal opened={deleteModalopened} onClose={closeDeleteModal} title="Are you sure you want to delete this user?" centered>
+      <Modal opened={addModalopened} onClose={closeAddModal} title={editMode? 'Edit ' + singularItem[dataHeader] : 'Add ' + singularItem[dataHeader]} centered>
+        {(() => {
+          switch (dataHeader) {
+            case 'Users':
+              return (
+                <form onSubmit={formUser.onSubmit((values)=>{handleApiAdd(values)})}>
+                  <TextInput
+                    label="Name"
+                    placeholder="Input name"
+                    key={formUser.key('name')}
+                    {...formUser.getInputProps('name')}
+                  />
+                  <TextInput
+                    label="Email"
+                    placeholder="Input email"
+                    key={formUser.key('email')}
+                    {...formUser.getInputProps('email')}
+                  />
+                  {<TextInput
+                    label="Password"
+                    placeholder="Input password"
+                    key={formUser.key('password')}
+                    {...formUser.getInputProps('password')}
+                  />}
+                  {<NativeSelect label="Role" data={['user', 'admin']} key={formUser.key('role')} {...formUser.getInputProps('role')}></NativeSelect>}
+                  <FileInput
+                    clearable
+                    label="Avatar"
+                    description="Upload user's avatar here"
+                    placeholder="Input image"
+                    key={formUser.key('avatar')}
+                    {...formUser.getInputProps('avatar')}
+                  />
+                  <Button type="submit" onClick={closeAddModal}>Add</Button>
+                  <Button onClick={closeAddModal}>Close</Button>
+                </form>
+              )
+            case 'Books':
+              return (
+                <form onSubmit={formBook.onSubmit((values)=>{handleApiAdd(values)})}>
+                  <TextInput
+                    label="Title"
+                    placeholder="Input title"
+                    key={formBook.key('bookName')}
+                    {...formBook.getInputProps('bookName')}
+                  />
+                  <TextInput
+                    label="Author"
+                    placeholder="Input author"
+                    key={formBook.key('authorName')}
+                    {...formBook.getInputProps('authorName')}
+                  />
+                  <TextInput
+                    label="Description"
+                    placeholder="Input description"
+                    key={formBook.key('description')}
+                    {...formBook.getInputProps('description')}
+                  />
+                  <TextInput
+                    label="Category"
+                    placeholder="Input category"
+                    key={formBook.key('categoryName')}
+                    {...formBook.getInputProps('categoryName')}
+                  />
+                  <FileInput
+                    label="Book"
+                    placeholder="Input book"
+                    description="Upload book file here"
+                    key={formBook.key('bookFile')}
+                    {...formBook.getInputProps('bookFile')}
+                  />
+                  <FileInput
+                    label="Image"
+                    placeholder="Input image"
+                    description="Upload book front cover here"
+                    key={formBook.key('coverImage')}
+                    {...formBook.getInputProps('coverImage')}
+                  />
+                  <Button type="submit" onClick={closeAddModal}>Add</Button>
+                  <Button onClick={closeAddModal}>Close</Button>
+                </form>
+              )
+            default:
+              return null
+          }
+        })()}
+      </Modal>
+      <Modal opened={deleteModalopened} onClose={closeDeleteModal} title={`Are you sure you want to delete this ${singularItem[dataHeader]}?`} centered>
         <Group>
           <Button onClick={()=>{handleApiDelete();closeDeleteModal();}}>Yes</Button>
           <Button onClick={closeDeleteModal}>No</Button>
         </Group>
       </Modal>
+
+      {/* END OF EPIC MODALS */}
+
       <ScrollArea>
         <Flex gap={15} me={20}>
           <TextInput
@@ -324,7 +384,8 @@ console.log("does the code duplicate?")
             onChange={handleSearchChange}
             flex={'1'}
           />
-          <Button variant="outline" color="green" onClick={()=>{setAddMode();openAddModal();}}>Add Data</Button>
+          <Button variant="outline" color="green" onClick={()=>{setAddMode();openAddModal();}}>{'Add ' + singularItem[dataHeader]}</Button>
+          <Button variant="outline" color="blue" onClick={()=>{handleNewData(currentApi)}}><LuRefreshCcw /></Button>
         </Flex>
         <Table
           horizontalSpacing="md"
