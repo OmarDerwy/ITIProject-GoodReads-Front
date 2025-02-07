@@ -9,8 +9,26 @@ import {
   Title,
   Image
 } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../apis/config";
 
 export default function AuthorDetails() {
+  const [author, setAuthor] = useState({});
+  const navigate = useNavigate();
+  const authorId = location.pathname.split("/")[2];
+
+  useEffect(() => {
+    const fetchAuthor = async () => {
+      try {
+        const response = await axiosInstance.get(`/api/authors/${authorId}`);
+        setAuthor(response.data);
+      } catch (err) {
+        console.log("Error: " + err.message);
+      }
+    };
+    fetchAuthor();
+  }, []);
   return (
     <>
       <Paper radius="md" p="lg" bg="var(--mantine-color-body)" m={10}>
@@ -18,28 +36,20 @@ export default function AuthorDetails() {
           <Grid.Col span="auto">
             {" "}
             <Avatar
-              src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-3.png"
+              src={author.imageUrl}
               size={210}
               radius={210}
             />
           </Grid.Col>
           <Grid.Col span={10}>
             <Title ta="left"  mb={5} order={2}>
-              Author Name
+              {author.authorName}
             </Title>
             <Text ta="left" fz="md" fw={500} mb={20}>
-              01/01/1970
+              {author.dateOfBirth}
             </Text>
-            <Text c="dimmed" fz="sm">
-              Small Bio: Martin Kesici's band, and Tobias Schultka. The band was
-              originally meant as a joke, but progressed into being a more
-              serious musical duo. The name for the band has no particular
-              meaning, although its origins were suggested from when the two
-              original members were driving in a car operated by Marcel Neumann
-              and an accident almost occurred. Neumann found Schultka "so funny
-              that he briefly lost control of the vehicle." Many of their songs
-              from this point were covers of German folk tales and nursery
-              rhymes.
+            <Text c="dimmed" fz="md">
+              {author.bio}
             </Text>
           </Grid.Col>
         </Grid>
