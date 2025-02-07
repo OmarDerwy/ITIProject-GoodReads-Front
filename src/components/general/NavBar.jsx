@@ -37,8 +37,8 @@ function Navbar() {
   const [active, setActive] = useState("");
   const location = useLocation();
   const activePage = location.pathname.split("/")[1];
-  const [signedIn, setSignedIn] = useState(false);
-
+  const [signedIn, setSignedIn] = useState(localStorage.getItem('userToken')? true: false);
+  
   const items = links.map((link) => (
     <Link
       key={link.label}
