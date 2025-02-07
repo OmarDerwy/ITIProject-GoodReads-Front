@@ -18,7 +18,9 @@ import {
   UnstyledButton,
   Modal,
   NativeSelect,
-  Tooltip
+  Tooltip,
+  FileInput,
+  Image
 } from "@mantine/core"
 import classes from "../../styles/admin/TableSort.module.css"
 import axiosInstance from "../../apis/config"
@@ -85,9 +87,11 @@ export function TableSort(props) {
   const [sortedData, setSortedData] = useState(() => sortData(data, { sortBy: null, reversed: false, search: "" }))
   const [sortBy, setSortBy] = useState(null)
   const [reverseSortDirection, setReverseSortDirection] = useState(false)
+  const [imageSrc, setimageSrc] = useState(null)
   //CRUD states
   const [item, setItem] = useState(null)
   //disclosures
+  const [imageModalOpened, {open: openImageModal,close: closeImageModal}] = useDisclosure(false);
   const [deleteModalopened, {open: openDeleteModal,close: closeDeleteModal}] = useDisclosure(false);
   const [addModalopened, {open: openAddModal,close: closeAddModal}] = useDisclosure(false);
   const [editMode, {open: setEditMode, close: setAddMode}] = useDisclosure(false);
@@ -111,7 +115,7 @@ export function TableSort(props) {
 
   //config functions
   const dataHeaders = {
-    Users: ["_id", "name", "email", "role"],
+    Users: ["_id", "name", "email", "role", "avatar"],
     Books: ["_id", "bookName", "authorName", "categoryName", "coverImage"]
   }
 
@@ -121,6 +125,7 @@ export function TableSort(props) {
       email: "dummy1@example.com",
       password: "3465Tyhg",
       role: "user",
+      avatar: null
     },
   })
 
@@ -132,7 +137,7 @@ export function TableSort(props) {
       ratings: 100,
       categoryName: "Sample Category",
       description: "This is a sample book description.",
-      coverImage: "https://example.com/sample-cover.jpg",
+      coverImage: null,
     },
   })
 
@@ -141,7 +146,7 @@ export function TableSort(props) {
     axiosInstance.delete(`${currentApi}${item}`)
     .then((response) => {
       console.log(response)
-      const newData = data.filter(item => item._id !== item)
+      // const newData = data.filter(item => item._id !== item)
       handleNewData(currentApi)
       notifications.show({
         title: 'Success',
@@ -159,10 +164,15 @@ export function TableSort(props) {
   }
 
   const handleApiAdd = (values) => {
+    // debugger;
     console.log(values)
-    console.log(item)
+    const formData = new FormData();
+    for (const key in values) {
+      formData.append(key, values[key]);
+    }
+    console.log(Array.from(formData));
     if(editMode){
-      axiosInstance.put(`${currentApi}${item}`, values)
+      axiosInstance.put(`${currentApi}${item}`, formData)
       .then((response) => {
         console.log(response)
         handleNewData(currentApi)
@@ -178,10 +188,12 @@ export function TableSort(props) {
           message: 'There was an error with your request.',
           color: 'red'
         })
+      }).finally(() => {
+        formUser.setValues({avatar: null})
       });
     }
     else{
-      axiosInstance.post(dataHeader == 'Users'? `/api/auth/register` : currentApi, values)
+      axiosInstance.post(dataHeader == 'Users'? `/api/auth/register` : currentApi, formData)
       .then((response) => {
         console.log(response)
         handleNewData(currentApi)
@@ -197,17 +209,38 @@ export function TableSort(props) {
           message: 'There was an error with your request.',
           color: 'red'
         })
+      }).finally(() => {
+        formUser.setValues({avatar: null})
       });
     }
   }
   const rows = sortedData.map(row => (
     <Table.Tr key={row._id}>
       {dataHeaders[dataHeader].map((field, index) => (
-        <Tooltip key={index} label={row[field]}><Table.Td key={index} style={{ overflow: 'hidden' }}>{row[field]}</Table.Td></Tooltip>
+        <Tooltip key={index} label={row[field]}>
+          <Table.Td key={index} style={{ overflow: 'hidden' }}>
+            {!row[field]? 'no data found' : ['avatar', 'coverImage'].includes(field)? <Image onClick={()=>{setimageSrc(row[field]);openImageModal();}} src={row[field]} width={50} height={50} fit="contain" />: row[field]}
+          </Table.Td>
+        </Tooltip>
       ))}
       <Table.Td>
         <Group spacing="sm">
-          <Button size="xs" variant="outline" onClick={()=>{setItem(row._id);setEditMode();openAddModal();}}>Edit</Button>
+          <Button size="xs" variant="outline" onClick={()=>{
+            setItem(row._id);
+            // formUser.setValues(row)
+            const formStuff = formUser.getValues()
+            for(const key in formStuff){
+              // if (!['password', 'avatar', 'role'].includes(key)) {
+              // }
+              console.log(key, row[key])
+              formUser.setFieldValue(key, row[key])
+            }
+            // .keys().forEach((key) => formUser.setFieldValue(key, row[key]));
+            setEditMode();
+            openAddModal();
+            }}>
+              Edit
+            </Button>
           <Button size="xs" color="red" variant="outline" onClick={() => {setItem(row._id); openDeleteModal()}}>Delete</Button>
         </Group>
       </Table.Td>
@@ -216,7 +249,10 @@ export function TableSort(props) {
 
   return (
     <>
-      {/* EPIC MODAL */}
+      {/* EPIC MODALS */}
+      <Modal opened={imageModalOpened} onClose={closeImageModal} centered>
+        <Image src={imageSrc} width={500} height={500} fit="contain" />
+      </Modal>
       <Modal opened={addModalopened} onClose={closeAddModal} title="Add item" centered>
         {(() => {
           switch (dataHeader) {
@@ -235,13 +271,21 @@ export function TableSort(props) {
                     key={formUser.key('email')}
                     {...formUser.getInputProps('email')}
                   />
-                  { !editMode ? <TextInput
+                  {<TextInput
                     label="Password"
                     placeholder="Input password"
                     key={formUser.key('password')}
                     {...formUser.getInputProps('password')}
-                  />:null}
-                  <NativeSelect label="Role" data={['user', 'admin']} key={formUser.key('role')} {...formUser.getInputProps('role')}></NativeSelect>
+                  />}
+                  {<NativeSelect label="Role" data={['user', 'admin']} key={formUser.key('role')} {...formUser.getInputProps('role')}></NativeSelect>}
+                  <FileInput
+                    clearable
+                    label="Input label"
+                    description="Input description"
+                    placeholder="Input placeholder"
+                    key={formUser.key('avatar')}
+                    {...formUser.getInputProps('avatar')}
+                  />
                   <Button type="submit" onClick={closeAddModal}>Add</Button>
                   <Button onClick={closeAddModal}>Close</Button>
                 </form>
@@ -294,6 +338,9 @@ export function TableSort(props) {
           <Button onClick={closeDeleteModal}>No</Button>
         </Group>
       </Modal>
+
+      {/* END OF EPIC MODALS */}
+
       <ScrollArea>
         <Flex gap={15} me={20}>
           <TextInput
