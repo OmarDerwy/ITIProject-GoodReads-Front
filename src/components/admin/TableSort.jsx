@@ -5,6 +5,7 @@ import {
   FaSearch as IconSearch,
   FaCaretDown as IconSelector
 } from "react-icons/fa"
+import { LuRefreshCcw } from "react-icons/lu";
 import {
   Flex,
   Button,
@@ -95,7 +96,11 @@ export function TableSort(props) {
   const [deleteModalopened, {open: openDeleteModal,close: closeDeleteModal}] = useDisclosure(false);
   const [addModalopened, {open: openAddModal,close: closeAddModal}] = useDisclosure(false);
   const [editMode, {open: setEditMode, close: setAddMode}] = useDisclosure(false);
-  //prepare form
+  //singular item
+  const singularItem={
+    Users: 'user',
+    Books: 'book',
+  }
 
   //native functions
   const setSorting = field => {
@@ -133,11 +138,10 @@ export function TableSort(props) {
     initialValues: {
       bookName: "Sample Book",
       authorName: "Sample Author",
-      averageRating: 4.5,
-      ratings: 100,
       categoryName: "Sample Category",
       description: "This is a sample book description.",
       coverImage: null,
+      bookFile: null,
     },
   })
 
@@ -150,7 +154,7 @@ export function TableSort(props) {
       handleNewData(currentApi)
       notifications.show({
         title: 'Success',
-        message: 'User deleted successfully.',
+        message: `${singularItem[dataHeader].charAt(0).toUpperCase() + singularItem[dataHeader].slice(1)} deleted successfully.`,
         color: 'green'
       })
     }).catch((error) => {
@@ -178,7 +182,7 @@ export function TableSort(props) {
         handleNewData(currentApi)
         notifications.show({
           title: 'Success',
-          message: `${values.name} updated successfully.`,
+          message: `${singularItem[dataHeader].charAt(0).toUpperCase() + singularItem[dataHeader].slice(1)} updated successfully.`,
           color: 'green'
         })
       }).catch((error) => {
@@ -189,7 +193,8 @@ export function TableSort(props) {
           color: 'red'
         })
       }).finally(() => {
-        formUser.setValues({avatar: null})
+        formUser.reset();
+        formBook.reset();
       });
     }
     else{
@@ -210,7 +215,7 @@ export function TableSort(props) {
           color: 'red'
         })
       }).finally(() => {
-        formUser.setValues({avatar: null})
+        // formUser.setValues({avatar: null}) check if this is necessary later
       });
     }
   }
@@ -227,15 +232,35 @@ export function TableSort(props) {
         <Group spacing="sm">
           <Button size="xs" variant="outline" onClick={()=>{
             setItem(row._id);
-            // formUser.setValues(row)
-            const formStuff = formUser.getValues()
-            for(const key in formStuff){
-              // if (!['password', 'avatar', 'role'].includes(key)) {
-              // }
-              console.log(key, row[key])
-              formUser.setFieldValue(key, row[key])
+            switch (dataHeader) {
+              case 'Users':
+                formUser.setValues({
+                  name: row.name,
+                  email: row.email,
+                  password: row.password,
+                  role: row.role,
+                  avatar: null
+                });
+                break;
+              case 'Books':
+                formBook.setValues({
+                  bookName: row.bookName,
+                  authorName: row.authorName,
+                  categoryName: row.categoryName,
+                  description: row.description,
+                  coverImage: null,
+                  bookFile: null,
+                });
+                break;
             }
-            // .keys().forEach((key) => formUser.setFieldValue(key, row[key]));
+            // const formStuff = formUser.getValues()
+            // for(const key in formStuff){
+            //   // if (!['password', 'avatar', 'role'].includes(key)) {
+            //   // }
+            //   console.log(key, row[key])
+            //   formUser.setFieldValue(key, row[key])
+            // }
+            // // .keys().forEach((key) => formUser.setFieldValue(key, row[key]));
             setEditMode();
             openAddModal();
             }}>
@@ -253,7 +278,7 @@ export function TableSort(props) {
       <Modal opened={imageModalOpened} onClose={closeImageModal} centered>
         <Image src={imageSrc} width={500} height={500} fit="contain" />
       </Modal>
-      <Modal opened={addModalopened} onClose={closeAddModal} title="Add item" centered>
+      <Modal opened={addModalopened} onClose={closeAddModal} title={editMode? 'Edit ' + singularItem[dataHeader] : 'Add ' + singularItem[dataHeader]} centered>
         {(() => {
           switch (dataHeader) {
             case 'Users':
@@ -280,9 +305,9 @@ export function TableSort(props) {
                   {<NativeSelect label="Role" data={['user', 'admin']} key={formUser.key('role')} {...formUser.getInputProps('role')}></NativeSelect>}
                   <FileInput
                     clearable
-                    label="Input label"
-                    description="Input description"
-                    placeholder="Input placeholder"
+                    label="Avatar"
+                    description="Upload user's avatar here"
+                    placeholder="Input image"
                     key={formUser.key('avatar')}
                     {...formUser.getInputProps('avatar')}
                   />
@@ -317,9 +342,17 @@ export function TableSort(props) {
                     key={formBook.key('categoryName')}
                     {...formBook.getInputProps('categoryName')}
                   />
-                  <TextInput
+                  <FileInput
+                    label="Book"
+                    placeholder="Input book"
+                    description="Upload book file here"
+                    key={formBook.key('bookFile')}
+                    {...formBook.getInputProps('bookFile')}
+                  />
+                  <FileInput
                     label="Image"
-                    placeholder="Input Image"
+                    placeholder="Input image"
+                    description="Upload book front cover here"
                     key={formBook.key('coverImage')}
                     {...formBook.getInputProps('coverImage')}
                   />
@@ -332,7 +365,7 @@ export function TableSort(props) {
           }
         })()}
       </Modal>
-      <Modal opened={deleteModalopened} onClose={closeDeleteModal} title="Are you sure you want to delete this user?" centered>
+      <Modal opened={deleteModalopened} onClose={closeDeleteModal} title={`Are you sure you want to delete this ${singularItem[dataHeader]}?`} centered>
         <Group>
           <Button onClick={()=>{handleApiDelete();closeDeleteModal();}}>Yes</Button>
           <Button onClick={closeDeleteModal}>No</Button>
@@ -351,7 +384,8 @@ export function TableSort(props) {
             onChange={handleSearchChange}
             flex={'1'}
           />
-          <Button variant="outline" color="green" onClick={()=>{setAddMode();openAddModal();}}>Add Data</Button>
+          <Button variant="outline" color="green" onClick={()=>{setAddMode();openAddModal();}}>{'Add ' + singularItem[dataHeader]}</Button>
+          <Button variant="outline" color="blue" onClick={()=>{handleNewData(currentApi)}}><LuRefreshCcw /></Button>
         </Flex>
         <Table
           horizontalSpacing="md"
