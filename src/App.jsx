@@ -37,14 +37,14 @@ function App() {
         <Routes>
           <Route path='/' element={<LandingPage/>}></Route>
           <Route path='/admin' element={<Admin/>}></Route>
-          {/* <Route element={<ProtectedRoutes/>}> */}
+          <Route element={<ProtectedRoutes/>}>
             <Route path='/profile' element={<UserProfile/>}></Route>
             <Route path='/bookmarks' element={<Bookmarks/>}></Route>
-          {/* </Route> */}
-          {/* <Route element={<UserAuthRoutes/>}> */}
+          </Route>
+          <Route element={<UserAuthRoutes/>}>
             <Route path='/login' element={<Login/>}></Route>
             <Route path='/sign-up' element={<SignUp/>}></Route>
-          {/* </Route> */}
+          </Route>
           <Route path='/reset-password' element={<ForgotPassword/>}></Route>
           <Route path='/books' element={<BookList/>}></Route> 
           <Route path="/books/:bookId" element={<BookDetails/>} />
