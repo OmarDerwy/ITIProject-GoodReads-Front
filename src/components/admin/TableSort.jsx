@@ -55,9 +55,13 @@ function Th({ children, reversed, sorted, onSort }) {
 function filterData(data, search) {
   const query = search.toLowerCase().trim()
   return data.filter(item =>{
-    const filteredHeaders = keys(data[0]).filter((key)=> !['__v', 'clicked', 'averageRating', 'ratings', 'reviews', 'coverImage'].includes(key))
+    const filteredHeaders = keys(data[0]).filter((key)=> !['__v', 'clicked', 'averageRating', 'ratings', 'reviews', 'coverImage', 'bookFile', 'verified', 'books', 'imageUrl' ].includes(key))
     return filteredHeaders.some(key => 
-      item[key].toLowerCase().includes(query)
+      {try {
+        return item[key].toLowerCase().includes(query)
+      } catch (error) {
+        console.log(key)
+      }}
     )
   })
 }
