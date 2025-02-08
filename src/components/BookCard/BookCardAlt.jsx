@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, Text, Image, Badge, Center } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import classes from '../../styles/general/BookCard.module.css';
+import image from "../../assets/bookCoverNotFound.webp"
 
 const BookCard = ({ book }) => {
     return (
@@ -15,11 +16,12 @@ const BookCard = ({ book }) => {
         
 
         <Center m="xs">
-            {book.image_url && <Image src={book.image_url} height={400} alt={book.title} />}
+            {book.coverImage ? <Image src={book.coverImage} height={400} alt={book.title}/>
+                            :  <Image src={image} height={400} alt={book.title}/>}
         </Center>
-        <Link to={`/book/${book.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to={`/books/${book.id}`} style={{ textDecoration: 'none', color: 'inherit'}}>
             <Text mt={4} c="primary-1" className={classes.title}>
-            {book.title}
+                {book.title}
             </Text>
         </Link>
         <Text mb={2} size="md" align="center" color="dimmed">
