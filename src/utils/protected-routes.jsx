@@ -1,25 +1,45 @@
 import { Navigate, Outlet } from "react-router-dom";
 import axiosInstance from "../apis/config";
+import React, { useEffect, useState } from "react";
 
+const ProtectedRoutes = () => {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-const getUser = async () => {
-    try {
-        const res = await axiosInstance.get('api/auth/');
-        console.log(res);
-        return res.data.id;
-    } catch (err) {
-        return null
-        console.log(err);
-    }
+    useEffect(() => {
+        axiosInstance.get('api/auth/')
+            .then(res => {
+                setUser(res.data.id);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.log(err);
+                setLoading(false);
+            });
+    }, []);
+
+    if (loading) return null; 
+    return user ? <Outlet /> : <Navigate to="/login" />;
 };
 
-const ProtectedRoutes = async () => {
-    const user = await getUser();
-    return user? <Outlet/> : <Navigate to="/login" />;
+const UserAuthRoutes = () => {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        axiosInstance.get('api/auth/')
+            .then(res => {
+                setUser(res.data.id);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.log(err);
+                setLoading(false);
+            });
+    }, []);
+
+    if (loading) return null; 
+    return !user ? <Outlet /> : <Navigate to="/profile" />;
 };
 
-const UserAuthRoutes = async ()=>{
-    const user = await getUser();
-    return !user? <Outlet/> : <Navigate to="/profile" />;
-};
-export {ProtectedRoutes, UserAuthRoutes};
+export { ProtectedRoutes, UserAuthRoutes };
