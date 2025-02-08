@@ -14,7 +14,8 @@ const BookList = React.lazy(() => import('./pages/BrowseBooks'));
 const Categories = React.lazy(() => import('./pages/Categories'));
 const NotFoundImage = React.lazy(() => import('./pages/PageNotFound'));
 const Authors = React.lazy(() => import('./pages/Authors'));
-const ForgotPassword = React.lazy(() => import('./pages/ResetPassword'));
+const ForgotPassword = React.lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = React.lazy( ()  => import('./pages/ResetPassword'))
 const Bookshelves = React.lazy(() => import('./pages/Bookshelves'));
 const AuthorDetails = React.lazy(() => import('./pages/AuthorDetails'));
 const CategoryDetails = React.lazy(() => import('./pages/CategoryDetails'));
@@ -37,7 +38,8 @@ function App() {
           <Route path='/admin' element={<Admin/>}></Route>
           <Route path='/login' element={<Login/>}></Route>
           <Route path='/sign-up' element={<SignUp/>}></Route>
-          <Route path='/reset-password' element={<ForgotPassword/>}></Route>
+          <Route path='/forgot-password' element={<ForgotPassword/>}></Route>
+          <Route path='/reset-password' element={<ResetPassword/>}></Route>
           <Route path='/books' element={<BookList/>}></Route> 
           <Route path="/books/:bookId" element={<BookDetails/>} />
           <Route path='/bookmarks' element={<Bookmarks/>}></Route>
