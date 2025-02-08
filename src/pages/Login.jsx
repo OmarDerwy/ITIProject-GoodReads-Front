@@ -20,14 +20,14 @@ const Login = () => {
   //   message: 'just a test',
   //   color: 'green'
   // })
-  if(location.state){
-    location.state.registerSuccess && notifications.show({
+  if(sessionStorage.getItem('justSignedUp')){
+    notifications.show({
       title:'Registeration successful!',
       message:"User has been registered successfuly.",
       color: 'green',
       autoClose:5000
     })
-    location.state.registerSuccess = false
+    sessionStorage.removeItem('justSignedUp')
   }
   // const users = JSON.parse(localStorage.getItem("users")) || [];
 
@@ -38,9 +38,9 @@ const Login = () => {
       .then((response) => {
         console.log(response);
         localStorage.setItem("userToken", response.data.token);
-
         //send registeration success for a toast at the landing page
-        navigate('/profile', {state:{loginSuccess: true}})
+        sessionStorage.setItem('justLoggedIn', true);
+        navigate('/profile')
       }).catch((error) => {
         console.log(error)
       })

@@ -85,19 +85,16 @@ const SignUp = () => {
         name: formValues.username,
         email: formValues.email,
         password: formValues.password,
-      };
-      axiosInstance
-        .post("/api/auth/register", sendPackage)
-        .then((response) => {
-          console.log(response);
-          //send registeration success for a toast at the landing page
-          navigate("/login", { state: { registerSuccess: true } });
-        })
-        .catch((error) => {
-          if (error.response.data.error.includes("duplicate")) {
-            setErrors({ email: "This email already exists" });
-          }
-        });
+      }
+      axiosInstance.post('/api/auth/register', sendPackage)
+      .then((response) => {
+        console.log(response);
+        //send registeration success for a toast at the landing page
+        sessionStorage.setItem('justSignedUp', true);
+        navigate('/login')
+      }).catch((error) => {
+        console.log(error)
+      })
     }
   };
 
