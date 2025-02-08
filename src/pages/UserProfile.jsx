@@ -7,13 +7,14 @@ import { notifications } from '@mantine/notifications'
 
 export default function UserProfile() {
   const location = useLocation()
-  if(location.state){
-    location.state.loginSuccess && notifications.show({
+  if(sessionStorage.getItem('justLoggedIn')){
+    notifications.show({
       title: 'Login Success',
-      message: location.state.message,
+      message: 'Successfully logged in',
       color: 'green',
       autoClose: 5000
     })
+    sessionStorage.removeItem('justLoggedIn');
   }
   const popular =[
     { title: "book1", rating: 2.5, views: 100 },

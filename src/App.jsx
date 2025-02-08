@@ -5,6 +5,7 @@ import React , {Suspense} from 'react';
 import Navbar from './components/general/NavBar';
 import { Loader } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
+import {ProtectedRoutes, UserAuthRoutes} from './utils/protected-routes';
 
 const LandingPage = React.lazy(() => import('./pages/LandingPage'));
 const Login = React.lazy(() => import('./pages/Login'));
@@ -35,17 +36,21 @@ function App() {
         <Routes>
           <Route path='/' element={<LandingPage/>}></Route>
           <Route path='/admin' element={<Admin/>}></Route>
-          <Route path='/login' element={<Login/>}></Route>
-          <Route path='/sign-up' element={<SignUp/>}></Route>
+          {/* <Route element={<ProtectedRoutes/>}> */}
+            <Route path='/profile' element={<UserProfile/>}></Route>
+            <Route path='/bookmarks' element={<Bookmarks/>}></Route>
+          {/* </Route> */}
+          {/* <Route element={<UserAuthRoutes/>}> */}
+            <Route path='/login' element={<Login/>}></Route>
+            <Route path='/sign-up' element={<SignUp/>}></Route>
+          {/* </Route> */}
           <Route path='/reset-password' element={<ForgotPassword/>}></Route>
           <Route path='/books' element={<BookList/>}></Route> 
           <Route path="/books/:bookId" element={<BookDetails/>} />
-          <Route path='/bookmarks' element={<Bookmarks/>}></Route>
           <Route path='/authors' element={<Authors/>}></Route>
           <Route path='/authors/:authorId' element={<AuthorDetails/>}></Route>
           <Route path='/categories' element={<Categories/>}></Route>
           <Route path='/categories/:categoryId' element={<CategoryDetails/>}></Route>
-          <Route path='/profile' element={<UserProfile/>}></Route>
           <Route path='/bookshelves' element={<Bookshelves/>}></Route>
           <Route path='/general' element={<General/>}></Route>
           <Route path='/contact-us' element={<ContactUs/>}></Route>  

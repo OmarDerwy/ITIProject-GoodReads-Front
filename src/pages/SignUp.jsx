@@ -68,12 +68,10 @@ const SignUp = () => {
       .then((response) => {
         console.log(response);
         //send registeration success for a toast at the landing page
-        navigate('/login', {state:{registerSuccess: true}})
+        sessionStorage.setItem('justSignedUp', true);
+        navigate('/login')
       }).catch((error) => {
-        if(error.response.data.error.includes('duplicate')){
-          setErrors({email: "This email already exists"})
-        }
-      
+        console.log(error)
       })
     }
   };
