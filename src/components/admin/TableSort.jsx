@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { AiOutlineClose } from "react-icons/ai"; 
+import { useState, useRef } from "react"
 import {
   FaChevronDown as IconChevronDown,
   FaChevronUp as IconChevronUp,
@@ -7,6 +8,7 @@ import {
 } from "react-icons/fa"
 import { LuRefreshCcw } from "react-icons/lu";
 import {
+  ActionIcon,
   Flex,
   Button,
   Center,
@@ -103,6 +105,8 @@ export function TableSort(props) {
   const [deleteModalopened, {open: openDeleteModal,close: closeDeleteModal}] = useDisclosure(false);
   const [addModalopened, {open: openAddModal,close: closeAddModal}] = useDisclosure(false);
   const [editMode, {open: setEditMode, close: setAddMode}] = useDisclosure(false);
+  //useRefs
+  const searchRef = useRef(null);
   //singular item
   const singularItem={
     Users: 'user',
@@ -119,8 +123,10 @@ export function TableSort(props) {
     setSortedData(sortData(data, { sortBy: field, reversed, search }))
   }
   console.log("does the code duplicate?")
-  const handleSearchChange = event => {
-    const { value } = event.currentTarget
+
+  const handleSearchChange = () => {
+    const { value } = searchRef.current
+    console.log(value)
     setSearch(value)
     setSortedData(
       sortData(data, { sortBy, reversed: reverseSortDirection, search: value })
@@ -478,6 +484,18 @@ export function TableSort(props) {
             value={search}
             onChange={handleSearchChange}
             flex={'1'}
+            ref={searchRef}
+            rightSection={
+              search && (
+                <ActionIcon
+                  size={22}
+                  variant="transparent"
+                  onClick={() => {searchRef.current.value = '';handleSearchChange()}}
+                >
+                  <AiOutlineClose size={16} stroke={1.5} />
+                </ActionIcon>
+              )
+            }
           />
           <Button variant="outline" color="green" onClick={()=>{setAddMode();openAddModal();}}>{'Add ' + singularItem[dataHeader]}</Button>
           <Button variant="outline" color="blue" onClick={()=>{handleNewData(currentApi)}}><LuRefreshCcw /></Button>
