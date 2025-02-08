@@ -27,6 +27,19 @@
     @mixin hover {
       background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
     }
+    &[data-active] {
+      &,
+      &:hover {
+        box-shadow: var(--mantine-shadow-sm);
+        background-color: var(--mantine-color-white);
+        color: var(--mantine-color-dark-filled);
+        
+  
+        .linkIcon {
+          color: var(--mantine-color-dark-filled);
+        }
+      }
+    }
   }
   
   
