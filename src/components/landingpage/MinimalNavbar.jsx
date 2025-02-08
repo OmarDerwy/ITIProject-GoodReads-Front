@@ -1,9 +1,10 @@
 // import { IconChevronDown } from '@tabler/icons-react';
-import { Burger, Center, Container, Group, Menu } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { Burger, Center, Container, Group, Menu } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 // import { MantineLogo } from '@mantinex/mantine-logo';
-import classes from './../../styles/landingpage/MinimalNavbar.module.css';
-import BooksLogo from '/Logomark.svg';
+import classes from "./../../styles/landingpage/MinimalNavbar.module.css";
+import BooksLogo from "/Logomark.svg";
+import { Link } from "react-router-dom";
 
 // const links = [
 //   { link: '/about', label: 'Features' },
@@ -33,50 +34,54 @@ import BooksLogo from '/Logomark.svg';
 export default function MinimalNavBar() {
   const [opened, { toggle }] = useDisclosure(false);
 
-//   const items = links.map((link) => {
-//     const menuItems = link.links?.map((item) => (
-//       <Menu.Item key={item.link}>{item.label}</Menu.Item>
-//     ));
+  //   const items = links.map((link) => {
+  //     const menuItems = link.links?.map((item) => (
+  //       <Menu.Item key={item.link}>{item.label}</Menu.Item>
+  //     ));
 
-//     if (menuItems) {
-//       return (
-//         <Menu key={link.label} trigger="hover" transitionProps={{ exitDuration: 0 }} withinPortal>
-//           <Menu.Target>
-//             <a
-//               href={link.link}
-//               className={classes.link}
-//               onClick={(event) => event.preventDefault()}
-//             >
-//               <Center>
-//                 <span className={classes.linkLabel}>{link.label}</span>
-//                 <IconChevronDown size={14} stroke={1.5} />
-//               </Center>
-//             </a>
-//           </Menu.Target>
-//           <Menu.Dropdown>{menuItems}</Menu.Dropdown>
-//         </Menu>
-//       );
-//     }
+  //     if (menuItems) {
+  //       return (
+  //         <Menu key={link.label} trigger="hover" transitionProps={{ exitDuration: 0 }} withinPortal>
+  //           <Menu.Target>
+  //             <a
+  //               href={link.link}
+  //               className={classes.link}
+  //               onClick={(event) => event.preventDefault()}
+  //             >
+  //               <Center>
+  //                 <span className={classes.linkLabel}>{link.label}</span>
+  //                 <IconChevronDown size={14} stroke={1.5} />
+  //               </Center>
+  //             </a>
+  //           </Menu.Target>
+  //           <Menu.Dropdown>{menuItems}</Menu.Dropdown>
+  //         </Menu>
+  //       );
+  //     }
 
-//     return (
-//       <a
-//         key={link.label}
-//         href={link.link}
-//         className={classes.link}
-//         onClick={(event) => event.preventDefault()}
-//       >
-//         {link.label}
-//       </a>
-//     );
-//   });
+  //     return (
+  //       <a
+  //         key={link.label}
+  //         href={link.link}
+  //         className={classes.link}
+  //         onClick={(event) => event.preventDefault()}
+  //       >
+  //         {link.label}
+  //       </a>
+  //     );
+  //   });
 
   return (
     <header className={classes.header}>
       <Container size="md">
-        <a href="#" className={classes.inner}>
+        <Link
+          to="/"
+          className={classes.inner}
+          style={{ textDecoration: "none" }}
+        >
           <img src={BooksLogo} alt="Books Logo" />
           <p className={classes.p}>Books</p>
-        </a>
+        </Link>
       </Container>
     </header>
   );
