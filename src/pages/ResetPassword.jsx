@@ -1,101 +1,105 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { PasswordInput, Container, Button, Group, Text, Paper, Title } from '@mantine/core';
 import classes from "../styles/general/ResetPassword.module.css";
-import { FaArrowLeft } from "react-icons/fa";
-import { useForm } from "@mantine/form";
-import {
-Anchor,
-Box,
-Button,
-Center,
-Container,
-Group,
-Paper,
-Text,
-TextInput,
-Title,
-} from "@mantine/core";
+import { RiLockPasswordLine } from "react-icons/ri";
+import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../apis/config';
 
-export function ForgotPassword() {
-const form = useForm({
-initialValues: { email: "" },
-
-validate: {
-    email: (value) =>
-    /^\S+@\S+\.\S+$/.test(value) ? null : "Invalid email format",
-},
+const ResetPassword = () => {
+const navigate = useNavigate();
+const [formValues, setFormValues] = useState({
+newPassword: '',
+confirmNewPassword: '',
 });
+const [errors, setErrors] = useState({});
+const [successMessage, setSuccessMessage] = useState('');
 
-const [submitted, setSubmitted] = useState(false);
+const validate = () => {
+const newErrors = {};
+if (formValues.newPassword.length < 8) {
+    newErrors.newPassword = 'Password must be at least 8 characters long';
+}
+else if (!/[A-Z]/.test(formValues.newPassword)) {
+    newErrors.newPassword = 'Password must contain at least one uppercase letter';
+}
+else if (!/[a-z]/.test(formValues.newPassword)) {
+    newErrors.newPassword = 'Password must contain at least one lowercase letter';
+}
+else if (!/\d/.test(formValues.newPassword)) {
+    newErrors.newPassword = 'Password must contain at least one digit';
+}
+else if (!/[@$!%*?&]/.test(formValues.newPassword)) {
+    newErrors.newPassword = 'Password must contain at least one special character (@$!%*?&)';
+}
+if (formValues.newPassword !== formValues.confirmNewPassword) {
+    newErrors.confirmNewPassword = 'Passwords do not match';
+}
+setErrors(newErrors);
+return Object.keys(newErrors).length === 0;
+};
 
-const handleSubmit = () => {
-if (form.validate().hasErrors) {
-    setSubmitted(false);
-} else {
-    setSubmitted(true);
-    console.log("Valid email submitted:", form.values.email);
-    // API request here for password reset
+const handleSubmit = (event) => {
+event.preventDefault();
+if (validate()) {
+    axiosInstance.post('/api/auth/reset-password', {
+    password: formValues.newPassword,
+    })
+    .then((response) => {
+    console.log(response);
+    setSuccessMessage('✅ Password has been reset successfully!');
+    setTimeout(() => navigate('/login'), 3000);
+    })
+    .catch((error) => {
+        console.log(error);
+        setErrors({ apiError: 'Failed to reset password. Try again later.' });
+    });
 }
 };
 
 return (
 <Container size={1000} my={30} p={30}>
-    <Title className={classes.title} ta="center">
-    Forgot your password?
+    <Title align="center" weight={900} variant="gradient" gradient={{ from: 'green', to: 'lightgreen' }} className={classes.title} my="xl">
+    Reset Your Password
     </Title>
-    <Text c="#90EE90" fz="lg" ta="center" mt="20px">
-    Enter your email to get a reset link
-    </Text>
-    <Paper
-    className={classes.container}
-    withBorder
-    shadow="md"
-    p={30}
-    radius="md"
-    mt="xl"
-    >
-
-    <TextInput
-        label="Your email"
-        placeholder="Enter your email"
-        required
-        styles={{
-        input: { height: "50px" },
-        label: {
-            fontWeight: "900",
-            marginBottom: "15px",
-            fontSize: "1rem",
-        },
-        }}
-        mt="lg"
-        mb="xl"
+    <Paper maw={700} shadow="md" p="xl" my={30} className={classes.container}>
+    <form method='POST' onSubmit={handleSubmit}>
+        <PasswordInput
+        label="New Password"
+        leftSection={<RiLockPasswordLine size={16}/> }
+        placeholder="Enter your new password"
+        styles={{ input: { height: '50px' }, label: { fontWeight:'900', marginBottom:'10px', fontSize:'1rem'} }}
         className={classes.resetContainerLabel}
-        {...form.getInputProps("email")}
-    />
-
-    <Group justify="space-between" mt="xl" mb="md" className={classes.controls}>
-        <Anchor href="/login" c="dimmed" size="sm" className={classes.control}>
-        <Center inline>
-            <FaArrowLeft />
-            <Box c="green" ml={5}>Back to the login page</Box>
-        </Center>
-        </Anchor>
-
-        <Button
-        className={classes.btnReset}
-        variant="gradient"
-        gradient={{ from: "green", to: "lightgreen" }}
-        onClick={handleSubmit}
-        >
-        Reset password
+        mt="lg"
+        mb="lg"
+        required
+        value={formValues.newPassword}
+        onChange={(e) => setFormValues({ ...formValues, newPassword: e.target.value })}
+        error={errors.newPassword}
+        />
+        <PasswordInput
+        label="Confirm New Password"
+        leftSection={<RiLockPasswordLine size={16}/> }
+        placeholder="Confirm your new password"
+        styles={{ input: { height: '50px' }, label: { fontWeight:'900', marginBottom:'10px', fontSize:'1rem'} }}
+        className={classes.resetContainerLabel}
+        mt="lg"
+        mb="lg"
+        required
+        value={formValues.confirmNewPassword}
+        onChange={(e) => setFormValues({ ...formValues, confirmNewPassword: e.target.value })}
+        error={errors.confirmNewPassword}
+        />
+        <Group position="center" mt="md">
+        <Button type="submit" fullWidth mt="md" mb='lg' variant="gradient" gradient={{ from: 'green', to: 'lightgreen' }} className={classes.btnLogin}>
+            Reset Password
         </Button>
-    </Group>
-
-    {submitted && (
-        <Text  ta="center" mt="md">
-        ✅ Reset link has been sent to your email!
-        </Text>
-    )}
+        </Group>
+        {successMessage && <Text color="lightgreen" size="sm" mt="sm" align="center">{successMessage}</Text>}
+        {errors.apiError && <Text color="red" size="sm" mt="sm" align="center">{errors.apiError}</Text>}
+    </form>
     </Paper>
 </Container>
 );
-}
+};
+
+export default ResetPassword;
