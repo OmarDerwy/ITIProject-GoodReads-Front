@@ -55,8 +55,10 @@ function Th({ children, reversed, sorted, onSort }) {
 function filterData(data, search) {
   const query = search.toLowerCase().trim()
   return data.filter(item =>{
-    const filteredHeaders = keys(data[0]).filter((key)=> key != "__v")
-    return filteredHeaders.some(key => item[key].toLowerCase().includes(query))
+    const filteredHeaders = keys(data[0]).filter((key)=> !['__v', 'clicked', 'averageRating', 'ratings', 'reviews', 'coverImage'].includes(key))
+    return filteredHeaders.some(key => 
+      item[key].toLowerCase().includes(query)
+    )
   })
 }
 
@@ -84,6 +86,7 @@ export function TableSort(props) {
   const { dataHeader, handleNewData, currentApi } = props
   //states
   const [ data, setData] = useState(props.data)
+  console.log(data)
   const [search, setSearch] = useState("")
   const [sortedData, setSortedData] = useState(() => sortData(data, { sortBy: null, reversed: false, search: "" }))
   const [sortBy, setSortBy] = useState(null)
@@ -100,6 +103,8 @@ export function TableSort(props) {
   const singularItem={
     Users: 'user',
     Books: 'book',
+    Authors: 'author',
+    Categories: 'category'
   }
 
   //native functions
@@ -121,7 +126,9 @@ export function TableSort(props) {
   //config functions
   const dataHeaders = {
     Users: ["_id", "name", "email", "role", "avatar"],
-    Books: ["_id", "bookName", "authorName", "categoryName", "coverImage"]
+    Books: ["_id", "bookName", "authorName", "categoryName", "coverImage"],
+    Authors: ["_id", "authorName", "dateOfBirth", "bio", 'avatar'],
+    Categories: ["_id", "categoryName", "description", "coverImage"]
   }
 
   const formUser = useForm({
@@ -142,6 +149,23 @@ export function TableSort(props) {
       description: "This is a sample book description.",
       coverImage: null,
       bookFile: null,
+    },
+  })
+
+  const formAuthor = useForm({
+    initialValues: {
+      authorName: "Sample Author",
+      dateOfBirth: "1990-01-01",
+      bio: "This is a sample author bio.",
+      avatar: null
+    },
+  })
+
+  const formCategory = useForm({
+    initialValues: {
+      categoryName: "Sample Category",
+      description: "This is a sample category description.",
+      coverImage: null
     },
   })
 
@@ -252,6 +276,21 @@ export function TableSort(props) {
                   bookFile: null,
                 });
                 break;
+              case 'Authors':
+                formAuthor.setValues({
+                  authorName: row.authorName,
+                  dateOfBirth: row.dateOfBirth,
+                  bio: row.bio,
+                  avatar: null
+                });
+                break;
+              case 'Categories':
+                formCategory.setValues({
+                  categoryName: row.categoryName,
+                  description: row.description,
+                  coverImage: null
+                });
+                break;
             }
             // const formStuff = formUser.getValues()
             // for(const key in formStuff){
@@ -355,6 +394,58 @@ export function TableSort(props) {
                     description="Upload book front cover here"
                     key={formBook.key('coverImage')}
                     {...formBook.getInputProps('coverImage')}
+                  />
+                  <Button type="submit" onClick={closeAddModal}>Add</Button>
+                  <Button onClick={closeAddModal}>Close</Button>
+                </form>
+              )
+            case 'Authors':
+              return (
+                <form onSubmit={formAuthor.onSubmit((values)=>{handleApiAdd(values)})}>
+                  <TextInput
+                    label="Name"
+                    placeholder="Input name"
+                    key={formAuthor.key('authorName')}
+                    {...formAuthor.getInputProps('authorName')}
+                  />
+                  <TextInput
+                    label="Description"
+                    placeholder="Input description"
+                    key={formAuthor.key('bio')}
+                    {...formAuthor.getInputProps('bio')}
+                  />
+                  <FileInput
+                    label="Image"
+                    placeholder="Input image"
+                    description="Upload author's avatar here"
+                    key={formAuthor.key('avatar')}
+                    {...formAuthor.getInputProps('avatar')}
+                  />
+                  <Button type="submit" onClick={closeAddModal}>Add</Button>
+                  <Button onClick={closeAddModal}>Close</Button>
+                </form>
+              )
+            case 'Categories':
+              return (
+                <form onSubmit={formCategory.onSubmit((values)=>{handleApiAdd(values)})}>
+                  <TextInput
+                    label="Name"
+                    placeholder="Input name"
+                    key={formCategory.key('categoryName')}
+                    {...formCategory.getInputProps('categoryName')}
+                  />
+                  <TextInput
+                    label="Description"
+                    placeholder="Input description"
+                    key={formCategory.key('description')}
+                    {...formCategory.getInputProps('description')}
+                  />
+                  <FileInput
+                    label="Image"
+                    placeholder="Input image"
+                    description="Upload category's avatar here"
+                    key={formCategory.key('avatar')}
+                    {...formCategory.getInputProps('avatar')}
                   />
                   <Button type="submit" onClick={closeAddModal}>Add</Button>
                   <Button onClick={closeAddModal}>Close</Button>

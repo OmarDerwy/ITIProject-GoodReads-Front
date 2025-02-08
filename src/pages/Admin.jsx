@@ -17,6 +17,7 @@ export default function Admin() {
   //   }
   // }, [location, navigate]);
   const [data, setData] = useState([]);
+  const [extraData, setExtraData] = useState({});
   const [active, setActive] = useState(null);
   const buttons = [
     {
@@ -26,6 +27,14 @@ export default function Admin() {
     {
       label: 'Books',
       api: '/api/books/',
+    },
+    {
+      label: 'Authors',
+      api: '/api/authors/',
+    },
+    {
+      label: 'Categories',
+      api: '/api/categories/',
     }
   ];
 
@@ -33,8 +42,13 @@ export default function Admin() {
     setData([])
     axiosInstance.get(api)
       .then((response) => {
+        console.log(response, typeof(response.data));
+        if(!Array.isArray(response.data)){
+          setData(response.data.array);
+          setExtraData({...response.data, array: undefined}); //use this maybe
+        }else{
         setData(response.data);
-        console.log(response);
+        }
       })
   };
   const items = buttons.map((button, index) => (
