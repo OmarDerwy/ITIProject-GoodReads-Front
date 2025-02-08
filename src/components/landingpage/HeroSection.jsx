@@ -62,7 +62,7 @@ export default function HeroSection() {
               </Button>
               <Button
                 component="a"
-                onClick={() => navigate('/Login')}
+                onClick={() => navigate('/login')}
                 size="xl"
                 variant="default"
                 className={classes.control}

@@ -7,14 +7,17 @@ import {
   Drawer,
   Group,
   Text,
+  Menu,
+  UnstyledButton,
 } from "@mantine/core";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "../../styles/general/Navbar.module.css";
 import BooksLogo from "/Logomark.svg";
 import { CiSearch } from "react-icons/ci";
-import { FaStar, FaRegStar } from "react-icons/fa";
-
+import { FaStar, FaRegStar, FaAngleDown } from "react-icons/fa";
+import { CgProfile } from "react-icons/cg";
+import { FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -37,8 +40,12 @@ function Navbar() {
   const [active, setActive] = useState("");
   const location = useLocation();
   const activePage = location.pathname.split("/")[1];
-  const [signedIn, setSignedIn] = useState(localStorage.getItem('userToken')? true: false);
-  
+  const [signedIn, setSignedIn] = useState(localStorage.getItem("userToken") ? true : false);
+  useEffect(() => {
+    setSignedIn(localStorage.getItem("userToken") ? true : false);
+
+  }, [signedIn]);
+
   const items = links.map((link) => (
     <Link
       key={link.label}
@@ -75,38 +82,66 @@ function Navbar() {
             visibleFrom="md"
           />
           {signedIn ? (
-            <Group visibleFrom="md" gap={10}>
-              <Link
-                style={{
-                  textDecoration: "inherit",
-                  color: "inherit ",
-                  display: "inherit",
-                }}
-                to="/profile"
+            <>
+              <Menu
+                visibleFrom="md"
+                width={260}
+                position="bottom-end"
+                transitionProps={{ transition: "pop-top-right" }}
+                withinPortal
               >
-                <Avatar src={user.image} alt={user.name} size="md" />
-                <Text fw={500} size="sm" lh={1} mr={10} ml={5} my="auto">
-                  {user.name}
-                </Text>
-              </Link>
-              <Link
-                style={{
-                  textDecoration: "inherit",
-                  color: "inherit",
-                  display: "inherit",
-                }}
-                to="/Bookmarks"
-              >
-                {activePage === "Bookmarks" ? (
-                  <FaStar size={25}></FaStar>
-                ) : (
-                  <FaRegStar size={25}></FaRegStar>
-                )}
-                <Text fw={500} size="sm" lh={1} mr={10} ml={5} my="auto">
-                  Bookmarks
-                </Text>
-              </Link>
-            </Group>
+                <Menu.Target>
+                  <UnstyledButton>
+                    <Group gap={7}>
+                      <Avatar
+                        src={user.image}
+                        alt={user.name}
+                        radius="xl"
+                        size={20}
+                      />
+                      <Text fw={500} size="sm" lh={1} mr={3}>
+                        {user.name}
+                      </Text>
+                      <FaAngleDown />
+                    </Group>
+                  </UnstyledButton>
+                </Menu.Target>
+                <Menu.Dropdown mt={5}>
+                  <Menu.Item
+                    leftSection={<CgProfile />}
+                    onClick={() => navigate("/profile")}
+                  >
+                    Profile
+                  </Menu.Item>
+                  <Menu.Item
+                    leftSection={
+                      activePage === "Bookmarks" ? (
+                        <FaStar></FaStar>
+                      ) : (
+                        <FaRegStar></FaRegStar>
+                      )
+                    }
+                    onClick={() => navigate("/Bookmarks")}
+                  >
+                    Bookmarks
+                  </Menu.Item>
+
+                  <Menu.Divider />
+
+                  <Menu.Item
+                    leftSection={<FiLogOut />}
+                    color="red"
+                    onClick={() => {
+                      localStorage.removeItem("userToken");
+                      setSignedIn(false);
+                      navigate("/");
+                    }}
+                  >
+                    Logout
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            </>
           ) : (
             <Group visibleFrom="md">
               <Button
@@ -166,6 +201,19 @@ function Navbar() {
                     Bookmarks
                   </Text>
                 </Link>
+                <Group
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    localStorage.removeItem("userToken");
+                    setSignedIn(false);
+                    navigate("/");
+                  }}
+                >
+                  <FiLogOut size={25}></FiLogOut>
+                  <Text fw={500} size="sm" lh={1} mr={10} ml={5} my="auto">
+                    Logout
+                  </Text>
+                </Group>
               </Group>
             ) : (
               <Group>
