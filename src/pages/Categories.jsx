@@ -20,7 +20,7 @@ export default function Categories() {
     const fetchCategories = async () => {
       try {
         const response = await axiosInstance.get("/api/categories");
-        setCategories(response.data.categories);
+        setCategories(response.data.array);
       } catch (err) {
         console.log("Error: " + err.message);
       }
