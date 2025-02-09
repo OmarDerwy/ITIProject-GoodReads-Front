@@ -42,4 +42,23 @@ const UserAuthRoutes = () => {
     return !user ? <Outlet /> : <Navigate to="/profile" />;
 };
 
-export { ProtectedRoutes, UserAuthRoutes };
+const AdminOnlyRoutes = () => {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        axiosInstance.get('api/auth/admin')
+            .then(res => {
+                setUser(res.data.id);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.log(err);
+                setLoading(false);
+            });
+    }, []);
+
+    if (loading) return null; 
+    return user ? <Outlet /> : <Navigate to="/" />;
+};
+export { ProtectedRoutes, UserAuthRoutes, AdminOnlyRoutes };
