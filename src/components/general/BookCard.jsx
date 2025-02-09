@@ -14,6 +14,7 @@ export default function BookCard(props) {
       target="_blank"
       w={150}
       onClick={()=>{navigate(`/${type === "b"? "books": type === "a"? "authors": "categories"}/${id}`)}}
+      style={{cursor: "pointer"}}
     >
       <Card.Section>
         <Image
