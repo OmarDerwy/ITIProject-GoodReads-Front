@@ -20,7 +20,7 @@ export default function Authors() {
     const fetchAuthors = async () => {
       try {
         const response = await axiosInstance.get("/api/authors");
-        setAuthors(response.data.authors);
+        setAuthors(response.data.array);
       } catch (err) {
         console.log("Error: " + err.message);
       }
