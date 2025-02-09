@@ -13,26 +13,24 @@ const data = [
 
 function Bookmarks() {
   const [user, setUser] = useState("");
-  useEffect(()=>{
+  useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await axiosInstance.get("/api/auth");
         setUser(response.data.id);
-        
       } catch (err) {
         console.log("Error: " + err.message);
       }
     };
     fetchUser();
-  }, [])
+  }, []);
   console.log(user);
   const [active, setActive] = useState("All");
   const [shelf, setShelf] = useState([]);
   const [books, setBooks] = useState([]);
   const [bookmarksAll, setBookmarksAll] = useState([]);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     const fetchShelf = async () => {
       try {
         const response = await axiosInstance.get(`/api/shelves/${user}`);
@@ -42,7 +40,7 @@ function Bookmarks() {
       }
     };
     fetchShelf();
-  }, [user])
+  }, [user]);
   console.log(shelf);
 
   useEffect(() => {
@@ -50,9 +48,7 @@ function Bookmarks() {
       try {
         const booksData = await Promise.all(
           shelf.map(async (sh) => {
-            const response = await axiosInstance.get(
-              `/api/books/${sh.bookId}`
-            );
+            const response = await axiosInstance.get(`/api/books/${sh.bookId}`);
             return response.data;
           })
         );
@@ -66,29 +62,35 @@ function Bookmarks() {
     }
   }, [shelf]);
 
-console.log(books);
+  console.log(books);
 
-useEffect(()=>{
-  if(books.length>0){
-    const updatedBookmarks = books.map((book)=>({
-      cover: book.coverImage,
-      name: book.bookName,
-      author: book.authorName,
-      avgRating: book.averageRating,
-      usrRating: 0,
-      status: shelf.find((sh)=>sh.bookId === book._id).shelve,
-    }));
-    setBookmarksAll(updatedBookmarks);
-  } 
-}, [books, shelf]); 
+  useEffect(() => {
+    if (books.length > 0) {
+      const updatedBookmarks = books.map((book) => ({
+        cover: book.coverImage,
+        name: book.bookName,
+        author: book.authorName,
+        avgRating: book.averageRating,
+        usrRating: 0,
+        status: shelf.find((sh) => sh.bookId === book._id).shelve,
+        id: book._id
+      }));
+      setBookmarksAll(updatedBookmarks);
+    }
+  }, [books, shelf]);
 
-  const handleStatusChange = (newStatus, bookmarkName) => {
+  const handleStatusChange = (newStatus, bookmarkName, bookId) => {
     const newBookmarksAll = bookmarksAll.map((bookmark) =>
       bookmark.name === bookmarkName
         ? { ...bookmark, status: newStatus }
         : bookmark
     );
     setBookmarksAll(newBookmarksAll);
+    axiosInstance.put(`/api/shelves`, {
+      bookId: bookId,
+      userId: user,
+      shelve: newStatus,
+    });
   };
 
   const handleRatingChange = (newRating, bookmarkName) => {
@@ -98,8 +100,7 @@ useEffect(()=>{
         : bookmark
     );
     setBookmarksAll(newBookmarksAll);
-
-  }
+  };
   const links = data.map((item) => {
     return (
       <Link
@@ -116,10 +117,8 @@ useEffect(()=>{
     );
   });
 
-
   console.log(bookmarksAll);
 
-  
   const bookmarks =
     active === "All"
       ? bookmarksAll
@@ -146,7 +145,7 @@ useEffect(()=>{
           placeholder="Read status"
           data={["Currently Reading", "Want To Read", "Read"]}
           defaultValue={bookmark.status}
-          onChange={(_value) => handleStatusChange(_value, bookmark.name)}
+          onChange={(_value) => handleStatusChange(_value, bookmark.name,bookmark.id)}
         />
       </Table.Td>
     </Table.Tr>
