@@ -4,7 +4,7 @@ import React , {Suspense} from 'react';
 import Navbar from './components/general/NavBar';
 import { Loader } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
-import {ProtectedRoutes, UserAuthRoutes} from './utils/protected-routes';
+import {ProtectedRoutes, UserAuthRoutes, AdminOnlyRoutes} from './utils/protected-routes';
 import {useEffect, useState} from 'react';
 import axiosInstance from './apis/config';
 
@@ -50,8 +50,11 @@ function App() {
       <Suspense fallback={<div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "200px"}}> <Loader type="bars" color="lightgreen" size={200}/> </div>}>
         <Routes>
           <Route path='/' element={<LandingPage/>}></Route>
-          <Route element={<ProtectedRoutes/>}>
+          
+          <Route element={<AdminOnlyRoutes/>}>
             <Route path='/admin' element={<Admin/>}></Route>
+          </Route>
+          <Route element={<ProtectedRoutes/>}>
             <Route path='/profile/:id' element={<UserProfile/>}></Route>
             <Route path='/profile' element={<Navigate to={`/profile/${userData.id}`} replace/>}></Route>
             <Route path='/bookmarks' element={<Bookmarks/>}></Route>
