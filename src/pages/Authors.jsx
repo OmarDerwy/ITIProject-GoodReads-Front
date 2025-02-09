@@ -35,7 +35,7 @@ import axiosInstance from "../apis/config";
         </Title>
   
         <Grid>
-          {authors.map((author, index)=>(
+          {authors?.map((author, index)=>(
             <Paper
             key={index}
             radius="md"

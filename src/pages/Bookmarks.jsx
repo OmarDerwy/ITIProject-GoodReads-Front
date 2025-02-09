@@ -25,7 +25,6 @@ function Bookmarks() {
     };
     fetchUser();
   }, []);
-  console.log(user);
   const [active, setActive] = useState("All");
   const [shelf, setShelf] = useState([]);
   const [books, setBooks] = useState([]);
@@ -42,7 +41,6 @@ function Bookmarks() {
     };
     fetchShelf();
   }, [user]);
-  console.log(shelf);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -62,8 +60,6 @@ function Bookmarks() {
       fetchBooks();
     }
   }, [shelf]);
-
-  console.log(books);
 
   useEffect(() => {
     if (books.length > 0) {
@@ -101,7 +97,6 @@ function Bookmarks() {
         : bookmark
     );
     setBookmarksAll(newBookmarksAll);
-    console.log(bookId);
     axiosInstance.post('/api/ratings', {
       bookId: bookId,
       userId: user,
@@ -133,7 +128,6 @@ function Bookmarks() {
     );
   });
 
-  console.log(bookmarksAll);
 
   const bookmarks =
     active === "All"
