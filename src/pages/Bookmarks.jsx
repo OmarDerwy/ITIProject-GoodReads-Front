@@ -14,6 +14,8 @@ const data = [
 
 function Bookmarks() {
   const [user, setUser] = useState("");
+  const [authors, setAuthors] = useState([]);
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -62,7 +64,19 @@ function Bookmarks() {
   }, [shelf]);
 
   useEffect(() => {
-    if (books.length > 0) {
+    const fetchAuthors = async () => {
+      try {
+        const response = await axiosInstance.get("/api/authors");
+        setAuthors(response.data.array);
+      } catch (err) {
+        console.log("Error: " + err.message);
+      }
+    };
+    fetchAuthors();
+  }, []);
+
+  useEffect(() => {
+    if (books.length > 0 && authors.length > 0) {
       const updatedBookmarks = books.map((book) => ({
         cover: book.coverImage,
         name: book.bookName,
@@ -71,10 +85,13 @@ function Bookmarks() {
         usrRating: 0,
         status: shelf.find((sh) => sh.bookId === book._id).shelve,
         bookId: book._id,
+        authorId: authors.find(
+          (author) => author.authorName === book.authorName
+        )._id,
       }));
       setBookmarksAll(updatedBookmarks);
     }
-  }, [books, shelf]);
+  }, [books, shelf, authors]);
 
   const handleStatusChange = (newStatus, bookmarkName, bookId) => {
     const newBookmarksAll = bookmarksAll.map((bookmark) =>
@@ -97,7 +114,7 @@ function Bookmarks() {
         : bookmark
     );
     setBookmarksAll(newBookmarksAll);
-    axiosInstance.post('/api/ratings', {
+    axiosInstance.post("/api/ratings", {
       bookId: bookId,
       userId: user,
       rating: newRating,
@@ -128,7 +145,6 @@ function Bookmarks() {
     );
   });
 
-
   const bookmarks =
     active === "All"
       ? bookmarksAll
@@ -138,8 +154,12 @@ function Bookmarks() {
       <Table.Td>
         <Image radius="md" src={bookmark.cover} h={84} w={84} />
       </Table.Td>
-      <Table.Td>{bookmark.name}</Table.Td>
-      <Table.Td>{bookmark.author}</Table.Td>
+      <Table.Td>
+        <Link to={`/books/${bookmark.bookId}`}>{bookmark.name}</Link>
+      </Table.Td>
+      <Table.Td>
+        <Link to={`/authors/${bookmark.authorId}`}>{bookmark.author}</Link>
+      </Table.Td>
       <Table.Td>
         <Rating value={bookmark.avgRating} fractions={4} readOnly />
       </Table.Td>
@@ -147,7 +167,9 @@ function Bookmarks() {
         <Rating
           defaultValue={bookmark.usrRating}
           fractions={4}
-          onChange={(_value) => handleRatingChange(_value, bookmark.name, bookmark.bookId)}
+          onChange={(_value) =>
+            handleRatingChange(_value, bookmark.name, bookmark.bookId)
+          }
         />
       </Table.Td>
       <Table.Td>
