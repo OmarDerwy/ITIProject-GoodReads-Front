@@ -1,17 +1,19 @@
 import React from 'react'
 import { Card, Image, Text, Rating } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function BookCard(props) {
-  const {title, author, rating, views, image} = props;
+  const {title, author, rating, views, image, id, type} = props;
+  const navigate = useNavigate();
   return (
     <Card
       shadow="sm"
       padding="xs"
       component="a"
-      href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
       target="_blank"
       w={150}
+      onClick={()=>{navigate(`/${type === "b"? "books": type === "a"? "authors": "categories"}/${id}`)}}
     >
       <Card.Section>
         <Image

@@ -25,6 +25,8 @@ function General() {
           rating: book.averageRating,
           views: book.clicked,
           image: book.coverImage,
+          id: book._id,
+          type: "b"
         }));
         setBooks(updatedBooks);
       } catch (err) {
@@ -40,6 +42,8 @@ function General() {
           title: author.authorName,
           views: 0,
           image: author.imageUrl,
+          id: author._id,
+          type: "a"
         }));
         setAuthors(updatedAuthors);
       } catch (err) {
@@ -55,6 +59,8 @@ function General() {
           title: category.categoryName,
           views: 0,
           image: category.coverImage,
+          id: category._id,
+          type: "c"
         }));
         setCategories(updatedCategories);
       } catch (err) {

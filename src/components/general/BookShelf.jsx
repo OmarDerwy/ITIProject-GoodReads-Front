@@ -20,7 +20,7 @@ export function BookShelf(props) {
         align="start"
         >
           {popular.map((pop, i)=>(
-          <Carousel.Slide key={i}><BookCard title={pop.title} rating={pop.rating} views={pop.views}/></Carousel.Slide>
+          <Carousel.Slide key={i}><BookCard title={pop.title} rating={pop.rating} views={pop.views} image={pop.image} id={pop.id} type={pop.type}/></Carousel.Slide>
           ))}
           {/* ...other slides */}
         </Carousel>

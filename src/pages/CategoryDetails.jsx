@@ -16,84 +16,92 @@ import { useEffect, useState } from "react";
 export default function CategoryDetails() {
   const categoryId = location.pathname.split("/")[2];
   const [books, setBooks] = useState([]);
-  const [bookIds, setBookIds] = useState([]);
+  const [authors, setAuthors] = useState([]);
   const navigate = useNavigate();
 
   const [categoryName, setCategoryName] = useState("");
   useEffect(() => {
-    const fetchBookIds = async () => {
+    const fetchBooks = async () => {
       try {
         const response = await axiosInstance.get(
           `/api/categories/${categoryId}`
         );
-        setBookIds(response.data.books);
+        setBooks(response.data.books);
         setCategoryName(response.data.categoryName);
       } catch (err) {
         console.log("Error: " + err.message);
       }
     };
-    fetchBookIds();
+    fetchBooks();
   }, [categoryId]);
 
   useEffect(() => {
-    const fetchBooks = async () => {
+    const fetchAuthors = async () => {
       try {
-        const booksData = await Promise.all(
-          bookIds.map(async (book) => {
-            const response = await axiosInstance.get(
-              `/api/books/${book.bookId}`
-            );
-            return response.data;
-          })
-        );
-        setBooks(booksData);
+        const response = await axiosInstance.get(`/api/authors`);
+        setAuthors(response.data.array);
       } catch (err) {
         console.log("Error: " + err.message);
       }
     };
-
-    if (bookIds.length > 0) {
-      fetchBooks();
-    }
-  }, [bookIds]);
+    fetchAuthors();
+  }, []);
 
   return (
     <>
-      {/*get category name by id from params*/ console.log(books)}
+      {/*get category name by id from params*/}
       <Title ml={30} mb={30} order={2}>
         {categoryName}
       </Title>
 
       <Grid>
-        {books?.map((book, index) => (
-          <Paper
-            radius="md"
-            withBorder
-            p="lg"
-            bg="var(--mantine-color-body)"
-            m="auto"
-            key={index}
-            onClick={()=>navigate(`/books/${book._id}`)}
-            style={{cursor:"pointer"}}
-          >
-            <Grid.Col span="auto">
-              <Image radius="md" h="200" w="180" fit="fill" src={book.coverImage} />
-            </Grid.Col>
-            <Grid.Col span="auto">
-              <Text ta="left" fz="lg" fw={700} mb={5}>
-                {book.bookName}
-              </Text>
-              <Text ta="left" fz="md" fw={500} mb={20}>
-                By {book.authorName}
-              </Text>
-              <Text ta="left" fz="md" fw={500} mb={20} span>
-                <Rating value={book.averageRating} fractions={2} readOnly />{" "}
-                {book.averageRating} stars - {book.ratings}
-                {book.ratings > 1 || book.ratings == 0 ? " ratings" : " rating"}
-              </Text>
-            </Grid.Col>
-          </Paper>
-        ))}
+        {books?.map((book, index) => {
+          const author = authors.find(
+            (author) => author._id === book.bookId.authorId
+          );
+          return (
+            <Paper
+              radius="md"
+              withBorder
+              p="lg"
+              bg="var(--mantine-color-body)"
+              m="auto"
+              key={index}
+              onClick={() => navigate(`/books/${book._id}`)}
+              style={{ cursor: "pointer" }}
+            >
+              <Grid.Col span="auto">
+                <Image
+                  radius="md"
+                  h="200"
+                  w="180"
+                  fit="fill"
+                  src={book.bookId.coverImage}
+                />
+              </Grid.Col>
+              <Grid.Col span="auto">
+                <Text ta="left" fz="lg" fw={700} mb={5}>
+                  {book.bookId.bookName}
+                </Text>
+                <Text ta="left" fz="md" fw={500} mb={20}>
+                  By {author ? author.authorName : "Unknown Author"}{" "}
+                  {/* Check if author is found */}
+                </Text>
+                <Text ta="left" fz="md" fw={500} mb={20} span>
+                  <Rating
+                    value={book.bookId.averageRating}
+                    fractions={2}
+                    readOnly
+                  />{" "}
+                  {book.bookId.averageRating} stars - {book.bookId.ratings}
+                  {book.bookId.ratings > 1 || book.bookId.ratings === 0
+                    ? " ratings"
+                    : " rating"}
+                </Text>
+              </Grid.Col>
+            </Paper>
+          );
+        })}
       </Grid>
     </>
   );
