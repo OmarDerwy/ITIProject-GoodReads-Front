@@ -3,7 +3,7 @@ import { Card, Image, Text, Rating } from '@mantine/core';
 
 
 export default function BookCard(props) {
-  const {title, author, rating, views} = props;
+  const {title, author, rating, views, image} = props;
   return (
     <Card
       shadow="sm"
@@ -15,8 +15,7 @@ export default function BookCard(props) {
     >
       <Card.Section>
         <Image
-          src="https://placehold.co/150x225"
-          alt="No way!"
+          src={image}
         />
       </Card.Section>
 

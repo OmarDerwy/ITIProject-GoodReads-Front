@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BookShelf } from "../components/general/BookShelf";
+import axiosInstance from "../apis/config";
 
 function General() {
   {
@@ -10,33 +11,63 @@ function General() {
   {
     /*Dummy data:*/
   }
-  const [books, setBooks] = useState([
-    { title: "book1", rating: 2.5, views: 100 },
-    { title: "book2", rating: 3, views: 200 },
-    { title: "book3", rating: 3.5, views: 300 },
-    { title: "book4", rating: 2.5, views: 100 },
-    { title: "book5", rating: 3, views: 200 },
-    { title: "book6", rating: 3.5, views: 300 },
-    { title: "book7", rating: 2.5, views: 100 },
-  ]);
-  const [authors, setAuthors] = useState([
-    { title: "author1", views: 100 },
-    { title: "author2", views: 200 },
-    { title: "author3", views: 300 },
-    { title: "author4", views: 100 },
-    { title: "author5", views: 200 },
-    { title: "author6", views: 300 },
-    { title: "author7", views: 100 },
-  ]);
-  const [categories, setCategories] = useState([
-    { title: "category1", views: 100 },
-    { title: "category2", views: 200 },
-    { title: "category3", views: 300 },
-    { title: "category4", views: 100 },
-    { title: "category5", views: 200 },
-    { title: "category6", views: 300 },
-    { title: "category7", views: 100 },
-  ]);
+  const [books, setBooks] = useState([]);
+  const [authors, setAuthors] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const getBooks = async () => {
+      try {
+        const response = await axiosInstance.get("/api/books");
+
+        const updatedBooks = response.data.array.map((book) => ({
+          title: book.bookName,
+          rating: book.averageRating,
+          views: book.clicked,
+          image: book.coverImage,
+        }));
+        setBooks(updatedBooks);
+      } catch (err) {
+        console.log("Error: " + err.message);
+      }
+    };
+
+    const getAuthors = async () => {
+      try {
+        const response = await axiosInstance.get("/api/authors");
+
+        const updatedAuthors = response.data.array.map((author) => ({
+          title: author.authorName,
+          views: 0,
+          image: author.imageUrl,
+        }));
+        setAuthors(updatedAuthors);
+      } catch (err) {
+        console.log("Error: " + err.message);
+      }
+    };
+
+    const getCategories = async () => {
+      try {
+        const response = await axiosInstance.get("/api/categories");
+
+        const updatedCategories = response.data.array.map((category) => ({
+          title: category.categoryName,
+          views: 0,
+          image: category.coverImage,
+        }));
+        setCategories(updatedCategories);
+      } catch (err) {
+        console.log("Error: " + err.message);
+      }
+    };
+    getBooks();
+    getAuthors();
+    getCategories();
+  }, []);
+  console.log(categories);
+  console.log(authors);
+  console.log(books);
   return (
     <>
       <BookShelf title="Popular Books" popular={books} />
