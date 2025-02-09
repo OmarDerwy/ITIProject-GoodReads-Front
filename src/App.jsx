@@ -1,11 +1,13 @@
 import './App.css'
-import { Routes, Route, useLocation} from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate} from 'react-router-dom';
 import React , {Suspense} from 'react';
 
 import Navbar from './components/general/NavBar';
 import { Loader } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import {ProtectedRoutes, UserAuthRoutes} from './utils/protected-routes';
+import {useEffect, useState} from 'react';
+import axiosInstance from './apis/config';
 
 const LandingPage = React.lazy(() => import('./pages/LandingPage'));
 const Login = React.lazy(() => import('./pages/Login'));
@@ -29,6 +31,16 @@ const Bookmarks = React.lazy(() => import('./pages/Bookmarks'));
 function App() {
   const location = useLocation();
   const excludedRoutes = ['/login', '/sign-up' , '/', '/admin']; //use this when navbar is finished
+  const [userData, setUserData] = useState({});
+  const fetchUserData = async () =>{
+    const response = await axiosInstance.get(`/api/auth`);
+    setUserData(response.data);
+    // console.log(response.data)
+  } 
+  // console.log('dklfjsldjkf')
+  useEffect(() => {
+    fetchUserData()
+  }, [])
   return (
     <>
       {!excludedRoutes.includes(location.pathname) && <Navbar />}
@@ -36,9 +48,10 @@ function App() {
       <Suspense fallback={<div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "200px"}}> <Loader type="bars" color="lightgreen" size={200}/> </div>}>
         <Routes>
           <Route path='/' element={<LandingPage/>}></Route>
-          <Route path='/admin' element={<Admin/>}></Route>
           <Route element={<ProtectedRoutes/>}>
-            <Route path='/profile' element={<UserProfile/>}></Route>
+            <Route path='/admin' element={<Admin/>}></Route>
+            <Route path='/profile/:id' element={<UserProfile/>}></Route>
+            <Route path='/profile' element={<Navigate to={`/profile/${userData.id}`} replace/>}></Route>
             <Route path='/bookmarks' element={<Bookmarks/>}></Route>
           </Route>
           <Route element={<UserAuthRoutes/>}>
