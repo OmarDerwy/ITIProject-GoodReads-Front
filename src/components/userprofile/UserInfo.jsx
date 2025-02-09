@@ -1,34 +1,37 @@
+import { FaMoneyCheck } from "react-icons/fa"; 
 import { FaEnvelope, FaPhone } from 'react-icons/fa';
 import { Avatar, Container, Group, Text, Paper } from '@mantine/core';
 import classes from '../../styles/userprofile/UserInfoIcons.module.css';
+// import { useEffect } from 'react';
 
-export function UserInfo() {
+export function UserInfo({userData}) {
+    console.log(userData)
   return (
       <Container>
         
         <Group wrap="nowrap" justify='center' m={30}>
           <Avatar
-            src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-2.png"
+            src={userData.avatar}
             size={94}
             radius="md"
           />
           <div>
             <Text fz="xs" tt="uppercase" fw={700} c="dimmed">
-              Software engineer
+              {userData.role}
             </Text>
             <Text fz="lg" fw={500} className={classes.name}>
-              Robert Glassbreaker
+              {userData.name}
             </Text>
             <Group wrap="nowrap" gap={10} mt={3}>
               <FaEnvelope stroke={1.5} size={16} className={classes.icon} />
               <Text fz="xs" c="dimmed">
-                robert@glassbreaker.io
+                {userData.email}
               </Text>
             </Group>
             <Group wrap="nowrap" gap={10} mt={5}>
-              <FaPhone stroke={1.5} size={16} className={classes.icon} />
+              <FaMoneyCheck stroke={1.5} size={16} className={classes.icon} />
               <Text fz="xs" c="dimmed">
-                +11 (876) 890 56 23
+                {userData.status.charAt(0).toUpperCase() + userData.status.slice(1) + " Subcriber"}
               </Text>
             </Group>
           </div>
