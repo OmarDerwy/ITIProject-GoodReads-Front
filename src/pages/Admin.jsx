@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { AppShell, Center, NavLink  } from '@mantine/core';
+import { AppShell, Center, NavLink, Pagination  } from '@mantine/core';
 import BooksLogo from '/Logomark.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 //components
@@ -18,7 +18,7 @@ export default function Admin() {
   // }, [location, navigate]);
   const [data, setData] = useState([]);
   const [extraData, setExtraData] = useState({});
-  const [active, setActive] = useState(null);
+  const [active, setActive] = useState(0);
   const buttons = [
     {
       label: 'Users',
@@ -38,9 +38,18 @@ export default function Admin() {
     }
   ];
 
+  const [searchParams, setSearchParams] = useState({
+    page: 1,
+    limit: 10
+  });
+  useEffect(() => {
+    handleNewData(buttons[active].api);
+  }, [searchParams]);
+
   const handleNewData = (api) => {
     setData([])
-    axiosInstance.get(api)
+    console.log(searchParams)
+    axiosInstance.get(api, {params: searchParams})
       .then((response) => {
         console.log(response, typeof(response.data));
         if(!Array.isArray(response.data)){
@@ -60,6 +69,9 @@ export default function Admin() {
       active={index === active}>
     </NavLink>
   ));
+  const handlePaginationChange = (page) => {
+    setSearchParams({...searchParams, page});
+  };
   return (
     <AppShell 
       header={{height: 60}}
@@ -73,8 +85,26 @@ export default function Admin() {
         {items}
         </AppShell.Navbar>
         <AppShell.Main>
-          {data.length > 0 ? <TableSort currentApi={buttons[active].api} handleNewData={handleNewData} data={data} dataHeader={buttons[active].label} /> : <p>No Data Retrieved</p>}
+          {data.length > 0 ? <>
+          <TableSort 
+            currentApi={buttons[active].api} 
+            handleNewData={handleNewData} 
+            data={data} 
+            dataHeader={buttons[active].label} 
+          />
+          <Center>
+            <Pagination
+              total={extraData.totalPages}
+              value={searchParams.page}
+              // page={searchParams.page}
+              onChange={handlePaginationChange}
+            />
+          </Center>
+          </>
+           : <p>No Data Retrieved</p>}
+  
         </AppShell.Main>
     </AppShell>
   )
 }
+
