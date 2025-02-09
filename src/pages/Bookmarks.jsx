@@ -74,7 +74,7 @@ function Bookmarks() {
         avgRating: book.averageRating,
         usrRating: 0,
         status: shelf.find((sh) => sh.bookId === book._id).shelve,
-        bookId: book._id
+        bookId: book._id,
       }));
       setBookmarksAll(updatedBookmarks);
     }
@@ -94,17 +94,25 @@ function Bookmarks() {
     });
   };
 
-  const handleRatingChange = (newRating, bookmarkName) => {
+  const handleRatingChange = (newRating, bookmarkName, bookId) => {
     const newBookmarksAll = bookmarksAll.map((bookmark) =>
       bookmark.name === bookmarkName
         ? { ...bookmark, usrRating: newRating }
         : bookmark
     );
     setBookmarksAll(newBookmarksAll);
+    console.log(bookId);
+    axiosInstance.post('/api/ratings', {
+      bookId: bookId,
+      userId: user,
+      rating: newRating,
+    });
   };
 
   const handleRemove = (bookId) => {
-    const newBookmarksAll = bookmarksAll.filter((bookmark)=> bookmark.bookId != bookId);
+    const newBookmarksAll = bookmarksAll.filter(
+      (bookmark) => bookmark.bookId != bookId
+    );
     setBookmarksAll(newBookmarksAll);
     axiosInstance.delete(`/api/shelves/${bookId}/${user}`);
   };
@@ -145,7 +153,7 @@ function Bookmarks() {
         <Rating
           defaultValue={bookmark.usrRating}
           fractions={4}
-          onChange={(_value) => handleRatingChange(_value, bookmark.name)}
+          onChange={(_value) => handleRatingChange(_value, bookmark.name, bookmark.bookId)}
         />
       </Table.Td>
       <Table.Td>
@@ -153,11 +161,24 @@ function Bookmarks() {
           placeholder="Read status"
           data={["Currently Reading", "Want To Read", "Read"]}
           defaultValue={bookmark.status}
-          onChange={(_value) => handleStatusChange(_value, bookmark.name, bookmark.bookId)}
+          onChange={(_value) =>
+            handleStatusChange(_value, bookmark.name, bookmark.bookId)
+          }
         />
       </Table.Td>
       <Table.Td>
-      <FaRegTrashAlt onClick={()=>{handleRemove(bookmark.bookId)}} style={{cursor: "pointer", marginLeft: "15px", width: "20px", height: "20px", color:"red"}}></FaRegTrashAlt>
+        <FaRegTrashAlt
+          onClick={() => {
+            handleRemove(bookmark.bookId);
+          }}
+          style={{
+            cursor: "pointer",
+            marginLeft: "15px",
+            width: "20px",
+            height: "20px",
+            color: "red",
+          }}
+        ></FaRegTrashAlt>
       </Table.Td>
     </Table.Tr>
   ));
