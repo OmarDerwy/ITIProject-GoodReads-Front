@@ -26,7 +26,6 @@ export default function AuthorDetails() {
         setAuthor(response.data);
         setBooks(response.data.books);
         console.log(books);
-    
       } catch (err) {
         console.log("Error: " + err.message);
       }
@@ -121,12 +120,18 @@ export default function AuthorDetails() {
               </Text>
             </Grid.Col>
             <Grid.Col span="auto">
-              <Select
-                placeholder="Read status"
-                data={["Currently read", "Want to read", "Read"]}
-                defaultValue=""
-              />
-              <Rating defaultValue={0} fractions={4} mt={20} />
+              {localStorage.getItem("userToken") ? (
+                <>
+                  <Select
+                    placeholder="Read status"
+                    data={["Currently read", "Want to read", "Read"]}
+                    defaultValue=""
+                  />
+                  <Rating defaultValue={0} fractions={4} mt={20} />
+                </>
+              ) : (
+                <></>
+              )}
             </Grid.Col>
           </Grid>
         </Paper>
