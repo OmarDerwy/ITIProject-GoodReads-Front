@@ -204,7 +204,7 @@ function Navbar() {
                 >
                   <Avatar src={user.image} alt={user.name} size="md" />
                   <Text fw={500} size="sm" lh={1} mr={10} ml={5} my="auto">
-                    {user.name}
+                  {userName}
                   </Text>
                 </Link>
                 <Link
