@@ -1,5 +1,5 @@
 import { AiOutlineClose } from "react-icons/ai"; 
-import { useState, useRef } from "react"
+import { useState, useRef, useCallback, useMemo, useEffect } from "react"
 import {
   FaChevronDown as IconChevronDown,
   FaChevronUp as IconChevronUp,
@@ -154,7 +154,7 @@ export function TableSort(props) {
   const formBook = useForm({
     initialValues: {
       bookName: "Sample Book",
-      authorName: "Sample Author",
+      authorId:'',
       categoryName: "Sample Category",
       description: "This is a sample book description.",
       coverImage: null,
@@ -179,6 +179,16 @@ export function TableSort(props) {
     },
   })
 
+  const [authorsArray, setAuthorsArray] = useState([]);
+  useEffect(() => {
+    const fetchAuthors = async () => {
+      const response = await axiosInstance.get("/api/authors");
+      setAuthorsArray(response.data);
+    };
+    if (dataHeader === "Books") {
+      fetchAuthors();
+    }
+  }, [dataHeader]);
   const handleApiDelete = () => {
     // console.log(row)
     axiosInstance.delete(`${currentApi}${item}`)
@@ -366,18 +376,22 @@ export function TableSort(props) {
               )
             case 'Books':
               return (
-                <form onSubmit={formBook.onSubmit((values)=>{handleApiAdd(values)})}>
+                <form onSubmit={formBook.onSubmit((values)=>{
+                  values.authorId = authorsArray.find((author) => author.authorName === values.authorId)._id
+                  handleApiAdd(values)
+                  })}>
                   <TextInput
                     label="Title"
                     placeholder="Input title"
                     key={formBook.key('bookName')}
                     {...formBook.getInputProps('bookName')}
                   />
-                  <TextInput
+                  <NativeSelect
                     label="Author"
                     placeholder="Input author"
-                    key={formBook.key('authorName')}
-                    {...formBook.getInputProps('authorName')}
+                    data={authorsArray.map((author) => author.authorName)}
+                    key={formBook.key('authorId')}
+                    {...formBook.getInputProps('authorId')}
                   />
                   <TextInput
                     label="Description"
@@ -523,6 +537,7 @@ export function TableSort(props) {
           <Table.Tbody>
             {rows.length > 0 ? (
               rows
+              
             ) : (
               <Table.Tr>
                 <Table.Td colSpan={4}>
