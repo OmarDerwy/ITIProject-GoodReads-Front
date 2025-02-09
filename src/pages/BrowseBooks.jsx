@@ -20,7 +20,7 @@ const fetchBooks = async () => {
     setError(null); // Clear previous errors
     try {
     const res = await axiosInstance.get(`/api/books?page=${page}&limit=5&search=${searchTerm}`);
-    setBooks(res.data.books);
+    setBooks(res.data.array);
     setTotalPages(res.data.totalPages || 1);
     } catch (err) {
     console.error("Error fetching books:", err);

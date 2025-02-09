@@ -60,7 +60,8 @@ function App() {
             <Route path='/login' element={<Login/>}></Route>
             <Route path='/sign-up' element={<SignUp/>}></Route>
           </Route>
-          <Route path='/reset-password' element={<ForgotPassword/>}></Route>
+          <Route path='/forgot-password' element={<ForgotPassword/>}></Route>
+          <Route path='/reset-password' element={<ResetPassword/>}></Route>
           <Route path='/books' element={<BookList/>}></Route> 
           <Route path="/books/:bookId" element={<BookDetails/>} />
           <Route path='/authors' element={<Authors/>}></Route>

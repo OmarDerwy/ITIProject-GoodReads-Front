@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { PasswordInput, Container, Button, Group, Text, Paper, Title } from '@mantine/core';
+import { PasswordInput, Container, Button, Group, Text, Paper, Title, PinInput } from '@mantine/core';
 import classes from "../styles/general/ResetPassword.module.css";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,7 @@ const navigate = useNavigate();
 const [formValues, setFormValues] = useState({
 newPassword: '',
 confirmNewPassword: '',
+otp: ''
 });
 const [errors, setErrors] = useState({});
 const [successMessage, setSuccessMessage] = useState('');
@@ -63,6 +64,18 @@ return (
     </Title>
     <Paper maw={700} shadow="md" p="xl" my={30} className={classes.container}>
     <form method='POST' onSubmit={handleSubmit}>
+        <Text size="md" weight={900} mt="lg" mb="sm" className={classes.resetContainerLabel}>OTP <span style={{ color: 'red' }}>*</span></Text>
+        <PinInput 
+            label="OTP"
+            length={4}
+            type="number"
+            inputType="tel" 
+            inputMode="numeric" 
+            value={formValues.otp}
+            onChange={(value) => setFormValues({ ...formValues, otp: value })}
+            error={errors.otp}
+            required
+        />
         <PasswordInput
         label="New Password"
         leftSection={<RiLockPasswordLine size={16}/> }
