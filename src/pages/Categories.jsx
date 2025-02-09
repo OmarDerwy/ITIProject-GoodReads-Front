@@ -20,7 +20,7 @@ export default function Categories() {
     const fetchCategories = async () => {
       try {
         const response = await axiosInstance.get("/api/categories");
-        setCategories(response.data.categories);
+        setCategories(response.data.array);
       } catch (err) {
         console.log("Error: " + err.message);
       }
@@ -42,7 +42,7 @@ export default function Categories() {
             withBorder
             p="lg"
             bg="var(--mantine-color-body)"
-            m="auto"
+            m={categories.length >= 5? "auto" : 30 }
             onClick={()=>navigate(`/categories/${category._id}`)}
             style={{cursor:"pointer"}}
           >

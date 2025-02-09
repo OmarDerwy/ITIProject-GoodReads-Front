@@ -20,12 +20,8 @@ import { CgProfile } from "react-icons/cg";
 import { FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axiosInstance from "../../apis/config";
 
-const user = {
-  name: "Userdagsag1",
-  email: "user1@fighter.dev",
-  image: "",
-};
 
 const links = [
   { link: "/", label: "Home" },
@@ -41,11 +37,41 @@ function Navbar() {
   const location = useLocation();
   const activePage = location.pathname.split("/")[1];
   const [signedIn, setSignedIn] = useState(localStorage.getItem("userToken") ? true : false);
+  const [userName, setUserName] = useState("");
   useEffect(() => {
     setSignedIn(localStorage.getItem("userToken") ? true : false);
 
   }, [signedIn]);
 
+  const [user, setUser] = useState("");
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axiosInstance.get("/api/auth");
+        setUser(response.data.id);
+      } catch (err) {
+        console.log("Error: " + err.message);
+      }
+
+    };
+    fetchUser();
+  }, [signedIn]);
+
+  useEffect(()=>{
+    const fetchUserName = async () =>{
+      if (!user) return;
+      try{
+        const response = await axiosInstance.get(`/api/users/${user}`);
+        setUserName(response.data.name)
+      }
+      catch(err){
+        console.log("Error: " + err.message);
+      }
+    }
+    fetchUserName();
+  }, [user])
+  
+  
   const items = links.map((link) => (
     <Link
       key={link.label}
@@ -94,13 +120,11 @@ function Navbar() {
                   <UnstyledButton>
                     <Group gap={7}>
                       <Avatar
-                        src={user.image}
-                        alt={user.name}
                         radius="xl"
-                        size={20}
+                        size={25}
                       />
                       <Text fw={500} size="sm" lh={1} mr={3}>
-                        {user.name}
+                        {userName}
                       </Text>
                       <FaAngleDown />
                     </Group>
