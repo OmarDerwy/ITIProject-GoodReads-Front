@@ -92,7 +92,7 @@ export function TableSort(props) {
   const { dataHeader, handleNewData, currentApi } = props
   //states
   const [ data, setData] = useState(props.data)
-  console.log(data)
+  // console.log(data)
   const [search, setSearch] = useState("")
   const [sortedData, setSortedData] = useState(() => sortData(data, { sortBy: null, reversed: false, search: "" }))
   const [sortBy, setSortBy] = useState(null)
@@ -183,7 +183,7 @@ export function TableSort(props) {
   useEffect(() => {
     const fetchAuthors = async () => {
       const response = await axiosInstance.get("/api/authors");
-      setAuthorsArray(response.data);
+      setAuthorsArray(response.data.array);
     };
     if (dataHeader === "Books") {
       fetchAuthors();

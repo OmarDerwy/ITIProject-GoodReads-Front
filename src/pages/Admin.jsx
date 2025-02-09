@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { AppShell, Center, NavLink, Pagination  } from '@mantine/core';
+import { AppShell, Center, NativeSelect, NavLink, Pagination, Space  } from '@mantine/core';
 import BooksLogo from '/Logomark.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 //components
@@ -65,12 +65,12 @@ export default function Admin() {
       href='#'
       key={index}
       label={button.label}
-      onClick={() => {setActive(index);handleNewData(button.api)}}
+      onClick={() => {setActive(index);setSearchParams({page: 1, limit: 10})}}
       active={index === active}>
     </NavLink>
   ));
-  const handlePaginationChange = (page) => {
-    setSearchParams({...searchParams, page});
+  const handlePaginationChange = (page, limit) => {
+    setSearchParams({...searchParams, page, limit});
   };
   return (
     <AppShell 
@@ -85,20 +85,26 @@ export default function Admin() {
         {items}
         </AppShell.Navbar>
         <AppShell.Main>
-          {data.length > 0 ? <>
+          {data?.length > 0 ? <>
           <TableSort 
             currentApi={buttons[active].api} 
             handleNewData={handleNewData} 
             data={data} 
             dataHeader={buttons[active].label} 
           />
-          <Center>
-            <Pagination
-              total={extraData.totalPages}
-              value={searchParams.page}
-              // page={searchParams.page}
-              onChange={handlePaginationChange}
-            />
+          <Center gap='md'>
+
+              <Pagination
+                total={extraData.totalPages}
+                value={searchParams.page}
+                onChange={(page) => handlePaginationChange(page, searchParams.limit)}
+              />
+              <Space w='md'></Space>
+              <NativeSelect
+                data={['10', '20', '50', '100']}
+                value={searchParams.limit.toString()}
+                onChange={(event) => handlePaginationChange(searchParams.page, parseInt(event.currentTarget.value))}
+              />
           </Center>
           </>
            : <p>No Data Retrieved</p>}
