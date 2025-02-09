@@ -3,6 +3,7 @@ import { Rating, Grid, Table, Select, Image } from "@mantine/core";
 import classes from "./../styles/general/Bookmarks.module.css";
 import { Link } from "react-router-dom";
 import axiosInstance from "../apis/config";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 const data = [
   { label: "All" },
@@ -73,7 +74,7 @@ function Bookmarks() {
         avgRating: book.averageRating,
         usrRating: 0,
         status: shelf.find((sh) => sh.bookId === book._id).shelve,
-        id: book._id
+        bookId: book._id
       }));
       setBookmarksAll(updatedBookmarks);
     }
@@ -101,6 +102,13 @@ function Bookmarks() {
     );
     setBookmarksAll(newBookmarksAll);
   };
+
+  const handleRemove = (bookId) => {
+    const newBookmarksAll = bookmarksAll.filter((bookmark)=> bookmark.bookId != bookId);
+    setBookmarksAll(newBookmarksAll);
+    axiosInstance.delete(`/api/shelves/${bookId}/${user}`);
+  };
+
   const links = data.map((item) => {
     return (
       <Link
@@ -145,8 +153,11 @@ function Bookmarks() {
           placeholder="Read status"
           data={["Currently Reading", "Want To Read", "Read"]}
           defaultValue={bookmark.status}
-          onChange={(_value) => handleStatusChange(_value, bookmark.name,bookmark.id)}
+          onChange={(_value) => handleStatusChange(_value, bookmark.name, bookmark.bookId)}
         />
+      </Table.Td>
+      <Table.Td>
+      <FaRegTrashAlt onClick={()=>{handleRemove(bookmark.bookId)}} style={{cursor: "pointer", marginLeft: "15px", width: "20px", height: "20px", color:"red"}}></FaRegTrashAlt>
       </Table.Td>
     </Table.Tr>
   ));
@@ -170,6 +181,7 @@ function Bookmarks() {
                 <Table.Th>Avg. Rating</Table.Th>
                 <Table.Th>Rating</Table.Th>
                 <Table.Th>Shelf</Table.Th>
+                <Table.Th>Remove</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>{rows}</Table.Tbody>
