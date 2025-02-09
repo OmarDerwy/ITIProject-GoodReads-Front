@@ -41,7 +41,7 @@ export default function Authors() {
             withBorder
             p="lg"
             bg="var(--mantine-color-body)"
-            m="auto"
+            m={authors.length >= 5? "auto" : 30 }
             onClick={() => navigate(`/authors/${author._id}`)}
             style={{ cursor: "pointer" }}
           >

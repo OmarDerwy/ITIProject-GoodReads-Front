@@ -42,7 +42,7 @@ export default function Categories() {
             withBorder
             p="lg"
             bg="var(--mantine-color-body)"
-            m="auto"
+            m={categories.length >= 5? "auto" : 30 }
             onClick={()=>navigate(`/categories/${category._id}`)}
             style={{cursor:"pointer"}}
           >
