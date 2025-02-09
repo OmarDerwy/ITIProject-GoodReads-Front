@@ -31,7 +31,6 @@ import { notifications } from '@mantine/notifications';
 import { useDisclosure } from "@mantine/hooks"
 import { useForm } from '@mantine/form';
 
-
 function Th({ children, reversed, sorted, onSort }) {
   const Icon = sorted
     ? reversed
@@ -136,7 +135,7 @@ export function TableSort(props) {
   //config functions
   const dataHeaders = {
     Users: ["_id", "name", "email", "role", "avatar"],
-    Books: ["_id", "bookName", "authorName", "categoryName", "coverImage"],
+    Books: ["_id", "bookName", "coverImage"],
     Authors: ["_id", "authorName", "dateOfBirth", "bio", 'avatar'],
     Categories: ["_id", "categoryName", "description", "coverImage"]
   }
@@ -154,10 +153,9 @@ export function TableSort(props) {
   const formBook = useForm({
     initialValues: {
       bookName: "Sample Book",
-      authorId:'',
-      categoryName: "Sample Category",
+      authorId: null,
+      categoryId: null,
       description: "This is a sample book description.",
-      coverImage: null,
       bookFile: null,
     },
   })
@@ -180,15 +178,27 @@ export function TableSort(props) {
   })
 
   const [authorsArray, setAuthorsArray] = useState([]);
+  const [categoriesArray, setCategoriesArray] = useState([]);
+  
   useEffect(() => {
     const fetchAuthors = async () => {
       const response = await axiosInstance.get("/api/authors");
       setAuthorsArray(response.data.array);
     };
+    
+    const fetchCategories = async () => {
+      const response = await axiosInstance.get("/api/categories");
+      setCategoriesArray(response.data.array);
+    };
+    
     if (dataHeader === "Books") {
       fetchAuthors();
+      fetchCategories();
+      formBook.setFieldValue('authorId', authorsArray[0]?._id || null);
+      formBook.setFieldValue('categoryId', categoriesArray[0]?._id || null);
     }
   }, [dataHeader]);
+
   const handleApiDelete = () => {
     // console.log(row)
     axiosInstance.delete(`${currentApi}${item}`)
@@ -272,6 +282,8 @@ export function TableSort(props) {
           </Table.Td>
         </Tooltip>
       ))}
+      {dataHeader === 'Books' && row.authorId ? <Table.Td>{row.authorId.authorName}</Table.Td> : null}
+      {dataHeader === 'Books' && row.categoryId ? <Table.Td>{row.categoryId.categoryName}</Table.Td> : null}
       <Table.Td>
         <Group spacing="sm">
           <Button size="xs" variant="outline" onClick={()=>{
@@ -292,7 +304,6 @@ export function TableSort(props) {
                   authorName: row.authorName,
                   categoryName: row.categoryName,
                   description: row.description,
-                  coverImage: null,
                   bookFile: null,
                 });
                 break;
@@ -377,7 +388,6 @@ export function TableSort(props) {
             case 'Books':
               return (
                 <form onSubmit={formBook.onSubmit((values)=>{
-                  values.authorId = authorsArray.find((author) => author.authorName === values.authorId)._id
                   handleApiAdd(values)
                   })}>
                   <TextInput
@@ -389,7 +399,7 @@ export function TableSort(props) {
                   <NativeSelect
                     label="Author"
                     placeholder="Input author"
-                    data={authorsArray.map((author) => author.authorName)}
+                    data={authorsArray.map((author) => ({ label: author.authorName, value: author._id }))}
                     key={formBook.key('authorId')}
                     {...formBook.getInputProps('authorId')}
                   />
@@ -399,11 +409,12 @@ export function TableSort(props) {
                     key={formBook.key('description')}
                     {...formBook.getInputProps('description')}
                   />
-                  <TextInput
+                  <NativeSelect
                     label="Category"
                     placeholder="Input category"
-                    key={formBook.key('categoryName')}
-                    {...formBook.getInputProps('categoryName')}
+                    data={categoriesArray.map((category) => ({label: category.categoryName, value: category._id}))}
+                    key={formBook.key('categoryId')}
+                    {...formBook.getInputProps('categoryId')}
                   />
                   <FileInput
                     label="Book"
@@ -411,13 +422,6 @@ export function TableSort(props) {
                     description="Upload book file here"
                     key={formBook.key('bookFile')}
                     {...formBook.getInputProps('bookFile')}
-                  />
-                  <FileInput
-                    label="Image"
-                    placeholder="Input image"
-                    description="Upload book front cover here"
-                    key={formBook.key('coverImage')}
-                    {...formBook.getInputProps('coverImage')}
                   />
                   <Button type="submit" onClick={closeAddModal}>Add</Button>
                   <Button onClick={closeAddModal}>Close</Button>
@@ -532,6 +536,7 @@ export function TableSort(props) {
                   {field.replace(/^_/, '')}
                 </Th>
               ))}
+              {dataHeader === 'Books' && <><Th>Author</Th><Th>Category</Th></>}
             </Table.Tr>
           </Table.Tbody>
           <Table.Tbody>
