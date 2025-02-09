@@ -25,6 +25,8 @@ export default function AuthorDetails() {
         const response = await axiosInstance.get(`/api/authors/${authorId}`);
         setAuthor(response.data);
         setBooks(response.data.books);
+        console.log(books);
+    
       } catch (err) {
         console.log("Error: " + err.message);
       }
@@ -38,7 +40,7 @@ export default function AuthorDetails() {
         const booksData = await Promise.all(
           books.map(async (book) => {
             const response = await axiosInstance.get(
-              `/api/books/${book.bookId}`
+              `/api/books/${book.bookId._id}`
             );
             return response.data;
           })
@@ -59,7 +61,7 @@ export default function AuthorDetails() {
         <Grid>
           <Grid.Col span="auto">
             {" "}
-            <Avatar src={author.imageUrl} size={210} radius={210} />
+            <Avatar src={author.avatar} size={210} radius={210} />
           </Grid.Col>
           <Grid.Col span={10}>
             <Title ta="left" mb={5} order={2}>
