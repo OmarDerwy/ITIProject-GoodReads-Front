@@ -47,7 +47,7 @@ export default function Admin() {
   }, [searchParams]);
 
   const handleNewData = (api) => {
-    setData([])
+    // setData([])
     console.log(searchParams)
     axiosInstance.get(api, {params: searchParams})
       .then((response) => {
