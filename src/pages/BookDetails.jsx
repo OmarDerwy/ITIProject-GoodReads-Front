@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Image, Text, Title, Loader, Group, Rating, Avatar, Center } from '@mantine/core';
+import { Container, Image, Text, Title, Loader, Group, Rating, Avatar, Center, Button } from '@mantine/core';
 import axiosInstance from '../apis/config';
 import image from "../assets/bookCoverNotFound.webp";
 
 const BookDetails = () => {
     const { bookId } = useParams();
     const [book, setBook] = useState(null);
-    const [reviews, setReviews] = useState([]); // Fixed: Initialize as an empty array
+    const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -20,7 +20,7 @@ const BookDetails = () => {
                 setBook(response1.data);
 
                 const response2 = await axiosInstance.get(`/api/reviews/${bookId}`);
-                setReviews(response2.data.reviews); // Fixed: Ensure response is an array
+                setReviews(response2.data.reviews);
 
             } catch (error) {
                 console.error("Error fetching book details:", error);
@@ -69,9 +69,17 @@ const BookDetails = () => {
             <Text mt="md">Category: {book.categoryName || "No Category available"}</Text>
             <Text mt="md">Average Rating: <Rating readOnly fractions={10} value={book.averageRating} /></Text>
             
+            {/* Open Book Button */}
+            {book.bookFile && (
+                <Center mt="xl">
+                    <Button component="a" href={book.bookFile} target="_blank" rel="noopener noreferrer" color="blue" size="md">
+                        Open Book
+                    </Button>
+                </Center>
+            )}
+            
             {/* Reviews Section */}
             <Title mt="xl" order={2}>Reviews</Title>
-
             {reviews.length > 0 ? (
                 reviews.map((review) => (
                     <div
