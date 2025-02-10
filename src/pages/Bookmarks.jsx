@@ -78,35 +78,35 @@ function Bookmarks() {
   useEffect(() => {
     const fetchRatings = async () => {
       try {
-        // Fetch ratings for all books at once
+        
         const ratingsResponse = await Promise.all(
           books.map((book) =>
             axiosInstance.get(`/api/ratings/${book._id}/${user}`)
           )
         );
   
-        // Create a map of ratings keyed by bookId
+        
         const ratingsMap = ratingsResponse.reduce((acc, response, index) => {
           const book = books[index];
-          const userRating = response.data?.rating || 0; // Default to 0 if not found
+          const userRating = response.data?.rating || 0; 
           acc[book._id] = userRating;
           return acc;
         }, {});
   
-        // Now update the bookmarks with ratings
+        
         const updatedBookmarks = books.map((book) => {
           const author = authors.find(
             (author) => author.authorName === book.authorName
           );
           const shelfStatus = shelf.find((sh) => sh.bookId === book._id)?.shelve;
-          const usrRating = ratingsMap[book._id] || 0; // Fallback to 0 if no rating
+          const usrRating = ratingsMap[book._id] || 0;
   
           return {
             cover: book.coverImage,
             name: book.bookName,
             author: book.authorName,
             avgRating: book.averageRating,
-            usrRating, // Set the resolved usrRating
+            usrRating, 
             status: shelfStatus,
             bookId: book._id,
             authorId: author ? author._id : null,
@@ -120,7 +120,7 @@ function Bookmarks() {
     };
   
     if (books.length > 0 && authors.length > 0 && shelf.length > 0) {
-      fetchRatings(); // Call this function to fetch ratings
+      fetchRatings(); 
     }
   }, [books, authors, shelf, user]);
 
