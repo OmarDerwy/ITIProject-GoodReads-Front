@@ -92,7 +92,11 @@ export function TableSort(props) {
   //states
   console.log(data)
   const [search, setSearch] = useState("")
-  const [sortedData, setSortedData] = useState(() => sortData(data, { sortBy: null, reversed: false, search: "" }))
+  const [sortedData, setSortedData] = useState([])
+  useEffect(() => {
+    setSortedData(sortData(data, { sortBy: null, reversed: false, search: "" }))
+  }, [data])
+  // console.log(sortedData)
   const [sortBy, setSortBy] = useState(null)
   const [reverseSortDirection, setReverseSortDirection] = useState(false)
   const [imageSrc, setimageSrc] = useState(null)
@@ -266,7 +270,7 @@ export function TableSort(props) {
       });
     }
     else{
-      axiosInstance.post(dataHeader == 'Users'? `/api/auth/register` : currentApi, formData)
+      axiosInstance.post(dataHeader == 'Users'? `/api/auth/registerInAdmin` : currentApi, formData)
       .then((response) => {
         console.log(response)
         handleNewData(currentApi)
