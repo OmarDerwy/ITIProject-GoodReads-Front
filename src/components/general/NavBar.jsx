@@ -30,32 +30,40 @@ const links = [
   { link: "/Authors", label: "Authors" },
 ];
 
-function Navbar() {
+function Navbar({userData, setUserData}) {
   const navigate = useNavigate();
   const [opened, { toggle }] = useDisclosure(false);
   const [active, setActive] = useState("");
   const location = useLocation();
   const activePage = location.pathname.split("/")[1];
-  const [signedIn, setSignedIn] = useState(localStorage.getItem("userToken") ? true : false);
+  const [signedIn, setSignedIn] = useState(null);
   const [userName, setUserName] = useState("");
-  useEffect(() => {
-    setSignedIn(localStorage.getItem("userToken") ? true : false);
-
-  }, [signedIn]);
-
   const [user, setUser] = useState("");
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axiosInstance.get("/api/auth");
-        setUser(response.data.id);
-      } catch (err) {
-        console.log("Error: " + err.message);
-      }
 
-    };
-    fetchUser();
-  }, [signedIn]);
+  // useEffect(() => {
+  //   setSignedIn(localStorage.getItem("userToken") ? true : false);
+
+  // }, [signedIn]);
+  
+  useEffect(() => {
+    setUser(userData.id)
+    if(userData.id){
+      setSignedIn(true);
+    }
+  }, [userData])
+
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const response = await axiosInstance.get("/api/auth");
+  //       setUser(response.data.id);
+  //     } catch (err) {
+  //       console.log("Error: " + err.message);
+  //     }
+
+  //   };
+  //   fetchUser();
+  // }, [signedIn]);
 
   useEffect(()=>{
     const fetchUserName = async () =>{

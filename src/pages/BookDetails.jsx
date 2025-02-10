@@ -187,24 +187,26 @@
     }
 
     if (error) {
-        return (
-        <div
-            style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: "200px",
-            }}
-        >
-            <Text fw={900} fz="3rem" color="red">
-            Error Loading Content.
-            </Text>
-            <Text fz="3rem" color="red">
-            {error}
-            </Text>
-        </div>
-        );
+       if ([400,404].includes(error.status)) {
+         return (
+         <div
+             style={{
+             display: "flex",
+             flexDirection: "column",
+             justifyContent: "center",
+             alignItems: "center",
+             marginTop: "200px",
+             }}
+         >
+             <Text fw={900} fz="3rem" color="red">
+             Error Loading Content.
+             </Text>
+             <Text fz="3rem" color="red">
+             {error}
+             </Text>
+         </div>
+         );
+       }
     }
 
     if (!book) {

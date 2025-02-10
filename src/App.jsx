@@ -35,8 +35,16 @@ function App() {
   const excludedRoutes = ['/login', '/sign-up' , '/', '/admin']; //use this when navbar is finished
   const [userData, setUserData] = useState({});
   const fetchUserData = async () =>{
-    const response = await axiosInstance.get(`/api/auth`);
-    setUserData(response.data);
+    try {
+      const response = await axiosInstance.get(`/api/auth`);
+      setUserData(response.data);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+      setUserData({});
+      } else {
+      console.error("An error occurred while fetching user data:", error);
+      }
+    }
     // console.log(response.data)
   } 
   // console.log('dklfjsldjkf')
@@ -46,7 +54,7 @@ function App() {
   return (
     <>
     <Notifications/>
-      {!excludedRoutes.includes(location.pathname) && <Navbar />}
+      {!excludedRoutes.includes(location.pathname) && <Navbar userData={userData} setUserData={setUserData}/>}
       <Suspense fallback={<div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "200px"}}> <Loader type="bars" color="lightgreen" size={200}/> </div>}>
         <Routes>
           <Route path='/' element={<LandingPage/>}></Route>
