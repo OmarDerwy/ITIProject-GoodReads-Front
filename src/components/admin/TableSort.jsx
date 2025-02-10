@@ -88,10 +88,9 @@ function sortData(data, payload) {
 
 
 export function TableSort(props) {
-  const { dataHeader, handleNewData, currentApi } = props
+  const { dataHeader, handleNewData, currentApi, data } = props
   //states
-  const [ data, setData] = useState(props.data)
-  // console.log(data)
+  console.log(data)
   const [search, setSearch] = useState("")
   const [sortedData, setSortedData] = useState(() => sortData(data, { sortBy: null, reversed: false, search: "" }))
   const [sortBy, setSortBy] = useState(null)
@@ -235,7 +234,13 @@ export function TableSort(props) {
     console.log(values)
     const formData = new FormData();
     for (const key in values) {
-      formData.append(key, values[key]);
+      if (key == 'avatar' || key == 'coverImage' || key == 'bookFile') {
+        if(values[key] !== null){
+          formData.append(key, values[key]);
+        }
+      } else {
+        formData.append(key, values[key]);
+      }
     }
     console.log(Array.from(formData));
     if(editMode){

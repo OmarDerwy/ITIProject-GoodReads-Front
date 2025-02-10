@@ -51,13 +51,10 @@ export default function Admin() {
     console.log(searchParams)
     axiosInstance.get(api, {params: searchParams})
       .then((response) => {
-        console.log(response, typeof(response.data));
-        if(!Array.isArray(response.data)){
-          setData(response.data.array);
-          setExtraData({...response.data, array: undefined}); //use this maybe
-        }else{
-        setData(response.data);
-        }
+        console.log(response.data)
+        setData(response.data.array);
+        setExtraData({...response.data, array: undefined}); //use this maybe
+        console.log(data)
       })
   };
   const items = buttons.map((button, index) => (
@@ -92,24 +89,27 @@ export default function Admin() {
             data={data} 
             dataHeader={buttons[active].label} 
           />
-          <Center gap='md'>
-
-              <Pagination
-                total={extraData.totalPages}
-                value={searchParams.page}
-                onChange={(page) => handlePaginationChange(page, searchParams.limit)}
-              />
-              <Space w='md'></Space>
-              <NativeSelect
-                data={['10', '20', '50', '100']}
-                value={searchParams.limit.toString()}
-                onChange={(event) => handlePaginationChange(searchParams.page, parseInt(event.currentTarget.value))}
-              />
-          </Center>
           </>
            : <p>No Data Retrieved</p>}
   
         </AppShell.Main>
+        <AppShell.Footer>
+          <Space>
+          <Center gap='md'>
+            <Pagination
+              total={extraData.totalPages}
+              value={searchParams.page}
+              onChange={(page) => handlePaginationChange(page, searchParams.limit)}
+            />
+            <Space w='md'></Space>
+            <NativeSelect
+              data={['10', '20', '50', '100']}
+              value={searchParams.limit.toString()}
+              onChange={(event) => handlePaginationChange(searchParams.page, parseInt(event.currentTarget.value))}
+            />
+            </Center>
+          </Space>
+        </AppShell.Footer>
     </AppShell>
   )
 }
