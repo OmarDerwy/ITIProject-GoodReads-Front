@@ -33,14 +33,14 @@ const PremiumSubscription = React.lazy( () => import('./pages/PremiumSubscriptio
 function App() {
   const location = useLocation();
   const excludedRoutes = ['/login', '/sign-up' , '/', '/admin']; //use this when navbar is finished
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState(null);
   const fetchUserData = async () =>{
     try {
       const response = await axiosInstance.get(`/api/auth`);
       setUserData(response.data);
     } catch (error) {
       if (error.response && error.response.status === 401) {
-      setUserData({});
+      setUserData(null);
       } else {
       console.error("An error occurred while fetching user data:", error);
       }
@@ -57,18 +57,17 @@ function App() {
       {!excludedRoutes.includes(location.pathname) && <Navbar userData={userData} setUserData={setUserData}/>}
       <Suspense fallback={<div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "200px"}}> <Loader type="bars" color="lightgreen" size={200}/> </div>}>
         <Routes>
-          <Route path='/' element={<LandingPage/>}></Route>
-          
           <Route element={<AdminOnlyRoutes/>}>
             <Route path='/admin' element={<Admin/>}></Route>
           </Route>
           <Route element={<ProtectedRoutes/>}>
             <Route path='/profile/:id' element={<UserProfile/>}></Route>
-            <Route path='/profile' element={<Navigate to={`/profile/${userData.id}`} replace/>}></Route>
+            <Route path='/profile' element={<Navigate to={`/profile/${userData?.id}`} replace/>}></Route>
             <Route path='/bookmarks' element={<Bookmarks/>}></Route>
           </Route>
           <Route element={<UserAuthRoutes/>}>
-            <Route path='/login' element={<Login/>}></Route>
+            <Route path='/' element={<LandingPage setUserData={setUserData}/>}></Route> 
+            <Route path='/login' element={<Login userData={userData}/>}></Route>
             <Route path='/sign-up' element={<SignUp/>}></Route>
           </Route>
           <Route path='/forgot-password' element={<ForgotPassword/>}></Route>

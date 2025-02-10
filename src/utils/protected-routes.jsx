@@ -39,7 +39,7 @@ const UserAuthRoutes = () => {
     }, []);
 
     if (loading) return null; 
-    return !user ? <Outlet /> : <Navigate to="/profile" />;
+    return !user ? <Outlet /> : <Navigate to="/general" />;
 };
 
 const AdminOnlyRoutes = () => {
@@ -59,6 +59,6 @@ const AdminOnlyRoutes = () => {
     }, []);
 
     if (loading) return null; 
-    return user ? <Outlet /> : <Navigate to="/" />;
+    return user ? <Outlet /> : <Navigate to="/general" />;
 };
 export { ProtectedRoutes, UserAuthRoutes, AdminOnlyRoutes };

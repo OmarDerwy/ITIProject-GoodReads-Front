@@ -24,7 +24,7 @@ import axiosInstance from "../../apis/config";
 
 
 const links = [
-  { link: "/", label: "Home" },
+  { link: "/general", label: "Home" },
   { link: "/Categories", label: "Categories" },
   { link: "/Books", label: "Books" },
   { link: "/Authors", label: "Authors" },
@@ -46,9 +46,11 @@ function Navbar({userData, setUserData}) {
   // }, [signedIn]);
   
   useEffect(() => {
-    setUser(userData.id)
-    if(userData.id){
-      setSignedIn(true);
+    if (userData) {
+      setUser(userData.id);
+      if (userData.id) {
+        setSignedIn(true);
+      }
     }
   }, [userData])
 
@@ -97,7 +99,7 @@ function Navbar({userData, setUserData}) {
         <Group wrap="auto" align="flex-start" className="Logo">
           <Link
             style={{ textDecoration: "none" }}
-            to="/"
+            to={signedIn ? "/general" : "/"}
             className={classes.inner}
           >
             <img src={BooksLogo} alt="Books Logo" />

@@ -5,11 +5,11 @@ import Footer from '../components/general/Footer'
 import { FaqWithImage } from '../components/landingpage/FAQ'
 import { EmailBanner } from '../components/landingpage/SubscribeToNews'
 
-export default function LandingPage() {
+export default function LandingPage({userData}) {
   return (
     <>
       <MinimalNavbar/>
-      <HeroSection/>
+      <HeroSection userData={userData}/>
       <FaqWithImage/>
       <EmailBanner/>
       <Footer/>

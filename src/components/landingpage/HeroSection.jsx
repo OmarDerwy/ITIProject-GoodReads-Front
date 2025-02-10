@@ -9,8 +9,9 @@ import { useState, useEffect } from 'react';
 //react-router
 import { useNavigate } from 'react-router-dom';
 
-export default function HeroSection() {
+export default function HeroSection({userData}) {
   const navigate = useNavigate();
+  // console.log(userData)
   function ImageWithHueShift({ src, alt, className }) {
     const [hue, setHue] = useState(0);
   
@@ -35,7 +36,7 @@ export default function HeroSection() {
   }
   return (
     <div className={classes.wrapper}>
-      <Container size={1500} style={{ minHeight: '100vh' }} className={classes.inner}>
+      <Container size={1500} style={{ minHeight: '75vh' }} className={classes.inner}>
         <Grid>
           <Grid.Col span={{base: 12, md: 6, lg: 6, xl: 6}} order={{base: 1, md: 2, lg: 2}} className={classes.imageContainer}>
             <ImageWithHueShift src={EtherealBook} alt="hero" className={classes.image} />
@@ -51,7 +52,7 @@ export default function HeroSection() {
               create your own libaray of books and discover more that fit your tastes from our database!
             </Text>
             <Group className={classes.controls}>
-              <Button
+              {!userData? <><Button
                 size="xl"
                 onClick={() => navigate('/sign-up')}
                 className={classes.control}
@@ -68,6 +69,16 @@ export default function HeroSection() {
                 className={classes.control}
               >
                 Login
+              </Button></>:null}
+              <Button
+                size="xl"
+                onClick={() => navigate('/general')}
+                className={classes.control}
+                variant="outline"
+                color='green'
+                // gradient={{ from: 'green', to: 'lightgreen' }}
+              >
+                Browse
               </Button>
             </Group>
           </Grid.Col>
