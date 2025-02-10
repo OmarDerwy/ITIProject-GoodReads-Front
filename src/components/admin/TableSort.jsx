@@ -183,6 +183,7 @@ export function TableSort(props) {
   useEffect(() => {
     const fetchAuthors = async () => {
       const response = await axiosInstance.get("/api/authors");
+      console.log(response.data.array)
       setAuthorsArray(response.data.array);
     };
     
@@ -194,10 +195,18 @@ export function TableSort(props) {
     if (dataHeader === "Books") {
       fetchAuthors();
       fetchCategories();
-      formBook.setFieldValue('authorId', authorsArray[0]?._id || null);
-      formBook.setFieldValue('categoryId', categoriesArray[0]?._id || null);
     }
   }, [dataHeader]);
+
+  useEffect(() => {
+    if (dataHeader === "Books" && authorsArray.length > 0 && categoriesArray.length > 0) {
+      formBook.setFieldValue('authorId', authorsArray[0]?._id);
+      formBook.setFieldValue('categoryId', categoriesArray[0]?._id);
+    }
+  }, [authorsArray, categoriesArray, dataHeader]);
+
+  // useEffect(() => {
+
 
   const handleApiDelete = () => {
     // console.log(row)
