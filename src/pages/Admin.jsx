@@ -85,7 +85,7 @@ export default function Admin() {
         {items}
         </AppShell.Navbar>
         <AppShell.Main>
-          {data?.length > 0 ? <>
+          {data? <>
           <TableSort 
             currentApi={buttons[active].api} 
             handleNewData={handleNewData} 
