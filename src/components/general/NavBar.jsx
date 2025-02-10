@@ -98,15 +98,10 @@ function Navbar() {
         </Group>
 
         <Group>
-          <Group gap={5} className={classes.links} visibleFrom="md">
+          <Group gap={5} className={classes.links} visibleFrom="md" mr={30}>
             {items}
           </Group>
-          <Autocomplete
-            className={classes.search}
-            placeholder="Search"
-            leftSection={<CiSearch />}
-            visibleFrom="md"
-          />
+         
           {signedIn ? (
             <>
               <Menu
@@ -272,13 +267,7 @@ function Navbar() {
               </Group>
             )}
 
-            <Autocomplete
-              className={classes.search}
-              placeholder="Search"
-              leftSection={<CiSearch />}
-              mb={10}
-              mt={10}
-            />
+            
             <Group
               gap={10}
               mb={10}

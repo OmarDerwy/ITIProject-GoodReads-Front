@@ -16,8 +16,22 @@ import axiosInstance from "../apis/config";
 export default function AuthorDetails() {
   const [author, setAuthor] = useState({});
   const [books, setBooks] = useState([]);
+  const [user, setUser] = useState("");
+
   const navigate = useNavigate();
   const authorId = location.pathname.split("/")[2];
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axiosInstance.get("/api/auth");
+        setUser(response.data.id);
+      } catch (err) {
+        console.log("Error: " + err.message);
+      }
+    };
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const fetchAuthor = async () => {
@@ -25,6 +39,7 @@ export default function AuthorDetails() {
         const response = await axiosInstance.get(`/api/authors/${authorId}`);
         setAuthor(response.data);
         setBooks(response.data.books);
+        console.log(books);
       } catch (err) {
         console.log("Error: " + err.message);
       }
@@ -38,7 +53,7 @@ export default function AuthorDetails() {
         const booksData = await Promise.all(
           books.map(async (book) => {
             const response = await axiosInstance.get(
-              `/api/books/${book.bookId}`
+              `/api/books/${book.bookId._id}`
             );
             return response.data;
           })
@@ -52,6 +67,25 @@ export default function AuthorDetails() {
       fetchBooks();
     }
   }, [author]);
+
+  const handleRatingChange = (newRating, bookId) => {
+    axiosInstance.post("/api/ratings", {
+      bookId: bookId,
+      userId: user,
+      rating: newRating,
+    });
+    
+  };
+
+  const handleStatusChange = (newStatus, bookId) => {
+    axiosInstance.post("/api/shelves", {
+      bookId: bookId,
+      userId: user,
+      shelve: newStatus,
+    });
+    
+  };
+
   return (
     <>
       {console.log(books)}
@@ -59,7 +93,7 @@ export default function AuthorDetails() {
         <Grid>
           <Grid.Col span="auto">
             {" "}
-            <Avatar src={author.imageUrl} size={210} radius={210} />
+            <Avatar src={author.avatar} size={210} radius={210} />
           </Grid.Col>
           <Grid.Col span={10}>
             <Title ta="left" mb={5} order={2}>
@@ -114,17 +148,32 @@ export default function AuthorDetails() {
               <Text ta="left" fz="md" fw={500} mb={20} span>
                 <Rating value={book.averageRating} fractions={4} readOnly />{" "}
                 {book.averageRating}
-                {book.averageRating == 1 ? " star" : " stars"} - {book.ratings}
-                {book.ratings == 1 ? " rating" : " ratings"}
+                {book.averageRating == 1 ? " star average" : " stars average"} 
               </Text>
             </Grid.Col>
             <Grid.Col span="auto">
-              <Select
-                placeholder="Read status"
-                data={["Currently read", "Want to read", "Read"]}
-                defaultValue=""
-              />
-              <Rating defaultValue={0} fractions={4} mt={20} />
+              {localStorage.getItem("userToken") ? (
+                <>
+                  <Select
+                    placeholder="Read status"
+                    data={["Currently Reading", "Want To Read", "Read"]}
+                    defaultValue=""
+                    onChange={(_value) =>
+                      handleStatusChange(_value, book._id)
+                    }
+                  />
+                  <Rating
+                    defaultValue={0}
+                    fractions={4}
+                    mt={20}
+                    onChange={(_value) =>
+                      handleRatingChange(_value, book._id)
+                    }
+                  />
+                </>
+              ) : (
+                <></>
+              )}
             </Grid.Col>
           </Grid>
         </Paper>

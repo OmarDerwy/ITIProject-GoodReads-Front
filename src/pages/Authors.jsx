@@ -51,7 +51,7 @@ export default function Authors() {
                 h="200"
                 w="180"
                 fit="fill"
-                src={author.imageUrl}
+                src={author.avatar}
               />{" "}
               {/*image or icon for author*/}
             </Grid.Col>
