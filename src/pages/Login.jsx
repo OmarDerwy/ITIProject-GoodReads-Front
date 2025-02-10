@@ -8,7 +8,7 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import axiosInstance from '../apis/config';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ setUserData = () => {} }) => {
   const navigate = useNavigate();
   //user input states
   const [email, setEmail] = useState("");
@@ -38,9 +38,10 @@ const Login = () => {
       .then((response) => {
         console.log(response);
         localStorage.setItem("userToken", response.data.token);
+        setUserData({ id: response.data.user._id});
         //send registeration success for a toast at the landing page
         sessionStorage.setItem('justLoggedIn', true);
-        navigate('/profile')
+        navigate('/general')
       }).catch((error) => {
         console.log(error)
       })
