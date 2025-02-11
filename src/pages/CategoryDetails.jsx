@@ -56,16 +56,18 @@ export default function CategoryDetails() {
 
       <Grid>
         {books?.map((book, index) => {
-          const author = authors.find(
+          const author =  book.bookId == null ? "" : authors?.find(
             (author) => author._id === book.bookId.authorId
           );
-          return (
+          return (  book.bookId == null ? "" :
             <Paper
               radius="md"
               withBorder
               p="lg"
               bg="var(--mantine-color-body)"
-              m="auto"
+              m={10}
+              w={250}
+              h={450}
               key={index}
               onClick={() => navigate(`/books/${book._id}`)}
               style={{ cursor: "pointer" }}

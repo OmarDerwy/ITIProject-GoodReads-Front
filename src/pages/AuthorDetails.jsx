@@ -39,7 +39,6 @@ export default function AuthorDetails() {
         const response = await axiosInstance.get(`/api/authors/${authorId}`);
         setAuthor(response.data);
         setBooks(response.data.books);
-        console.log(books);
       } catch (err) {
         console.log("Error: " + err.message);
       }
@@ -52,7 +51,8 @@ export default function AuthorDetails() {
       try {
         const booksData = await Promise.all(
           books.map(async (book) => {
-            const response = await axiosInstance.get(
+            
+            const response = book.bookId == null? "" : await axiosInstance.get(
               `/api/books/${book.bookId._id}`
             );
             return response.data;
@@ -88,7 +88,6 @@ export default function AuthorDetails() {
 
   return (
     <>
-      {console.log(books)}
       <Paper radius="md" p="lg" bg="var(--mantine-color-body)" m={10}>
         <Grid>
           <Grid.Col span="auto">
@@ -113,7 +112,7 @@ export default function AuthorDetails() {
         Books released:
       </Title>
 
-      {books.map((book, index) => (
+      {books?.map((book, index) => ( book == undefined? "" :
         <Paper
           key={index}
           radius="md"
