@@ -61,7 +61,7 @@ function App() {
             <Route path='/admin' element={<Admin/>}></Route>
           </Route>
           <Route element={<ProtectedRoutes/>}>
-            <Route path='/profile/:id' element={<UserProfile/>}></Route>
+            <Route path='/profile/:id' element={<UserProfile loggedUser={userData}/>}></Route>
             <Route path='/profile' element={<Navigate to={`/profile/${userData?.id}`} replace/>}></Route>
             <Route path='/bookmarks' element={<Bookmarks userData={userData}/>}></Route>
           </Route>

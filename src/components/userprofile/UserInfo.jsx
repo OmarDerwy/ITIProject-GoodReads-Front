@@ -5,10 +5,8 @@ import classes from '../../styles/userprofile/UserInfoIcons.module.css';
 // import { useEffect } from 'react';
 
 export function UserInfo({userData, subscription}) {
-    console.log(userData)
   return (
       <Container>
-        
         <Group wrap="nowrap" justify='center' m={30}>
           <Avatar
             src={userData.avatar}

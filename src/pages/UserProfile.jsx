@@ -2,16 +2,25 @@ import { AiOutlineArrowRight } from "react-icons/ai";
 import React, { useEffect, useState } from 'react'
 import { UserInfo } from '../components/userprofile/UserInfo'
 import { BookShelf } from '../components/general/BookShelf'
-import { Container, Divider, Flex, Text, Title, Card, Center } from '@mantine/core'
+import { Container, Divider, Flex, Text, Title, Card, Center, Button } from '@mantine/core'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { notifications } from '@mantine/notifications'
 import axiosInstance from '../apis/config'
+import { use } from "react";
 
-export default function UserProfile() {
+export default function UserProfile({loggedUser}) {
   let params = useParams();
   const [userData, setUserData] = useState(null);
   const [bookshelf, setBookshelf] = useState(null);
   const [subscription, setSubscription] = useState(null);
+
+  useEffect(() => {
+    console.log('Bookshelf:', bookshelf);
+  }, [bookshelf]);
+
+  useEffect(() => {
+    console.log('Subscription:', subscription);
+  }, [subscription]);
   const navigate = useNavigate();
 
 
@@ -36,7 +45,13 @@ export default function UserProfile() {
   const fetchShelves = async (id) =>{
    try {
      const response = await axiosInstance.get(`/api/shelves/2/${id}`);
-     setBookshelf(response.data);
+     setBookshelf(response.data.shelves.map((shelf) => ({
+        title: shelf.bookId.bookName,
+        views: 0,
+        image: shelf.bookId.coverImage,
+        id: shelf.bookId._id,
+        type: 'b',
+      })));
    } catch (error) {
      console.error("An error occurred while fetching shelves:", error);
     
@@ -68,11 +83,24 @@ export default function UserProfile() {
       })
   }, [params.id]);
 
-
-
+  console.log('loggedUser:', loggedUser, params.id);
   return (
     <>
       {userData ? <UserInfo userData={userData} subscription={subscription}/> : <div>loading</div>}
+      {userData?.role === 'admin' ? (
+        <Center>
+        <Button mb={'lg'} variant="gradient" gradient={{from: 'purple', to: 'lightblue'}} onClick={() => navigate(`/admin`)} >
+          Admin Panel
+        </Button>
+        </Center>
+        ): null}
+      {subscription === 'Premium' ? null : (
+        <Center>
+        <Button variant="gradient" gradient={{from: 'green', to: 'lightgreen'}} onClick={() => navigate(`/subscribe-to-premium/`)}>
+          Subscribe Now
+        </Button>
+        </Center>
+      )}
       <Divider my="md" />
       <Container>
         <Flex justify={'start'} align={'center'}>
@@ -82,12 +110,12 @@ export default function UserProfile() {
       </Container>
       {bookshelf ? (
         bookshelf.length > 0 ? (
-          <BookShelf key={shelf.id} shelf={bookshelf} />
+          <BookShelf title="" popular={bookshelf} />
         ) : (
           <Container>
             <Card h={200}>
               <Flex justify="center" align="center" style={{ height: '100%' }}>
-                <Text >This user has no books in their bookshelf</Text>
+                <Text>This user has no books in their bookshelf</Text>
               </Flex>
             </Card>
           </Container>
