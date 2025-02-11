@@ -185,13 +185,13 @@ export function TableSort(props) {
   
   useEffect(() => {
     const fetchAuthors = async () => {
-      const response = await axiosInstance.get("/api/authors");
+      const response = await axiosInstance.get("/api/authors", {params:{noPagination: true }} );
       console.log(response.data.array)
       setAuthorsArray(response.data.array);
     };
     
     const fetchCategories = async () => {
-      const response = await axiosInstance.get("/api/categories");
+      const response = await axiosInstance.get("/api/categories", {params:{noPagination: true }} );
       setCategoriesArray(response.data.array);
     };
     
@@ -292,10 +292,10 @@ export function TableSort(props) {
     }
   }
   const rows = sortedData.map(row => (
-    <Table.Tr key={row._id}>
+    <Table.Tr key={row._id} style={{ maxHeight: '50px', overflow: 'hidden' }}>
       {dataHeaders[dataHeader].map((field, index) => (
         <Tooltip key={index} label={row[field]}>
-          <Table.Td key={index} style={{ overflow: 'hidden' }}>
+          <Table.Td key={index} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {!row[field]? 'no data found' : ['avatar', 'coverImage'].includes(field)? <Image onClick={()=>{setimageSrc(row[field]);openImageModal();}} src={row[field]} width={50} height={50} fit="contain" />: row[field]}
           </Table.Td>
         </Tooltip>
