@@ -81,7 +81,7 @@ function App() {
           <Route path='/bookshelves' element={<Bookshelves/>}></Route>
           <Route path='/general' element={<General/>}></Route>
           <Route path='/contact-us' element={<ContactUs/>}></Route>
-          <Route path='/subscripe-to-premium' element={<PremiumSubscription/>}></Route>  
+          <Route path='/subscribe-to-premium' element={<PremiumSubscription userData={userData} />}></Route>  
           <Route path='*' element={<NotFoundImage/>}></Route>
         </Routes>
       </Suspense>
