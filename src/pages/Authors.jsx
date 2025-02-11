@@ -79,7 +79,7 @@ export default function Authors() {
               color: "black",
               fontSize: "1.5rem",
               fontWeight: "900",
-              borderRadius: "0",
+              borderRadius: "5px",
             },
           }}
         />
