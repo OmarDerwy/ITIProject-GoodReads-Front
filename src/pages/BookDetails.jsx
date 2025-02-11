@@ -31,11 +31,13 @@
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [authorId, setAuthorId] = useState(null);
+    // const [authorId, setAuthorId] = useState(null);
 
     const [user, setUser] = useState(null);
     const [reviewText, setReviewText] = useState("");
     const [submitting, setSubmitting] = useState(false);
+
+    const [category, setCategory] = useState();
 
     const [shelf, setShelf] = useState("");
     const [shelfId, setShelfId] = useState(null); // Store shelf ID if it exists
@@ -106,16 +108,22 @@
 
             const bookRes = await axiosInstance.get(`/api/books/${bookId}`);
             setBook(bookRes.data);
+            console.log(bookRes.data);
 
             const reviewsRes = await axiosInstance.get(`/api/reviews/${bookId}`);
             setReviews(reviewsRes.data.reviews);
 
-            if (bookRes.data.authorName) {
-            const authorRes = await axiosInstance.get(
-                `/api/authors/name/${bookRes.data.authorName}`
-            );
-            setAuthorId(authorRes.data._id);
-            }
+            const categoryRes = await axiosInstance.get(`/api/categories/${bookRes.data.categoryId}`);
+            setCategory(categoryRes.data);
+            console.log(category)
+    
+
+            // if (bookRes.data.authorName) {
+            // const authorRes = await axiosInstance.get(
+            //     `/api/authors/name/${bookRes.data.authorName}`
+            // );
+            // setAuthorId(authorRes.data._id);
+            // }
         } catch (error) {
             console.error("Error fetching book details:", error);
             setError(error.message || "Failed to fetch book details.");
@@ -252,7 +260,7 @@
                     <strong>By: </strong>
                     <Anchor
                     component={Link}
-                    to={`/authors/${authorId}`}
+                    to={`/authors/${book.authorId._id}`}
                     style={{
                         color: "#21C063",
                         fontWeight: "bold",
@@ -260,7 +268,7 @@
                         textDecoration: "none",
                     }}
                     >
-                    {book.authorName}
+                    {book.authorId.authorName}
                     </Anchor>
                 </Text>
 
@@ -270,11 +278,27 @@
                     <strong style= {{fontSize: "18px"}}>Description:</strong>{" "}
                     {book.description || "No description available"}
                 </Text>
-                <Text mt="md">
-                    <strong style= {{fontSize: "18px"}}>Category:</strong>{" "}
-                    {book.categoryName || "No category available"}
-                </Text>
+
                 
+                <Text mt="md">
+  <strong style={{ fontSize: "18px" }}>Category:</strong>{" "}
+  {category ? ( // Check if category exists
+    <Anchor
+      component={Link}
+      to={`/categories/${book.categoryId}`}
+      style={{
+        color: "#21C063",
+        fontWeight: "bold",
+        marginLeft: "5px",
+        textDecoration: "none",
+      }}
+    >
+      {category.categoryName}
+    </Anchor>
+  ) : (
+    <span style={{ marginLeft: "5px" }}>No category available</span> 
+  )}
+</Text>
                 <Text mt="md" >
                     <strong style={{ fontSize: "18px" }}>Average Rating:</strong>
                     <Rating 
@@ -317,22 +341,22 @@
                     onChange={handleShelfChange}
                     styles={{
                         label: {
-                            fontSize: "18px", // Increased label size
+                            fontSize: "18px", 
                             fontWeight: "bold",
                             color: "#E7FFDB",
                             marginBottom: "10px",
                         },
                         root: {
-                            maxWidth: "350px", // Slightly wider
+                            maxWidth: "350px", 
                             width: "100%",
                             marginTop: "20px",
                         },
                         input: {
                             backgroundColor: "#0A151A",
                             color: "#E7FFDB",
-                            height: "50px", // Larger height
+                            height: "50px", 
                             borderRadius: "8px",
-                            border: "2px solid #21C063", // Thicker border
+                            border: "2px solid #21C063", 
                             padding: "10px",
                             fontSize: "16px",
                             fontWeight: "500",
@@ -341,8 +365,7 @@
                             transition: "0.3s",
                         },
                         dropdown: {
-                            backgroundColor: "#111A20",
-                            // border: "1px solid #21C063",
+                            backgroundColor: "#111A20"
                         },
                         item: {
                             color: "#E7FFDB",
