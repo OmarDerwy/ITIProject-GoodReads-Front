@@ -25,34 +25,80 @@
     import { Link } from "react-router-dom";
     import { Anchor } from "@mantine/core";
 
-    const BookDetails = () => {
+function BookDetails( {userData, setUserData} ) {
     const { bookId } = useParams();
-    const [book, setBook] = useState(null);
+    const [book, setBook] = useState([]);
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     // const [authorId, setAuthorId] = useState(null);
 
     const [user, setUser] = useState(null);
+
     const [reviewText, setReviewText] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
-    const [category, setCategory] = useState();
+    const [category, setCategory] = useState([]);
 
     const [shelf, setShelf] = useState("");
     const [shelfId, setShelfId] = useState(null); // Store shelf ID if it exists
 
+    // useEffect(() => {
+    //     const fetchUser = async () => {
+    //     try {
+    //         const userrRes = await axiosInstance.get("/api/auth");
+    //         setUser(userrRes.data._id);
+    //         console.log(userrRes);
+    //     } catch (err) {
+    //         console.log("Error: " + err.message);
+    //     }
+    //     };
+    //     fetchUser();
+    // }, []);
+
+    // Get userId
     useEffect(() => {
-        const fetchUser = async () => {
-        try {
-            const response = await axiosInstance.get("/api/auth");
-            setUser(response.data.id);
-        } catch (err) {
-            console.log("Error: " + err.message);
+        if (userData) {
+            setUser(userData.id);
+            console.log("User: ", user);
         }
-        };
-        fetchUser();
-    }, []);
+    }, [userData]);
+
+    
+    // To get book Details
+    useEffect(() => {
+    const fetchBookDetails = async () => {
+    try {
+        if (!bookId) throw new Error("Invalid book ID.");
+
+        console.log("BookID: ", bookId);
+        const bookRes = await axiosInstance.get(`/api/books/${bookId}`);
+        setBook(bookRes.data);
+        // console.log("BookRes.data",book);
+
+        const reviewsRes = await axiosInstance.get(`/api/reviews/${bookId}`);
+        setReviews(reviewsRes.data);
+        console.log("Book reviews: ",reviewsRes.data);
+
+        const categoryRes = await axiosInstance.get(`/api/categories/${bookRes.data.book.categoryId}`);
+        setCategory(categoryRes.data);
+        console.log("Category: ", categoryRes.data);
+        
+
+    } catch (error) {
+        console.error("Error fetching book details:", error);
+        setError(error.message || "Failed to fetch book details.");
+    } finally {
+        setLoading(false);
+    }
+    };
+
+    fetchBookDetails();
+}, [bookId]);
+
+useEffect(() => {
+    console.log("BookRes.data",book);
+}, [book]);
 
     useEffect(() => {
         const fetchShelf = async () => {
@@ -60,6 +106,7 @@
                 if (!user) return;
     
                 const response = await axiosInstance.get(`/api/shelves/${user}`);
+                console.log(response);
                 const userShelf = response.data.shelves.find(s => s.bookId === bookId);
     
                 if (userShelf) {
@@ -101,44 +148,12 @@
         }
     };
 
-    useEffect(() => {
-        const fetchBookDetails = async () => {
-        try {
-            if (!bookId) throw new Error("Invalid book ID.");
-
-            const bookRes = await axiosInstance.get(`/api/books/${bookId}`);
-            setBook(bookRes.data);
-            console.log(bookRes.data);
-
-            const reviewsRes = await axiosInstance.get(`/api/reviews/${bookId}`);
-            setReviews(reviewsRes.data.reviews);
-
-            const categoryRes = await axiosInstance.get(`/api/categories/${bookRes.data.categoryId}`);
-            setCategory(categoryRes.data);
-            console.log(category)
     
-
-            // if (bookRes.data.authorName) {
-            // const authorRes = await axiosInstance.get(
-            //     `/api/authors/name/${bookRes.data.authorName}`
-            // );
-            // setAuthorId(authorRes.data._id);
-            // }
-        } catch (error) {
-            console.error("Error fetching book details:", error);
-            setError(error.message || "Failed to fetch book details.");
-        } finally {
-            setLoading(false);
-        }
-        };
-
-        fetchBookDetails();
-    }, [bookId]);
 
     
 
     const handleReviewSubmit = async (event) => {
-        event.preventDefault(); // 🔹 Prevents the page from reloading
+        event.preventDefault(); // ✅ Prevents the page from reloading
     
         if (!reviewText.trim()) {
             alert("Please enter a review.");
@@ -152,24 +167,32 @@
     
             const response = await axiosInstance.post("/api/reviews", {
                 bookId,
-                userId: user,
+                userId: user, 
                 reviewText,
             });
     
-            console.log("Review Submitted:", response.data); // Debugging API response
+            console.log("Review Submitted:", response.data);
     
-            // 🔹 Update UI immediately after submitting
-            setReviews((prevReviews) => [
-                ...prevReviews,
-                { 
-                    _id: Date.now(), // Temporary ID
-                    userId: { name: "You" },
-                    reviewText,
-                    date: new Date(),
-                },
-            ]);
+            console.log("Book reviews before update:", reviews);
+            setReviews((prevReviews) =>
+                Array.isArray(prevReviews)
+                    ? [...prevReviews, {
+                        _id: Date.now(), 
+                        userId: { name: "You" }, 
+                        reviewText, 
+                        date: new Date(),
+                    }]
+                    : [{
+                        _id: Date.now(), 
+                        userId: { name: "You" }, 
+                        reviewText, 
+                        date: new Date(),
+                    }]
+            );
+            console.log("Book reviews after update:", reviews);
+            
     
-            setReviewText(""); // 🔹 Clear input field
+            setReviewText(""); // ✅ Clear input field
         } catch (error) {
             console.error("Error submitting review:", error);
             alert("Failed to submit review.");
@@ -177,6 +200,8 @@
             setSubmitting(false);
         }
     };
+    
+    
     
 
     if (loading) {
@@ -195,26 +220,26 @@
     }
 
     if (error) {
-       if ([400,404].includes(error.status)) {
-         return (
-         <div
-             style={{
-             display: "flex",
-             flexDirection: "column",
-             justifyContent: "center",
-             alignItems: "center",
-             marginTop: "200px",
-             }}
-         >
-             <Text fw={900} fz="3rem" color="red">
-             Error Loading Content.
-             </Text>
-             <Text fz="3rem" color="red">
-             {error}
-             </Text>
-         </div>
-         );
-       }
+    if ([400,404].includes(error.status)) {
+        return (
+        <div
+            style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "200px",
+            }}
+        >
+            <Text fw={900} fz="3rem" color="red">
+            Error Loading Content.
+            </Text>
+            <Text fz="3rem" color="red">
+            {error}
+            </Text>
+        </div>
+        );
+    }
     }
 
     if (!book) {
@@ -244,8 +269,8 @@
             <Grid gutter="xl" align="center">
                 <Grid.Col span={{ base: 12, md: 5 }}>
                 <Image
-                    src={book.coverImage || image}
-                    alt={book.bookName}
+                    src={book.book.coverImage || image}
+                    alt={book.book.bookName}
                     height={450}
                     radius="md"
                     withBorder
@@ -254,13 +279,13 @@
 
                 <Grid.Col span={{ base: 12, md: 7 }}>
                 <Title order={1} align="left" color="#E7FFDB">
-                    {book.bookName}
+                    {book.book.bookName}
                 </Title>
                 <Text size="lg" align="left" mt="sm">
                     <strong>By: </strong>
                     <Anchor
                     component={Link}
-                    to={`/authors/${book.authorId._id}`}
+                    to={`/authors/${book.book.authorId._id}`}
                     style={{
                         color: "#21C063",
                         fontWeight: "bold",
@@ -268,7 +293,7 @@
                         textDecoration: "none",
                     }}
                     >
-                    {book.authorId.authorName}
+                    {book.book.authorId.authorName}
                     </Anchor>
                 </Text>
 
@@ -276,35 +301,35 @@
 
                 <Text mt="md">
                     <strong style= {{fontSize: "18px"}}>Description:</strong>{" "}
-                    {book.description || "No description available"}
+                    {book.book.description || "No description available"}
                 </Text>
 
                 
                 <Text mt="md">
-  <strong style={{ fontSize: "18px" }}>Category:</strong>{" "}
-  {category ? ( // Check if category exists
-    <Anchor
-      component={Link}
-      to={`/categories/${book.categoryId}`}
-      style={{
-        color: "#21C063",
-        fontWeight: "bold",
-        marginLeft: "5px",
-        textDecoration: "none",
-      }}
-    >
-      {category.categoryName}
-    </Anchor>
-  ) : (
-    <span style={{ marginLeft: "5px" }}>No category available</span> 
-  )}
+    <strong style={{ fontSize: "18px" }}>Category:</strong>{" "}
+    {category ? ( // Check if category exists
+        <Anchor
+        component={Link}
+        to={`/categories/${book.book.categoryId}`}
+        style={{
+            color: "#21C063",
+            fontWeight: "bold",
+            marginLeft: "5px",
+            textDecoration: "none",
+        }}
+        >
+        {category.categoryName}
+        </Anchor>
+    ) : (
+        <span style={{ marginLeft: "5px" }}>No category available</span> 
+    )}
 </Text>
                 <Text mt="md" >
                     <strong style={{ fontSize: "18px" }}>Average Rating:</strong>
                     <Rating 
                         readOnly 
                         fractions={10} 
-                        value={book.averageRating} 
+                        value={book.book.averageRating} 
                         color="#21C063" 
                     />
                 </Text>
@@ -386,8 +411,8 @@
             </Title>
             <Divider my="lg" color="rgba(255, 255, 255, 0.2)" />
 
-            {reviews.length > 0 ? (
-            reviews.map((review) => (
+            {reviews.reviews.length > 0 ? (
+                reviews.reviews.map((review) => (
                 <Paper
                 key={review._id}
                 shadow="sm"
@@ -435,22 +460,26 @@
                     }}
                 >
                     <Title order={3} mb="md">Write a Review</Title>
-                    <Textarea
-                        placeholder="Write your review here..."
-                        minRows={3}
-                        value={reviewText}
-                        onChange={(event) => setReviewText(event.target.value)}
-                    />
-                    <Button
-                        mt="md"
-                        fullWidth
-                        variant="gradient" 
-                        gradient={{ from: "green", to: "lightgreen" }}
-                        onClick={handleReviewSubmit}
-                        disabled={submitting}
-                    >
-                        {submitting ? "Submitting..." : "Submit Review"}
-                    </Button>
+            <form onSubmit={handleReviewSubmit}>
+                <Textarea
+                    placeholder="Write your review here..."
+                    minRows={3}
+                    value={reviewText}
+                    onChange={(event) => setReviewText(event.target.value)}
+                />
+                <Button
+                    mt="md"
+                    fullWidth
+                    type="submit"
+                    variant="gradient"
+                    gradient={{ from: "green", to: "lightgreen" }}
+                    disabled={submitting}
+                    
+                >
+                    {submitting ? "Submitting..." : "Submit Review"}
+                </Button>
+            </form>
+
                 </div>
             )}
 
@@ -460,4 +489,4 @@
     );
     };
 
-    export default BookDetails;
+export default BookDetails;

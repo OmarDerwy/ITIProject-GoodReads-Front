@@ -73,7 +73,7 @@ function App() {
           <Route path='/forgot-password' element={<ForgotPassword/>}></Route>
           <Route path='/reset-password' element={<ResetPassword/>}></Route>
           <Route path='/books' element={<BookList/>}></Route> 
-          <Route path="/books/:bookId" element={<BookDetails/>} />
+          <Route path="/books/:bookId" element={<BookDetails userData={userData} setUserData={setUserData}/>} />
           <Route path='/authors' element={<Authors/>}></Route>
           <Route path='/authors/:authorId' element={<AuthorDetails userData={userData}/>}></Route>
           <Route path='/categories' element={<Categories/>}></Route>
