@@ -17,7 +17,7 @@ export default function AuthorDetails({ userData, setUserData }) {
   const [author, setAuthor] = useState({});
   const [books, setBooks] = useState([]);
   const [user, setUser] = useState("");
-  const [ratings, setRatings] = useState("");
+  const [userRatings, setUserRatings] = useState({});
 
 
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ export default function AuthorDetails({ userData, setUserData }) {
       try {
         const response = await axiosInstance.get(`/api/authors/${authorId}`);
         setAuthor(response.data);
-        setBooks(response.data.books);
+        setBooks(response.data.books.filter((book)=>book.bookId != null));
       } catch (err) {
         console.log("Error: " + err.message);
       }
@@ -64,10 +64,11 @@ export default function AuthorDetails({ userData, setUserData }) {
               book.bookId == null
                 ? ""
                 : await axiosInstance.get(`/api/books/${book.bookId._id}`);
-            return response.data;
+           return response.data.book;
           })
         );
         setBooks(booksData);
+        console.log(books);
       } catch (err) {
         console.log("Error: " + err.message);
       }
@@ -77,12 +78,44 @@ export default function AuthorDetails({ userData, setUserData }) {
     }
   }, [author]);
 
+
+  useEffect(() => {
+    const fetchUserRatings = async () => {
+      try {
+        const ratingsResponse = await Promise.all(
+          books.map(async (book) => {
+            const ratingResponse = await axiosInstance.get(
+              `/api/ratings/${book._id}/${user}`
+            );
+            return { bookId: book._id, rating: ratingResponse.data.rating };
+          })
+        );
+        const ratingsMap = ratingsResponse.reduce((acc, { bookId, rating }) => {
+          acc[bookId] = rating;
+          return acc;
+        }, {});
+        setUserRatings(ratingsMap); 
+      } catch (err) {
+        console.log("Error fetching user ratings:", err);
+      }
+    };
+
+    if (books.length > 0 && user) {
+      fetchUserRatings();
+    }
+  }, [books, user]);
+
   const handleRatingChange = (newRating, bookId) => {
     axiosInstance.post("/api/ratings", {
       bookId: bookId,
       userId: user,
       rating: newRating,
     });
+    setUserRatings((prevRatings) => ({
+      ...prevRatings,
+      [bookId]: newRating,
+    }));
+
   };
 
   const handleStatusChange = (newStatus, bookId) => {
@@ -100,7 +133,7 @@ export default function AuthorDetails({ userData, setUserData }) {
         });
       });
   };
-
+console.log(userRatings)
   return (
     <>
       <Paper radius="md" p="lg" bg="var(--mantine-color-body)" m={10}>
@@ -131,9 +164,7 @@ export default function AuthorDetails({ userData, setUserData }) {
       </Title>
 
       {books?.map((book, index) =>
-        book == undefined ? (
-          ""
-        ) : (
+       (
           <Paper
             key={index}
             radius="md"
@@ -183,7 +214,7 @@ export default function AuthorDetails({ userData, setUserData }) {
                       }
                     />
                     <Rating
-                      defaultValue={0}
+                      value={userRatings[book._id] || 0}
                       fractions={1}
                       mt={20}
                       onChange={(_value) =>
