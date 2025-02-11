@@ -4,7 +4,7 @@ import { Avatar, Container, Group, Text, Paper } from '@mantine/core';
 import classes from '../../styles/userprofile/UserInfoIcons.module.css';
 // import { useEffect } from 'react';
 
-export function UserInfo({userData}) {
+export function UserInfo({userData, subscription}) {
     console.log(userData)
   return (
       <Container>
@@ -31,7 +31,7 @@ export function UserInfo({userData}) {
             <Group wrap="nowrap" gap={10} mt={5}>
               <FaMoneyCheck stroke={1.5} size={16} className={classes.icon} />
               <Text fz="xs" c="dimmed">
-                {userData.status.charAt(0).toUpperCase() + userData.status.slice(1) + " Subcriber"}
+                {subscription + " Subcriber"}
               </Text>
             </Group>
           </div>
