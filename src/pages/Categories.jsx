@@ -34,7 +34,7 @@ export default function Categories() {
         Categories:
       </Title>
 
-      <Grid>
+      <Grid ml={20}>
         {categories?.map((category, index) => (
           <Paper
             key={index}
@@ -42,7 +42,7 @@ export default function Categories() {
             withBorder
             p="lg"
             bg="var(--mantine-color-body)"
-            m={categories.length >= 5? "auto" : 30 }
+            m={10}
             onClick={()=>navigate(`/categories/${category._id}`)}
             style={{cursor:"pointer"}}
           >
