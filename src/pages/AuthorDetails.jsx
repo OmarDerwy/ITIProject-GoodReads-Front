@@ -98,10 +98,10 @@ export default function AuthorDetails() {
             <Title ta="left" mb={5} order={2}>
               {author.authorName}
             </Title>
-            <Text ta="left" fz="md" fw={500} mb={20}>
-              {author.dateOfBirth}
+            <Text ta="left" fz="lg" fw={500} mb={20}>
+              Date of birth: {author.dateOfBirth == undefined? "" : author.dateOfBirth.substring(0,10)}
             </Text>
-            <Text c="dimmed" fz="md">
+            <Text c="dimmed" fz="lg">
               {author.bio}
             </Text>
           </Grid.Col>
