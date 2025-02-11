@@ -18,7 +18,7 @@ export default function AuthorDetails({ userData, setUserData }) {
   const [books, setBooks] = useState([]);
   const [user, setUser] = useState("");
   const [userRatings, setUserRatings] = useState({});
-
+  const [userShelf, setUserShelf] = useState([]);
 
   const navigate = useNavigate();
   const authorId = location.pathname.split("/")[2];
@@ -28,7 +28,6 @@ export default function AuthorDetails({ userData, setUserData }) {
       setUser(userData.id);
     }
   }, [userData]);
-  console.log(user);
 
   // useEffect(() => {
   //   const fetchUser = async () => {
@@ -47,7 +46,7 @@ export default function AuthorDetails({ userData, setUserData }) {
       try {
         const response = await axiosInstance.get(`/api/authors/${authorId}`);
         setAuthor(response.data);
-        setBooks(response.data.books.filter((book)=>book.bookId != null));
+        setBooks(response.data.books.filter((book) => book.bookId != null));
       } catch (err) {
         console.log("Error: " + err.message);
       }
@@ -64,11 +63,10 @@ export default function AuthorDetails({ userData, setUserData }) {
               book.bookId == null
                 ? ""
                 : await axiosInstance.get(`/api/books/${book.bookId._id}`);
-           return response.data.book;
+            return response.data.book;
           })
         );
         setBooks(booksData);
-        console.log(books);
       } catch (err) {
         console.log("Error: " + err.message);
       }
@@ -77,7 +75,6 @@ export default function AuthorDetails({ userData, setUserData }) {
       fetchBooks();
     }
   }, [author]);
-
 
   useEffect(() => {
     const fetchUserRatings = async () => {
@@ -94,7 +91,7 @@ export default function AuthorDetails({ userData, setUserData }) {
           acc[bookId] = rating;
           return acc;
         }, {});
-        setUserRatings(ratingsMap); 
+        setUserRatings(ratingsMap);
       } catch (err) {
         console.log("Error fetching user ratings:", err);
       }
@@ -104,6 +101,18 @@ export default function AuthorDetails({ userData, setUserData }) {
       fetchUserRatings();
     }
   }, [books, user]);
+
+  useEffect(() => {
+    const fetchUserShelf = async () => {
+      try {
+        const response = await axiosInstance.get(`/api/shelves/${user}`);
+        setUserShelf(response.data.shelves) || [];
+      } catch (error) {
+        console.log("Error fetching user shelf:", err);
+      }
+    };
+    fetchUserShelf();
+  }, [user]);
 
   const handleRatingChange = (newRating, bookId) => {
     axiosInstance.post("/api/ratings", {
@@ -115,7 +124,6 @@ export default function AuthorDetails({ userData, setUserData }) {
       ...prevRatings,
       [bookId]: newRating,
     }));
-
   };
 
   const handleStatusChange = (newStatus, bookId) => {
@@ -132,8 +140,16 @@ export default function AuthorDetails({ userData, setUserData }) {
           shelve: newStatus,
         });
       });
+
+      setUserShelf((prevShelf) => {
+          const updatedShelf = prevShelf.map((shelf) =>
+            shelf.bookId === bookId ? { ...shelf, shelve: newStatus } : shelf
+          );
+          return updatedShelf;
+        });
+      
   };
-console.log(userRatings)
+  console.log(userRatings);
   return (
     <>
       <Paper radius="md" p="lg" bg="var(--mantine-color-body)" m={10}>
@@ -163,73 +179,67 @@ console.log(userRatings)
         Books released:
       </Title>
 
-      {books?.map((book, index) =>
-       (
-          <Paper
-            key={index}
-            radius="md"
-            withBorder
-            p="lg"
-            bg="var(--mantine-color-body)"
-            m={50}
-          >
-            <Grid>
-              <Grid.Col span="auto">
-                <Image
-                  radius="md"
-                  h="200"
-                  w="180"
-                  fit="fill"
-                  src={book.coverImage}
-                  onClick={() => navigate(`/books/${book._id}`)}
-                  style={{ cursor: "pointer" }}
-                />
-              </Grid.Col>
-              <Grid.Col span={8}>
-                <Text
-                  ta="left"
-                  fz="lg"
-                  fw={700}
-                  mb={5}
-                  onClick={() => navigate(`/books/${book._id}`)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {book.bookName}
-                </Text>
-                <Text ta="left" fz="md" fw={500} mb={20} span>
-                  <Rating value={book.averageRating} fractions={4} readOnly />{" "}
-                  {book.averageRating}
-                  {book.averageRating == 1 ? " star average" : " stars average"}
-                </Text>
-              </Grid.Col>
-              <Grid.Col span="auto">
-                {localStorage.getItem("userToken") ? (
-                  <>
-                    <Select
-                      placeholder="Read status"
-                      data={["Currently Reading", "Want To Read", "Read"]}
-                      defaultValue=""
-                      onChange={(_value) =>
-                        handleStatusChange(_value, book._id)
-                      }
-                    />
-                    <Rating
-                      value={userRatings[book._id] || 0}
-                      fractions={1}
-                      mt={20}
-                      onChange={(_value) =>
-                        handleRatingChange(_value, book._id)
-                      }
-                    />
-                  </>
-                ) : (
-                  <></>
-                )}
-              </Grid.Col>
-            </Grid>
-          </Paper>
-        )
-      )}
+      {books?.map((book, index) => (
+        <Paper
+          key={index}
+          radius="md"
+          withBorder
+          p="lg"
+          bg="var(--mantine-color-body)"
+          m={50}
+        >
+          <Grid>
+            <Grid.Col span="auto">
+              <Image
+                radius="md"
+                h="200"
+                w="180"
+                fit="fill"
+                src={book.coverImage}
+                onClick={() => navigate(`/books/${book._id}`)}
+                style={{ cursor: "pointer" }}
+              />
+            </Grid.Col>
+            <Grid.Col span={8}>
+              <Text
+                ta="left"
+                fz="lg"
+                fw={700}
+                mb={5}
+                onClick={() => navigate(`/books/${book._id}`)}
+                style={{ cursor: "pointer" }}
+              >
+                {book.bookName}
+              </Text>
+              <Text ta="left" fz="md" fw={500} mb={20} span>
+                <Rating value={book.averageRating} fractions={4} readOnly />{" "}
+                {book.averageRating}
+                {book.averageRating == 1 ? " star average" : " stars average"}
+              </Text>
+            </Grid.Col>
+            <Grid.Col span="auto">
+              {localStorage.getItem("userToken") ? (
+                <>
+                  <Select
+                    placeholder="Read status"
+                    data={["Currently Reading", "Want To Read", "Read"]}
+                    value={userShelf.find((shelf)=> shelf.bookId === book._id)?.shelve}
+                    onChange={(_value) => handleStatusChange(_value, book._id)}
+                  />
+                  <Rating
+                    value={userRatings[book._id] || 0}
+                    fractions={1}
+                    mt={20}
+                    onChange={(_value) => handleRatingChange(_value, book._id)}
+                  />
+                </>
+              ) : (
+                <></>
+              )}
+            </Grid.Col>
+          </Grid>
+        </Paper>
+      ))}
     </>
   );
 }
