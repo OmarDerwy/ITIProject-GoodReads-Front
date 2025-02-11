@@ -57,7 +57,7 @@ function Bookmarks({userData, setUserData}) {
         const booksData = await Promise.all(
           shelf.map(async (sh) => {
             const response = await axiosInstance.get(`/api/books/${sh.bookId}`);
-            return response.data;
+            return response.data.book;
           })
         );
         setBooks(booksData);
@@ -113,12 +113,12 @@ function Bookmarks({userData, setUserData}) {
           return {
             cover: book.coverImage,
             name: book.bookName,
-            author: book.authorName,
+            author: book.authorId.authorName,
             avgRating: book.averageRating,
             usrRating, 
             status: shelfStatus,
             bookId: book._id,
-            authorId: author ? author._id : null,
+            authorId: book.authorId._id,
           };
         });
   
@@ -250,7 +250,7 @@ function Bookmarks({userData, setUserData}) {
           </nav>
         </Grid.Col>
 
-        <Grid.Col span={9}>
+        <Grid.Col span={9} mr={50}>
           <Table striped highlightOnHover withTableBorder>
             <Table.Thead>
               <Table.Tr>
