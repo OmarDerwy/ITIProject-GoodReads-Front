@@ -13,25 +13,34 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../apis/config";
 
-export default function AuthorDetails() {
+export default function AuthorDetails({userData, setUserData}) {
   const [author, setAuthor] = useState({});
   const [books, setBooks] = useState([]);
   const [user, setUser] = useState("");
 
   const navigate = useNavigate();
   const authorId = location.pathname.split("/")[2];
-
+  
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axiosInstance.get("/api/auth");
-        setUser(response.data.id);
-      } catch (err) {
-        console.log("Error: " + err.message);
+    if (userData) {
+      setUser(userData.id);
+      if (userData.id) {
+        setSignedIn(true);
       }
-    };
-    fetchUser();
-  }, []);
+    }
+  }, [userData])
+
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const response = await axiosInstance.get("/api/auth");
+  //       setUser(response.data.id);
+  //     } catch (err) {
+  //       console.log("Error: " + err.message);
+  //     }
+  //   };
+  //   fetchUser();
+  // }, []);
 
   useEffect(() => {
     const fetchAuthor = async () => {

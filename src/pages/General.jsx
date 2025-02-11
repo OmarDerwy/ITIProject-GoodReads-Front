@@ -71,9 +71,7 @@ function General() {
     getAuthors();
     getCategories();
   }, []);
-  console.log(categories);
-  console.log(authors);
-  console.log(books);
+
   return (
     <>
       <BookShelf title="Popular Books" popular={books} />

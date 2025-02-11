@@ -12,21 +12,28 @@ const data = [
   { label: "Want To Read" },
 ];
 
-function Bookmarks() {
+function Bookmarks({userData, setUserData}) {
   const [user, setUser] = useState("");
   const [authors, setAuthors] = useState([]);
-
+  
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axiosInstance.get("/api/auth");
-        setUser(response.data.id);
-      } catch (err) {
-        console.log("Error: " + err.message);
-      }
-    };
-    fetchUser();
-  }, []);
+    if (userData) {
+      setUser(userData.id);
+    }
+  }, [userData])
+  console.log(userData)
+ 
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const response = await axiosInstance.get("/api/auth");
+  //       setUser(response.data.id);
+  //     } catch (err) {
+  //       console.log("Error: " + err.message);
+  //     }
+  //   };
+  //   fetchUser();
+  // }, []);
   const [active, setActive] = useState("All");
   const [shelf, setShelf] = useState([]);
   const [books, setBooks] = useState([]);
