@@ -14,17 +14,20 @@ Text,
 TextInput,
 Title,
 } from "@mantine/core";
-import axios from "axios";
+import { notifications } from "@mantine/notifications";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../apis/config";
 
 export default function ForgotPassword() {
 const form = useForm({
 initialValues: { email: "" },
-
 validate: {
     email: (value) =>
     /^\S+@\S+\.\S+$/.test(value) ? null : "Invalid email format",
 },
 });
+
+const navigate = useNavigate();
 
 const [submitted, setSubmitted] = useState(false);
 
@@ -32,16 +35,24 @@ const handleSubmit = async () => {
 if (form.validate().hasErrors) {
     setSubmitted(false);
 } else {
+    console.log("Email:", form.values.email);
     try {
-    const response = await axios.post("/api/auth/sendOTP", {
+    const response = await axiosInstance.post("/api/auth/sendOTP", {
         email: form.values.email,
     });
 
     if (response.data.status === "pending") {
         setSubmitted(true);
+        sessionStorage.setItem("email", form.values.email);
+        sessionStorage.setItem('justSentOTP', true);
         console.log("Reset email sent:", response.data);
+        navigate('/reset-password');
     } else {
         console.error("Error:", response.data.message);
+        notifications.show({
+            title: "Error",
+            message: response.data.message,
+        });
     }
     } catch (error) {
     console.error("Error sending reset request:", error);
