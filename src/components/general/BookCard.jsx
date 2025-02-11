@@ -32,10 +32,7 @@ export default function BookCard(props) {
       <Text mt="xs" c="dimmed" size="sm">
       {rating == undefined? "" : <Rating value={rating} fractions={2} readOnly />}
       </Text>
-      <Text mt="xs" c="dimmed" size="sm">
-      {views == undefined? "" : views+" views"}
 
-      </Text>
     </Card>
   )
 }
