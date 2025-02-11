@@ -36,8 +36,10 @@ export default function Categories() {
   }, []);
 
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-    if (searchQuery.trim() === "") {
+    const query = e.target.value;
+    setSearchQuery(query); 
+
+    if (query.trim() === "") {
       setFilteredCategories(categories);
     }
   };
@@ -62,6 +64,7 @@ export default function Categories() {
           value={searchQuery}
           onChange={handleSearchChange}
           placeholder="Search for categories..."
+          onKeyDown={(event) => { if (event.key === 'Enter') handleSearchClick(); }}
           mr={10}
           styles={{
             input: {

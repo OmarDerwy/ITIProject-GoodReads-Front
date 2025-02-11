@@ -36,8 +36,10 @@ export default function Authors() {
   }, []);
 
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-    if (searchQuery.trim() === "") {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query.trim() === "") {
       setFilteredAuthors(authors);
     }
   };
@@ -63,6 +65,7 @@ export default function Authors() {
           value={searchQuery}
           onChange={handleSearchChange}
           placeholder="Search for authors..."
+          onKeyDown={(event) => { if (event.key === 'Enter') handleSearchClick(); }}
           mr={10}
           styles={{
             input: {
