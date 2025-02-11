@@ -56,7 +56,7 @@ function Th({ children, reversed, sorted, onSort }) {
 function filterData(data, search) {
   const query = search.toLowerCase().trim()
   return data.filter(item =>{
-    const filteredHeaders = keys(data[0]).filter((key)=> !['__v', 'clicked', 'averageRating', 'ratings', 'reviews', 'coverImage', 'bookFile', 'verified', 'books', 'imageUrl' ].includes(key))
+    const filteredHeaders = keys(data[0]).filter((key)=> !['__v', 'clicked', 'averageRating', 'ratings', 'reviews', 'coverImage', 'bookFile', 'verified', 'books', 'imageUrl', 'category_covers' ].includes(key))
     return filteredHeaders.some(key => 
       {try {
         return item[key].toLowerCase().includes(query)
@@ -238,7 +238,7 @@ export function TableSort(props) {
     console.log(values)
     const formData = new FormData();
     for (const key in values) {
-      if (key == 'avatar' || key == 'coverImage' || key == 'bookFile') {
+      if (key == 'avatar' || key == 'coverImage'|| key == 'category_covers' || key == 'bookFile') {
         if(values[key] !== null){
           formData.append(key, values[key]);
         }
@@ -287,7 +287,10 @@ export function TableSort(props) {
           color: 'red'
         })
       }).finally(() => {
-        // formUser.setValues({avatar: null}) check if this is necessary later
+        formUser.reset();
+        formAuthor.reset();
+        formBook.reset();
+        formCategory.reset();
       });
     }
   }
@@ -296,7 +299,7 @@ export function TableSort(props) {
       {dataHeaders[dataHeader].map((field, index) => (
         <Tooltip key={index} label={row[field]}>
           <Table.Td key={index} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {!row[field]? 'no data found' : ['avatar', 'coverImage'].includes(field)? <Image onClick={()=>{setimageSrc(row[field]);openImageModal();}} src={row[field]} width={50} height={50} fit="contain" />: row[field]}
+            {!row[field]? 'no data found' : ['avatar', 'coverImage', 'category_covers'].includes(field)? <Image onClick={()=>{setimageSrc(row[field]);openImageModal();}} src={row[field]} width={50} height={50} fit="contain" />: row[field]}
           </Table.Td>
         </Tooltip>
       ))}
@@ -337,7 +340,7 @@ export function TableSort(props) {
                 formCategory.setValues({
                   categoryName: row.categoryName,
                   description: row.description,
-                  coverImage: null
+                  coverImage: null,
                 });
                 break;
             }
@@ -489,9 +492,9 @@ export function TableSort(props) {
                   <FileInput
                     label="Image"
                     placeholder="Input image"
-                    description="Upload category's avatar here"
-                    key={formCategory.key('avatar')}
-                    {...formCategory.getInputProps('avatar')}
+                    description="Upload category's image here"
+                    key={formCategory.key('coverImage')}
+                    {...formCategory.getInputProps('coverImage')}
                   />
                   <Button type="submit" onClick={closeAddModal}>Add</Button>
                   <Button onClick={closeAddModal}>Close</Button>
