@@ -17,6 +17,8 @@ export default function AuthorDetails({ userData, setUserData }) {
   const [author, setAuthor] = useState({});
   const [books, setBooks] = useState([]);
   const [user, setUser] = useState("");
+  const [ratings, setRatings] = useState("");
+
 
   const navigate = useNavigate();
   const authorId = location.pathname.split("/")[2];
