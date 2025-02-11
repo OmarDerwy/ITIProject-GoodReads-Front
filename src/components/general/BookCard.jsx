@@ -13,16 +13,19 @@ export default function BookCard(props) {
       component="a"
       target="_blank"
       w={150}
+      h={type === "b"? 250 : type === "a"? 230 : 230}
       onClick={()=>{navigate(`/${type === "b"? "books": type === "a"? "authors": "categories"}/${id}`)}}
       style={{cursor: "pointer"}}
     >
       <Card.Section>
         <Image
+        h={150}
+        fit='contain'
           src={image}
         />
       </Card.Section>
 
-      <Text fw={500} size="lg" mt="md">
+      <Text fw={500} size="lg" mt="md" truncate="end">
         {title == undefined? "" : title }
       </Text>
 

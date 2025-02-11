@@ -15,7 +15,7 @@ export function BookShelf(props) {
         <Carousel
         withIndicators
         slideSize={{base:'20%', xs:'33.333%' ,sm:'25%', md:'20%', lg:'20%'}}
-        slideGap="md"
+        slideGap="lg"
         loop
         align="start"
         >
