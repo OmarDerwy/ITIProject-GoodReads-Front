@@ -182,7 +182,7 @@ export default function AuthorDetails({ userData, setUserData }) {
                     />
                     <Rating
                       defaultValue={0}
-                      fractions={4}
+                      fractions={1}
                       mt={20}
                       onChange={(_value) =>
                         handleRatingChange(_value, book._id)
