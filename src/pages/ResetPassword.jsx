@@ -4,6 +4,8 @@ import classes from "../styles/general/ResetPassword.module.css";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../apis/config';
+import { notifications } from '@mantine/notifications';
+import { useEffect } from 'react';
 
 const ResetPassword = () => {
 const navigate = useNavigate();
@@ -39,16 +41,32 @@ setErrors(newErrors);
 return Object.keys(newErrors).length === 0;
 };
 
+useEffect(() => {
+    if (sessionStorage.getItem('justSentOTP') === 'true') {
+        sessionStorage.removeItem('justSentOTP');
+        notifications.show({
+            title: 'OTP Sent',
+            message: 'An OTP has been sent to your email address. Please check your inbox.',
+            color: 'green',
+            autoClose: 5000
+        });
+    }
+}, []);
+
+
 const handleSubmit = (event) => {
 event.preventDefault();
-if (validate()) {
+const email = sessionStorage.getItem('email');
+if (validate() && email) {
     axiosInstance.post('/api/auth/reset-password', {
-    password: formValues.newPassword,
+    newPassword: formValues.newPassword,
+    email: email,
+    otp: formValues.otp
     })
     .then((response) => {
-    console.log(response);
-    setSuccessMessage('✅ Password has been reset successfully!');
-    setTimeout(() => navigate('/login'), 3000);
+        console.log(response);
+        setSuccessMessage('✅ Password has been reset successfully!');
+        setTimeout(() => navigate('/login'), 3000);
     })
     .catch((error) => {
         console.log(error);
