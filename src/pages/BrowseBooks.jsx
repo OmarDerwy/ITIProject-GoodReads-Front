@@ -99,7 +99,7 @@ const BookList = () => {
           onKeyDown={(event) => {
             if (event.key === "Enter") handleSearch();
           }}
-          mr={10}
+          
           styles={{
             input: {
               height: "60px",
