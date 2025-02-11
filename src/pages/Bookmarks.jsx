@@ -167,6 +167,8 @@ function Bookmarks({userData, setUserData}) {
     );
     setBookmarksAll(newBookmarksAll);
     axiosInstance.delete(`/api/shelves/${bookId}/${user}`);
+    axiosInstance.delete(`/api/ratings/${bookId}/${user}`);
+
   };
 
   const links = data.map((item) => {
