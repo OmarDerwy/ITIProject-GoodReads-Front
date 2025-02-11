@@ -33,15 +33,16 @@ export default function Authors() {
         Authors:
       </Title>
 
-      <Grid>
+      <Grid ml={20}>
         {authors?.map((author, index) => (
           <Paper
+          display={"inline-block"}
             key={index}
             radius="md"
             withBorder
             p="lg"
             bg="var(--mantine-color-body)"
-            m={authors.length >= 5? "auto" : 30 }
+            m={10}
             onClick={() => navigate(`/authors/${author._id}`)}
             style={{ cursor: "pointer" }}
           >

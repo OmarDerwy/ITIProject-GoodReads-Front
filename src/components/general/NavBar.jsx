@@ -52,7 +52,8 @@ function Navbar({userData, setUserData}) {
         setSignedIn(true);
       }
     }
-  }, [userData])
+  }, [userData, signedIn])
+
 
   // useEffect(() => {
   //   const fetchUser = async () => {

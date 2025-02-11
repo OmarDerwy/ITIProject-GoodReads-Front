@@ -63,7 +63,7 @@ function App() {
           <Route element={<ProtectedRoutes/>}>
             <Route path='/profile/:id' element={<UserProfile/>}></Route>
             <Route path='/profile' element={<Navigate to={`/profile/${userData?.id}`} replace/>}></Route>
-            <Route path='/bookmarks' element={<Bookmarks/>}></Route>
+            <Route path='/bookmarks' element={<Bookmarks userData={userData}/>}></Route>
           </Route>
           <Route element={<UserAuthRoutes/>}>
             <Route path='/' element={<LandingPage setUserData={setUserData}/>}></Route> 
@@ -75,7 +75,7 @@ function App() {
           <Route path='/books' element={<BookList/>}></Route> 
           <Route path="/books/:bookId" element={<BookDetails/>} />
           <Route path='/authors' element={<Authors/>}></Route>
-          <Route path='/authors/:authorId' element={<AuthorDetails/>}></Route>
+          <Route path='/authors/:authorId' element={<AuthorDetails userData={userData}/>}></Route>
           <Route path='/categories' element={<Categories/>}></Route>
           <Route path='/categories/:categoryId' element={<CategoryDetails/>}></Route>
           <Route path='/bookshelves' element={<Bookshelves/>}></Route>

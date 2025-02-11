@@ -54,7 +54,7 @@ export default function CategoryDetails() {
         {categoryName}
       </Title>
 
-      <Grid>
+      <Grid ml={20}>
         {books?.map((book, index) => {
           const author =  book.bookId == null ? "" : authors?.find(
             (author) => author._id === book.bookId.authorId

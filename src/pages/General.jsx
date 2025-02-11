@@ -41,7 +41,7 @@ function General() {
         const updatedAuthors = response.data.array.map((author) => ({
           title: author.authorName,
           views: 0,
-          image: author.imageUrl,
+          image: author.avatar,
           id: author._id,
           type: "a"
         }));
@@ -71,9 +71,7 @@ function General() {
     getAuthors();
     getCategories();
   }, []);
-  console.log(categories);
-  console.log(authors);
-  console.log(books);
+
   return (
     <>
       <BookShelf title="Popular Books" popular={books} />
