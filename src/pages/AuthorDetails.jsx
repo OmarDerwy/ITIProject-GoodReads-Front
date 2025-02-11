@@ -17,6 +17,8 @@ export default function AuthorDetails({ userData, setUserData }) {
   const [author, setAuthor] = useState({});
   const [books, setBooks] = useState([]);
   const [user, setUser] = useState("");
+  const [ratings, setRatings] = useState("");
+
 
   const navigate = useNavigate();
   const authorId = location.pathname.split("/")[2];
@@ -182,7 +184,7 @@ export default function AuthorDetails({ userData, setUserData }) {
                     />
                     <Rating
                       defaultValue={0}
-                      fractions={4}
+                      fractions={1}
                       mt={20}
                       onChange={(_value) =>
                         handleRatingChange(_value, book._id)

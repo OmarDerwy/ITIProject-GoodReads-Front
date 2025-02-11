@@ -167,6 +167,8 @@ function Bookmarks({userData, setUserData}) {
     );
     setBookmarksAll(newBookmarksAll);
     axiosInstance.delete(`/api/shelves/${bookId}/${user}`);
+    axiosInstance.delete(`/api/ratings/${bookId}/${user}`);
+
   };
 
   const links = data.map((item) => {
@@ -201,12 +203,12 @@ function Bookmarks({userData, setUserData}) {
         <Link to={`/authors/${bookmark.authorId}`}>{bookmark.author}</Link>
       </Table.Td>
       <Table.Td>
-        <Rating value={bookmark.avgRating} fractions={3} readOnly />
+        <Rating value={bookmark.avgRating} fractions={4} readOnly />
       </Table.Td>
       <Table.Td>
         <Rating
           defaultValue={bookmark.usrRating}
-          fractions={3}
+          fractions={1}
           onChange={(_value) =>
             handleRatingChange(_value, bookmark.name, bookmark.bookId)
           }
