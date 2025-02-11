@@ -13,20 +13,20 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../apis/config";
 
-export default function AuthorDetails({userData, setUserData}) {
+export default function AuthorDetails({ userData, setUserData }) {
   const [author, setAuthor] = useState({});
   const [books, setBooks] = useState([]);
   const [user, setUser] = useState("");
 
   const navigate = useNavigate();
   const authorId = location.pathname.split("/")[2];
-  
+
   useEffect(() => {
     if (userData) {
       setUser(userData.id);
     }
-  }, [userData])
-  console.log(user)
+  }, [userData]);
+  console.log(user);
 
   // useEffect(() => {
   //   const fetchUser = async () => {
@@ -58,10 +58,10 @@ export default function AuthorDetails({userData, setUserData}) {
       try {
         const booksData = await Promise.all(
           books.map(async (book) => {
-            
-            const response = book.bookId == null? "" : await axiosInstance.get(
-              `/api/books/${book.bookId._id}`
-            );
+            const response =
+              book.bookId == null
+                ? ""
+                : await axiosInstance.get(`/api/books/${book.bookId._id}`);
             return response.data;
           })
         );
@@ -81,16 +81,22 @@ export default function AuthorDetails({userData, setUserData}) {
       userId: user,
       rating: newRating,
     });
-    
   };
 
   const handleStatusChange = (newStatus, bookId) => {
-    axiosInstance.post("/api/shelves", {
-      bookId: bookId,
-      userId: user,
-      shelve: newStatus,
-    });
-    
+    axiosInstance
+      .post("/api/shelves", {
+        bookId: bookId,
+        userId: user,
+        shelve: newStatus,
+      })
+      .catch(() => {
+        axiosInstance.put("/api/shelves", {
+          bookId: bookId,
+          userId: user,
+          shelve: newStatus,
+        });
+      });
   };
 
   return (
@@ -106,7 +112,10 @@ export default function AuthorDetails({userData, setUserData}) {
               {author.authorName}
             </Title>
             <Text ta="left" fz="lg" fw={500} mb={20}>
-              Date of birth: {author.dateOfBirth == undefined? "" : author.dateOfBirth.substring(0,10)}
+              Date of birth:{" "}
+              {author.dateOfBirth == undefined
+                ? ""
+                : author.dateOfBirth.substring(0, 10)}
             </Text>
             <Text c="dimmed" fz="lg">
               {author.bio}
@@ -119,71 +128,75 @@ export default function AuthorDetails({userData, setUserData}) {
         Books released:
       </Title>
 
-      {books?.map((book, index) => ( book == undefined? "" :
-        <Paper
-          key={index}
-          radius="md"
-          withBorder
-          p="lg"
-          bg="var(--mantine-color-body)"
-          m={50}
-        >
-          <Grid>
-            <Grid.Col span="auto">
-              <Image
-                radius="md"
-                h="200"
-                w="180"
-                fit="fill"
-                src={book.coverImage}
-                onClick={() => navigate(`/books/${book._id}`)}
-                style={{ cursor: "pointer" }}
-              />
-            </Grid.Col>
-            <Grid.Col span={8}>
-              <Text
-                ta="left"
-                fz="lg"
-                fw={700}
-                mb={5}
-                onClick={() => navigate(`/books/${book._id}`)}
-                style={{ cursor: "pointer" }}
-              >
-                {book.bookName}
-              </Text>
-              <Text ta="left" fz="md" fw={500} mb={20} span>
-                <Rating value={book.averageRating} fractions={4} readOnly />{" "}
-                {book.averageRating}
-                {book.averageRating == 1 ? " star average" : " stars average"} 
-              </Text>
-            </Grid.Col>
-            <Grid.Col span="auto">
-              {localStorage.getItem("userToken") ? (
-                <>
-                  <Select
-                    placeholder="Read status"
-                    data={["Currently Reading", "Want To Read", "Read"]}
-                    defaultValue=""
-                    onChange={(_value) =>
-                      handleStatusChange(_value, book._id)
-                    }
-                  />
-                  <Rating
-                    defaultValue={0}
-                    fractions={4}
-                    mt={20}
-                    onChange={(_value) =>
-                      handleRatingChange(_value, book._id)
-                    }
-                  />
-                </>
-              ) : (
-                <></>
-              )}
-            </Grid.Col>
-          </Grid>
-        </Paper>
-      ))}
+      {books?.map((book, index) =>
+        book == undefined ? (
+          ""
+        ) : (
+          <Paper
+            key={index}
+            radius="md"
+            withBorder
+            p="lg"
+            bg="var(--mantine-color-body)"
+            m={50}
+          >
+            <Grid>
+              <Grid.Col span="auto">
+                <Image
+                  radius="md"
+                  h="200"
+                  w="180"
+                  fit="fill"
+                  src={book.coverImage}
+                  onClick={() => navigate(`/books/${book._id}`)}
+                  style={{ cursor: "pointer" }}
+                />
+              </Grid.Col>
+              <Grid.Col span={8}>
+                <Text
+                  ta="left"
+                  fz="lg"
+                  fw={700}
+                  mb={5}
+                  onClick={() => navigate(`/books/${book._id}`)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {book.bookName}
+                </Text>
+                <Text ta="left" fz="md" fw={500} mb={20} span>
+                  <Rating value={book.averageRating} fractions={4} readOnly />{" "}
+                  {book.averageRating}
+                  {book.averageRating == 1 ? " star average" : " stars average"}
+                </Text>
+              </Grid.Col>
+              <Grid.Col span="auto">
+                {localStorage.getItem("userToken") ? (
+                  <>
+                    <Select
+                      placeholder="Read status"
+                      data={["Currently Reading", "Want To Read", "Read"]}
+                      defaultValue=""
+                      onChange={(_value) =>
+                        handleStatusChange(_value, book._id)
+                      }
+                    />
+                    <Rating
+                      defaultValue={0}
+                      fractions={4}
+                      mt={20}
+                      onChange={(_value) =>
+                        handleRatingChange(_value, book._id)
+                      }
+                    />
+                  </>
+                ) : (
+                  <></>
+                )}
+              </Grid.Col>
+            </Grid>
+          </Paper>
+        )
+      )}
     </>
   );
 }
