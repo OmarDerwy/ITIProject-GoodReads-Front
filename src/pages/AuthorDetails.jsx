@@ -24,11 +24,9 @@ export default function AuthorDetails({userData, setUserData}) {
   useEffect(() => {
     if (userData) {
       setUser(userData.id);
-      if (userData.id) {
-        setSignedIn(true);
-      }
     }
   }, [userData])
+  console.log(user)
 
   // useEffect(() => {
   //   const fetchUser = async () => {

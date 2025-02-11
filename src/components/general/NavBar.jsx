@@ -53,7 +53,7 @@ function Navbar({userData, setUserData}) {
       }
     }
   }, [userData, signedIn])
-  console.log(userData)
+
 
   // useEffect(() => {
   //   const fetchUser = async () => {

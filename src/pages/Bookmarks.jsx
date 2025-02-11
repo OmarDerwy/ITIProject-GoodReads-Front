@@ -21,7 +21,7 @@ function Bookmarks({userData, setUserData}) {
       setUser(userData.id);
     }
   }, [userData])
-  console.log(userData)
+  console.log(user)
  
   // useEffect(() => {
   //   const fetchUser = async () => {
@@ -88,7 +88,9 @@ function Bookmarks({userData, setUserData}) {
         
         const ratingsResponse = await Promise.all(
           books.map((book) =>
-            axiosInstance.get(`/api/ratings/${book._id}/${user}`)
+            axiosInstance.get(`/api/ratings/${book._id}/${user}`).catch(()=>{
+              return {data : {rating: 0}};
+            })
           )
         );
   
