@@ -57,16 +57,17 @@ export default function Authors() {
 
   return (
     <>
-      <Title ml={30} mb={30} order={2}>
-        Authors:
-      </Title>
-      <Center mb={30}>
+      <Center
+        mb={30}
+        style={{ display: "flex", gap: "10px", marginTop: "50px" }}
+      >
         <TextInput
           value={searchQuery}
           onChange={handleSearchChange}
           placeholder="Search for authors..."
-          onKeyDown={(event) => { if (event.key === 'Enter') handleSearchClick(); }}
-          mr={10}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") handleSearchClick();
+          }}
           styles={{
             input: {
               height: "60px",
