@@ -41,7 +41,7 @@ function General() {
         const updatedAuthors = response.data.array.map((author) => ({
           title: author.authorName,
           views: 0,
-          image: author.imageUrl,
+          image: author.avatar,
           id: author._id,
           type: "a"
         }));
