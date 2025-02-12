@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import classes from '../styles/landingpage/Login.module.css';
-import { TextInput, PasswordInput, Button, Checkbox, Divider, Text, Paper, Group, Anchor, Title } from '@mantine/core';
+import { TextInput, PasswordInput, Button, Checkbox, Divider, Text, Paper, Group, Anchor, Title, Loader } from '@mantine/core';
 import { notifications } from '@mantine/notifications'
 import BooksLogo from '/Logomark.svg';
 import { RiLockPasswordLine } from "react-icons/ri";
@@ -14,6 +14,8 @@ const Login = ({ setUserData = () => {} }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  //loading state
+  const [loading, setLoading] = useState(false);
   //location hook
   const location = useLocation();
   // notifications.show({
@@ -33,6 +35,8 @@ const Login = ({ setUserData = () => {} }) => {
 
   const handleLogin = (e) => {
     e.preventDefault();
+    //loading state
+    setLoading(true);
     // const userFound = users.find(user => user.name === username && user.password === password);
     axiosInstance.post('/api/auth/login', {email,password})
       .then((response) => {
@@ -44,8 +48,30 @@ const Login = ({ setUserData = () => {} }) => {
         navigate('/general')
       }).catch((error) => {
         console.log(error)
-      })
+        notifications.show({
+          title:'Error',
+          message:error.response.data.message,
+          color: 'red',
+          autoClose:5000
+        })
+      }).finally(() => {
+        setLoading(false);
+      });
   };
+  if (loading) {
+    return (
+    <div
+        style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: "200px",
+        }}
+    >
+        <Loader type="bars" color="lightgreen" size={200} />
+    </div>
+    );
+}
 
   return (
     <Paper shadow="md" p="xl" radius="md" withBorder style={{ minHeight: '100vh' }}>
