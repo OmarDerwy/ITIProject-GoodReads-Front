@@ -48,7 +48,7 @@ const PremiumSubscription = ({userData}) => {
                 delivery_needed: false,
                 amount_cents: selectedPrice * 100,
                 currency: "EGP",
-                merchant_order_id: `${userData.id}-${plan}-${Date.now()}`,
+                merchant_order_id: `${userData.id}-${plan}`,
                 items: []
             });
             })
