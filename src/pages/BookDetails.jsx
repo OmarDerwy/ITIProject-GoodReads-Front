@@ -1,5 +1,5 @@
     import React, { useState, useEffect } from "react";
-    import { useParams } from "react-router-dom";
+    import { useNavigate, useParams } from "react-router-dom";
     import {
     Container,
     Image,
@@ -42,6 +42,7 @@ function BookDetails( {userData, setUserData} ) {
 
     const [shelf, setShelf] = useState("");
     const [shelfId, setShelfId] = useState(null); // Store shelf ID if it exists
+    const navigate = useNavigate();
 
     // useEffect(() => {
     //     const fetchUser = async () => {
@@ -335,7 +336,7 @@ useEffect(() => {
                 </Text>
                 
                 
-                { (book.book.bookFile )&& (
+                { (book.book.bookFile )? (
                     <Button
                     component="a"
                     href={book.book.bookFile}
@@ -356,7 +357,23 @@ useEffect(() => {
                     >
                     Open Book
                     </Button>
-                )}
+                ):<Button
+                component="a"
+                onClick={()=>{navigate(`/subscribe-to-premium`)}}
+                variant="gradient"
+                gradient={{from: 'gold', to: 'white'}}
+                size="lg"
+                radius="xl"
+                mt="lg"
+                style={{
+                    backgroundColor: "#21C063",
+                    color: "#111B21",
+                    fontWeight: "bold",
+                    transition: "0.3s",
+                }}
+                >
+                    Subscribe to premium to view file
+                    </Button>}
 
                 {user && (
                     <Select

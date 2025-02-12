@@ -245,7 +245,7 @@ const SignUp = () => {
             className={classes.title}
             my="xl"
           >
-            Welcome To GOODREADS
+            Welcome To Books
           </Title>
           <form method="POST" onSubmit={handleSubmit}>
             <TextInput
