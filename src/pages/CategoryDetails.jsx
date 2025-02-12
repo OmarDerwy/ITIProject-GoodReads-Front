@@ -69,7 +69,7 @@ export default function CategoryDetails() {
               w={250}
               h={450}
               key={index}
-              onClick={() => navigate(`/books/${book._id}`)}
+              onClick={() => navigate(`/books/${book.bookId._id}`)}
               style={{ cursor: "pointer" }}
             >
               <Grid.Col span="auto">
