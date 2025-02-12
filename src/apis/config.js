@@ -3,7 +3,7 @@ import axios from "axios";
 // const apikey = import.meta.env.VITE_API_KEY
 
 const axiosInstance = axios.create({
-   baseURL: 'http://localhost:3000',
+   baseURL: 'https://good-reads-application-production.up.railway.app/',
 })
 
 axiosInstance.interceptors.request.use(function (config) {
