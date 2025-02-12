@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Title, Text, SegmentedControl, Button, Card, Center, Badge, Stack, Group } from "@mantine/core";
+import { Container, Title, Text, SegmentedControl, Button, Card, Center, Badge, Stack, Group, Loader } from "@mantine/core";
 import { FaCheckCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { showNotification } from "@mantine/notifications";
