@@ -14,6 +14,7 @@ import {
   Anchor,
   Avatar,
   FileInput,
+  Loader,
 } from "@mantine/core";
 import classes from "../styles/landingpage/Login.module.css";
 //react-router-dom
@@ -29,6 +30,7 @@ import { BsTelephone } from "react-icons/bs";
 //axios
 import axiosInstance from "../apis/config";
 import { use } from "react";
+import { notifications } from "@mantine/notifications";
 
 const SignUp = () => {
   //init useNaviate
@@ -47,6 +49,7 @@ const SignUp = () => {
   const [otpSent, setOtpSent] = useDisclosure();
   const [otp, setOtp] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(false);
   const validate = () => {
     const newErrors = {};
     if (!formValues.username || formValues.username.length < 6) {
@@ -97,15 +100,32 @@ const SignUp = () => {
       console.log(sendPackage);
       const formData = new FormData();
       Object.keys(sendPackage).forEach(key => formData.append(key, sendPackage[key]));
-
+      setLoading(true)
       axiosInstance.post('/api/auth/register', formData)
       .then((response) => {
+        setLoading(false);
         console.log(response);
         setUserId(response.data.data.userId);
         //send registration success
         setOtpSent.open();
+
+        notifications.show({
+          title: "Check Inbox",
+          message: "Please check your email for the OTP.",
+          color: "green",
+          autoClose: 5000,
+        });
       }).catch((error) => {
+        setLoading(false)
         console.log(error);
+        notifications.show({
+          title: "Registration Failed",
+          message: "An error occurred while registering. Please try again.",
+          color: "red",
+          autoClose: 5000,
+        });
+      }).finally(() => {
+        setLoading(false)
       });
     }
   };
@@ -124,6 +144,43 @@ const SignUp = () => {
         console.log(err);
       });
   };
+  const handleResendOTP = () => {
+    axiosInstance.post("/api/auth/resend-otp", { email: formValues.email })
+      .then((res) => {
+        console.log(res)
+        notifications.show({
+          title: "OTP Sent",
+          message: "OTP has been sent to your email",
+          color: "green",
+          autoClose: 5000,
+        });
+        console.log("OTP sent");
+      })
+      .catch((err) => {
+        console.log(err);
+        notifications.show({
+          title: "Error",
+          message: "An error occurred while sending OTP",
+          color: "red",
+          autoClose: 5000,
+        });
+      });
+  };
+
+  if (loading) {
+    return (
+    <div
+        style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: "200px",
+        }}
+    >
+        <Loader type="bars" color="lightgreen" size={200} />
+    </div>
+    );
+}
 
   return (
     <>
@@ -132,6 +189,7 @@ const SignUp = () => {
         onClose={() => setOtpSent.close()}
         title="Verify OTP"
         centered
+        closeOnClickOutside={false}
       >
         <Text align="center" size="sm">
           Enter the 4-digit OTP sent to your email
@@ -147,6 +205,14 @@ const SignUp = () => {
             onClick={handleVerifyOTP}
           >
             Verify OTP
+          </Button>
+          <Button
+            fullWidth
+            variant="outline"
+            color="green"
+            onClick={handleResendOTP}
+          >
+            Resend OTP
           </Button>
         </Group>
       </Modal>

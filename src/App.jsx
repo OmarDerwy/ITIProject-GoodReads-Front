@@ -3,7 +3,7 @@ import { Routes, Route, useLocation, Navigate} from 'react-router-dom';
 import React , {Suspense} from 'react';
 import Navbar from './components/general/NavBar';
 import { Loader } from '@mantine/core';
-import { Notifications } from '@mantine/notifications';
+import { notifications, Notifications } from '@mantine/notifications';
 import {ProtectedRoutes, UserAuthRoutes, AdminOnlyRoutes} from './utils/protected-routes';
 import {useEffect, useState} from 'react';
 import axiosInstance from './apis/config';
@@ -51,6 +51,16 @@ function App() {
   useEffect(() => {
     fetchUserData()
   }, [])
+  if(sessionStorage.getItem('justLoggedIn')){
+    notifications.show({
+      title:'Login successful!',
+      message:"User has been logged in successfuly.",
+      color: 'green',
+      autoClose:5000
+    })
+    fetchUserData();
+    sessionStorage.removeItem('justLoggedIn');
+  }
   return (
     <>
     <Notifications/>

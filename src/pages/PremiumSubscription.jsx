@@ -8,6 +8,7 @@ import axios from "axios";
 const PremiumSubscription = ({userData}) => {
     
     const [plan, setPlan] = useState("monthly");
+    const [loading, setLoading] = useState(false);
     
 
     const pricing = {
@@ -40,6 +41,7 @@ const PremiumSubscription = ({userData}) => {
         console.log(`Starting checkout process.. Plan: ${plan}, Amount: ${selectedPrice} EGP user: ${userData.id}`);
         axios.get('http://localhost:3000/paymob/token')
             .then((response) => {
+            setLoading(true);
             console.log("Received token:", response.data.token);
             sessionStorage.setItem('paymentToken', response.data.token);
             return axios.post('https://accept.paymob.com/api/ecommerce/orders', {
@@ -93,10 +95,24 @@ const PremiumSubscription = ({userData}) => {
                 });
             }
             }).finally(() => {
+                setLoading(false);
                 sessionStorage.removeItem('paymentToken');
             });
     };
-            
+    if (loading) {
+        return (
+        <div
+            style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "200px",
+            }}
+        >
+            <Loader type="bars" color="lightgreen" size={200} />
+        </div>
+        );
+    }        
 
     return (
         <Container size="sm" mt={110}>
