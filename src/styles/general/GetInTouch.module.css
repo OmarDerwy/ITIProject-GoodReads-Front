@@ -1,0 +1,38 @@
+.title {
+    font-family: Greycliff CF, var(--mantine-font-family);
+    font-weight: 900;
+    font-size: 2.5rem;
+}
+
+.container {
+    margin: 2rem auto;
+    text-align: center;
+    align-items: center;
+    background-color: var(--primary-2);
+    padding: 2rem;
+    margin: auto;
+    min-width: 20rem;
+    max-width: 1000px;
+    min-height: 500px;
+    border: 0.25px solid var(--secondry-1);
+    border-radius: 10px;
+}
+
+.contactUsFormLabel {
+    width: 100%;
+    text-align: left;
+    text-transform: capitalize;
+    font-weight: 900;
+    size: 1rem;
+}
+
+.btnSubmit{
+    color: var(--primary-1);
+}
+
+.btnSubmit:hover {
+    color: var(--primary-1);
+    transition: background-color 1.5s, color 1.5s, transform 0.75s;
+    transform: scale(1.05);
+    transform-origin: center;
+}

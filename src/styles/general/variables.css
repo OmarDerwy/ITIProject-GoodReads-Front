@@ -1,0 +1,21 @@
+:root {
+    /* dark colors */
+--primary-1: #111B21;
+--primary-2: #1C1E21;
+
+/* secondary colors */
+--secondry-1: #24D367;
+--secondry-2: #E7FFDB;
+--secondry-3: #678856;
+
+/* light colors */
+--white: #FEFEFF;
+--wheat: #F8F7E8;
+
+    /* Gray scale */
+    --gray-2: #e0e0e0; /* Example */
+
+
+    /* Shadows */
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1); /* Example */
+}

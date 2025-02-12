@@ -1,0 +1,82 @@
+:root {
+    /* color variables */
+      /* dark colors */
+    --primary-1: #111B21;
+    --primary-2: #1C1E21;
+    
+    /* secondry colors  */
+    /* Used For: buttons, borders and decorations*/
+    --secondry-1: #24D367;
+    --secondry-2: #E7FFDB;
+    --secondry-3: #678856;
+    
+    
+    /* light colors */
+    --white: #FEFEFF;
+    --wheat: #F8F7E8;
+    }
+    
+/* ------------------------------------------------------- Login page -----------------------------------------------------*/
+.loginContainer {
+    margin: 2rem auto;
+    text-align: center;
+    align-items: center;
+    background-color: var(--primary-2);
+    padding: 2rem;
+    margin: auto;
+    min-width: 20rem;
+    max-width: 700px;
+    border: 0.25px solid var(--secondry-1);
+    border-radius: 10px;
+}
+
+.title {
+    font-family: Greycliff CF, var(--mantine-font-family);
+    font-weight: 700;
+    font-size: 2.5rem;
+}
+
+.loginContainer a {
+    color: var(--secondry-1);
+}
+
+.loginContainerLabel {
+    width: 100%;
+    text-align: left;
+    text-transform: capitalize;
+    font-weight: 900;
+    size: 1rem;
+}
+
+.loginContainer a:hover {
+    text-decoration: underline;
+}
+
+.formControl:focus {
+    outline: none;
+    box-shadow: 0 0 5px var(--secondry-1);
+}
+
+.btnLogin {
+    color: var(--primary-1);
+}
+
+.btnLogin:hover {
+    color: var(--primary-1);
+    transition: background-color 1.5s, color 1.5s, transform 0.75s;
+    transform: scale(1.05);
+    transform-origin: center;
+}
+
+
+#verifyCodeBox {
+    display: none;
+}
+
+@media (max-width: 668px) {
+    .loginContainer {
+        padding: 1rem;
+        max-width: 95%;
+        min-width: 20rem;
+    }
+}

@@ -1,0 +1,26 @@
+<svg width="33" height="46" viewBox="0 0 33 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_122)">
+<mask id="mask0_6_122" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="1" y="4" width="30" height="38">
+<path d="M28.7136 6.14224H6.00986C6.00986 6.14224 3.33883 8.00035 3.33883 12.6456C3.33883 17.2909 6.00986 19.149 6.00986 19.149H28.7136C28.7136 19.149 26.0426 17.2909 26.0426 12.6456C26.0426 8.00035 28.7136 6.14224 28.7136 6.14224ZM3.33883 26.5814H26.0426C26.0426 26.5814 28.7136 28.4395 28.7136 33.0848C28.7136 37.7301 26.0426 39.5882 26.0426 39.5882H3.33883C3.33883 39.5882 6.00986 37.7301 6.00986 33.0848C6.00986 28.4395 3.33883 26.5814 3.33883 26.5814Z" fill="white" stroke="white" stroke-width="3.71622" stroke-linecap="round" stroke-linejoin="round"/>
+</mask>
+<g mask="url(#mask0_6_122)">
+<path d="M32.0524 0.567917H3.8147e-06V45.1625H32.0524V0.567917Z" fill="#24D367"/>
+</g>
+</g>
+<g clip-path="url(#clip1_6_122)">
+<mask id="mask1_6_122" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="1" y="-17" width="30" height="39">
+<path d="M28.7136 -14.297H6.00986C6.00986 -14.297 3.33883 -12.4389 3.33883 -7.79362C3.33883 -3.14835 6.00986 -1.29024 6.00986 -1.29024H28.7136C28.7136 -1.29024 26.0426 -3.14835 26.0426 -7.79362C26.0426 -12.4389 28.7136 -14.297 28.7136 -14.297ZM3.33883 6.14219H26.0426C26.0426 6.14219 28.7136 8.0003 28.7136 12.6456C28.7136 17.2908 26.0426 19.1489 26.0426 19.1489H3.33883C3.33883 19.1489 6.00986 17.2908 6.00986 12.6456C6.00986 8.0003 3.33883 6.14219 3.33883 6.14219Z" fill="white" stroke="white" stroke-width="3.71622" stroke-linecap="round" stroke-linejoin="round"/>
+</mask>
+<g mask="url(#mask1_6_122)">
+<path d="M32.0524 -19.8713H3.8147e-06V24.7233H32.0524V-19.8713Z" fill="#24D367"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_6_122">
+<rect width="32.0524" height="24.1554" fill="white" transform="matrix(-1 0 0 1 32.0524 21.0071)"/>
+</clipPath>
+<clipPath id="clip1_6_122">
+<rect width="32.0524" height="24.1554" fill="white" transform="matrix(-1 0 0 1 32.0524 0.567871)"/>
+</clipPath>
+</defs>
+</svg>
