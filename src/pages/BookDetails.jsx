@@ -335,10 +335,10 @@ useEffect(() => {
                 </Text>
                 
                 
-                {book.bookFile && (
+                { (book.book.bookFile )&& (
                     <Button
                     component="a"
-                    href={book.bookFile}
+                    href={book.book.bookFile}
                     target="_blank"
                     rel="noopener noreferrer"
                     color="green"

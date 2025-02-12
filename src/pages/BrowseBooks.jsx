@@ -100,11 +100,13 @@ return (
                 book={{
                 id: book._id,
                 title: book.bookName,
-                author: book.authorName,
+                authorId: book.authorId._id,
+                author: book.authorId.authorName,
                 rating: book.averageRating,
                 views: book.ratings,
                 coverImage: book.coverImage,
-                category: book.categoryName,
+                categoryId: book.categoryId._id,
+                categoryName: book.categoryId.categoryName,
                 }}
             />
             </Grid.Col>
