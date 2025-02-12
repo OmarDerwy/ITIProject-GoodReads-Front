@@ -32,7 +32,7 @@ const BookCard = ({ book }) => {
         
         <Center mt="xs">
             <Badge variant="light" className={classes.badge}>
-                {book.categoryName}
+                {book.category}
             </Badge>
         </Center>
     </Card>
