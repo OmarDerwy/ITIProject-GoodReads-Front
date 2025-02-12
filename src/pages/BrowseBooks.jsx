@@ -68,6 +68,42 @@ const BookList = () => {
     );
   }
 
+
+    <Center>
+    <Grid
+        cols={5}
+        spacing="lg"
+        mt="xl"
+        breakpoints={[
+        { maxWidth: 1200, cols: 3 },
+        { maxWidth: 992, cols: 2 },
+        { maxWidth: 768, cols: 1 },
+        ]}
+    >
+        {books.length > 0 ? (
+        books.map((book) => (
+            <Grid.Col key={book._id} span="auto">
+            <BookCard
+                book={{
+                id: book._id,
+                title: book.bookName,
+                authorId: book.authorId._id,
+                author: book.authorId.authorName,
+                rating: book.averageRating,
+                views: book.ratings,
+                coverImage: book.coverImage,
+                categoryId: book.categoryId._id,
+                categoryName: book.categoryId.categoryName,
+                }}
+            />
+            </Grid.Col>
+        ))
+        ) : (
+        <Text fz="xl" mt="lg">No books found.</Text>
+        )}
+    </Grid>
+    </Center>
+
   if (error) {
     return (
       <div
@@ -86,9 +122,9 @@ const BookList = () => {
           {error}
         </Text>
       </div>
-    );
-  }
-
+    )};
+    
+   
   return (
     <Container px="md" className={classes.browseBooksContainer}>
       <Center style={{ display: "flex", gap: "10px", marginTop: "50px" }}>
