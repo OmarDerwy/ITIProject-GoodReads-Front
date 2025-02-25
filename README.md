@@ -1,8 +1,17 @@
-# React + Vite
+# Books Project
+This project is inspired by Goodreads; which is a site that enables users to browse books and taf them as reading, finished, or wish to read. Our provides a community that fosters love for books by enabling users to rate books and review them. Also added to the site the ability to subscribe in order to read books at leisure. Provided below are a list of features of the site.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Features
+- Browse books. 📚
+- Categorize as reading, want to read, finished. 🔖
+- Rate books. ⭐
+- Review books. 📝
+- Purchase subscription in order to read the books on the site. 💳
+- Admin panel in order to provide CRUD operations on users, authors, categories and the books themselves. ⚙️
+- Intuitive home page with a search bar to search for the books you want. 🔍🏠
 
-Currently, two official plugins are available:
+# Youtube preview of the site
+[Watch here](https://youtu.be/QCjCibb8e6w)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Youtube preview of the admin panel
+[Watch here](https://youtu.be/hS_Sg9WZH9U)
