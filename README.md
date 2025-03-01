@@ -1,5 +1,5 @@
 # Books Project
-This project is inspired by Goodreads; which is a site that enables users to browse books and taf them as reading, finished, or wish to read. Our provides a community that fosters love for books by enabling users to rate books and review them. Also added to the site the ability to subscribe in order to read books at leisure. Provided below are a list of features of the site.
+This project is inspired by Goodreads; which is a site that enables users to browse books and tag them as reading, finished, or wish to read. Our website provides a community that fosters love for books by enabling users to rate books and review them. Also added to the site the ability to subscribe in order to read books at leisure. Provided below are a list of features of the site.
 
 # Features
 - Browse books. 📚
