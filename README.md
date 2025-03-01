@@ -15,3 +15,9 @@ This project is inspired by Goodreads; which is a site that enables users to bro
 
 # Youtube preview of the admin panel
 [Watch here](https://youtu.be/hS_Sg9WZH9U)
+
+# Backend Github
+https://github.com/Nizar-Esmat/Good-Reads-Application
+
+# Documentation of bacfkend APIs
+https://documenter.getpostman.com/view/37803646/2sAYdfpr4g
